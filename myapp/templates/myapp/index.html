@@ -4,7 +4,7 @@
         ログイン済み
         {{request.user}}さんようこそ
     {% else %}
-        <a href="{% url 'signup' %}">sign up</a>
-        <a href="{% url 'login' %}">login</a>
+        <a href="{% url 'signup_view' %}">sign up</a>
+        <a href="{% url 'login_view' %}">login</a>
     {% endif %}
 {% endblock content %}

@@ -1,7 +1,7 @@
 {% extends 'myapp/base.html' %}
 {% block content %}
   {# signup処理部分 #}
-<form method="post" action="{% url 'signup' %}" enctype="multipart/form-data">
+<form method="post" action="{% url 'signup_view' %}" enctype="multipart/form-data">
     <table>
         <tr>
             <td>{{ form.username.label_tag }}</td>
