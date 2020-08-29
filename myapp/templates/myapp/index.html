@@ -1,1 +1,10 @@
-I
+{% extends 'myapp/base.html' %}
+{% block content %}
+    {% if request.user.is_authenticated %}
+        ログイン済み
+        {{request.user}}さんようこそ
+    {% else %}
+        <a href="{% url 'signup' %}">sign up</a>
+        <a href="{% url 'login' %}">login</a>
+    {% endif %}
+{% endblock content %}

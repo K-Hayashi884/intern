@@ -1,1 +1,38 @@
-SU
+{% extends 'myapp/base.html' %}
+{% block content %}
+  {# signup処理部分 #}
+<form method="post" action="{% url 'signup' %}" enctype="multipart/form-data">
+    <table>
+        <tr>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.email.label_tag }}</td>
+            <td>{{ form.email }}</td>
+        </tr>
+        <tr>
+        <td>{{ form.password1.label_tag }}</td>
+        <td>{{ form.password1 }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password2.label_tag }}</td>
+            <td>{{ form.password2 }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.img.label_tag }}</td>
+            <td>{{ form.img }}</td>
+        </tr>
+    </table>
+    {% csrf_token %}
+    <button type="submit">submit</button>
+    {# エラーメッセージを表示 #}
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+         {% endfor %}
+    {% endif %} 
+    </form>
+{% endblock content %}

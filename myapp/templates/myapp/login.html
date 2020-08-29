@@ -1,1 +1,26 @@
-LI
+{% extends 'myapp/base.html' %}
+{% block content %}
+  {# login処理部分 #}
+<form method="post" action="{% url 'login' %}">
+    <table>
+        <tr>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password.label_tag }}</td>
+            <td>{{ form.password }}</td>
+        </tr>
+    </table>
+    {% csrf_token %}
+    <button type="submit">submit</button>
+    {# エラーメッセージを表示 #}
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+         {% endfor %}
+    {% endif %} 
+    </form>
+{% endblock content %}
