@@ -1,4 +1,5 @@
 {% extends 'myapp/base.html' %}
+{% load static %}
 {% block content %}
     {% if request.user.is_authenticated %}
         ログイン済み
@@ -8,3 +9,4 @@
         <a href="{% url 'login_view' %}">login</a>
     {% endif %}
 {% endblock content %}
+
