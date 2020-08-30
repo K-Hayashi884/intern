@@ -1,29 +1,61 @@
 from django.shortcuts import redirect, render
-from .forms import SignupForm
+from django.contrib.auth import authenticate,login
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+from .forms import SignUpForm,LoginForm
+from django.contrib import messages 
 
 # Create your views here.
-
+from .models import User,UserImage
 def index(request):
     return render (request, "myapp/index.html")
 
-class SignUp(CreateView):
-    form_class = SignupForm
-    template_name = "myapp/signup.html" 
-    # success_url = reverse_lazy('top')
-
-    def form_valid(self, form):
-        user = form.save() # formの情報を保存
-        login(self.request, user) # 認証
-        self.object = user 
-        return HttpResponseRedirect(self.get_success_url()) # リダイレクト
-
-# def signup(request):
-#     form_class = SignupForm
-#     user = form.save() # formの情報を保存
-#     return render (request, "myapp/signup.html")
-
-def login(request):
-    return render (request, "myapp/login.html")
+def signup_view(request):
+    if request.method == "GET":
+        form = SignUpForm()
+        params = {"form":form,}
+        return render(request,"myapp/signup.html",params)
+    elif request.method == "POST":
+        form = SignUpForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            #フォームから'username'を読み取る
+            username = form.cleaned_data.get('username')
+            #フォームから'password1'を読み取る
+            password = form.cleaned_data.get('password1')
+            #フォームから'img'を読み取る
+            image = form.cleaned_data.get('img')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            user = User.objects.get(username=username)
+            user_img = UserImage(
+                user=user,
+                image=image,
+            )
+            user_img.save()
+            return redirect("/")
+        params = {"form":form,}
+        return render(request,"myapp/signup.html",params)
+        
+def login_view(request):
+    if request.method == "GET":
+        form = LoginForm()
+        params = {"form":form}
+        return render (request, "myapp/login.html",params)
+    elif request.method == "POST":
+        form = LoginForm(request.POST)
+        username = request.POST['username'] 
+        password = request.POST['password'] 
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect("/") 
+        else: 
+            messages.error(request,'username or password not correct') 
+            params = {"form":form}
+            return render(request,"myapp/login.html",params)
 
 def friends(request):
     return render (request, "myapp/friends.html")
