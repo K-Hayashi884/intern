@@ -1,0 +1,38 @@
+.talk_room{
+
+}
+
+.talk_room__chatboard{
+
+}
+
+.talk_room__sendbox{
+    width: 100%;
+    min-height: 8rem;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background-color: #00ff7f;
+    font-size: 2rem;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+}
+
+.talk_room__sendbox-textbox{
+    font-size: 3rem;
+    width: calc(100% - 10rem - 4rem);
+    margin: 8px auto;
+    border: solid 4px #000;
+    border-radius: 32px;
+}
+
+.talk_room__sendbox-btn{
+    font-size: 3rem;
+    margin: auto 8px;
+    width: 10rem;
+    border: solid 2px #131313;
+    background: none;
+    border-radius: 32px;
+}
