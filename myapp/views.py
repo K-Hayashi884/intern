@@ -58,10 +58,26 @@ def login_view(request):
             return render(request,"myapp/login.html",params)
 
 def friends(request):
-    return render (request, "myapp/friends.html")
+    user = request.user
+    # usernameの重複は許されていないので、usernameだけで一意に定まる
+    friends = User.objects.exclude(username=user.username)
+    # user_img = UserImage.objects.get(user=user)
+    user_img = UserImage.objects.all()
+    params = {
+        "user": user,
+        "user_img": user_img,
+        "friends": friends,
+    }
+    return render (request, "myapp/friends.html", params)
 
-def talk_room(request):
-    return render (request, "myapp/talk_room.html")
+def talk_room(request,friend_username):
+    user = request.user
+    friend = User.objects.get(username=friend_username)
+    params = {
+        "user": user,
+        "friend": friend, 
+    }
+    return render (request, "myapp/talk_room.html", params)
 
 def setting(request):
     return render (request, "myapp/setting.html")
