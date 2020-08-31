@@ -8,6 +8,8 @@ from django.contrib import messages
 
 # Create your views here.
 from .models import User,UserImage
+
+
 def index(request):
     return render (request, "myapp/index.html")
 
