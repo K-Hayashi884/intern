@@ -10,3 +10,10 @@ class UserImage(models.Model):
     image = models.ImageField(verbose_name="画像",null=True,blank=True,upload_to="images")
     def __int__(self):
         return "{}の写真".format(self.user)
+
+class Talk(models.Model):
+    talk = models.CharField(max_length = 500)
+    talk_from = models.CharField(max_length = 20)
+    talk_to = models.CharField(max_length = 20)
+    def __int__(self):
+        return "{}>>{}".format(self.talk_from, self.talk_to)

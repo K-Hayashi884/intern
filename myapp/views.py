@@ -73,6 +73,7 @@ def friends(request):
 def talk_room(request,friend_username):
     user = request.user
     friend = User.objects.get(username=friend_username)
+    
     params = {
         "user": user,
         "friend": friend, 
