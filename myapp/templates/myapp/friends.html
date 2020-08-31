@@ -1,0 +1,63 @@
+<link rel="stylesheet" type="text/css" href="../../static/myapp/css/friends.css">
+<!-- <link rel="stylesheet" type="text/css" href=""> -->
+<div class="friends">
+    <div class="friends__search"></div>
+    <ul class="friends__list-wrap">
+        {% for friend in friends %}
+        <li class="friends__list">
+            <a class="friends__list-link" href="">
+                {% for user_img in user_img %}
+                {% if user_img.user.username == friend.username %}
+                {% comment %}
+                <img class="friends__list-usericon" src="{{ user_img.filter(username=friend.username) }}">
+                {% endcomment %}
+                <img class="friends__list-usericon" src="/images/{{ user_img.image }}">
+                {% endif %}
+                {% endfor %}
+                <!-- <img class="friends__list-usericon" src=""> -->
+                <div class="friends__list-username">{{ friend.username }}</div>
+                <div class="friends__list-talk">
+                    <p class="friends__list-talk-content">やっぴ～aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+                    <p class="friends__list-talk-time">12:18</p>
+                </div>
+            </a>
+        </li>
+        {% endfor %}
+
+
+
+        <li class="friends__list">
+            <a class="friends__list-link" href="">
+                <img class="friends__list-usericon" src="https://cdn-ak.f.st-hatena.com/images/fotolife/j/ji2/20200217/20200217162353.png">
+                <!-- <img class="friends__list-usericon" src=""> -->
+                <div class="friends__list-username">たくみ</div>
+                <div class="friends__list-talk">
+                    <p class="friends__list-talk-content">やっぴ～aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+                    <p class="friends__list-talk-time">12:18</p>
+                </div>
+            </a>
+        </li>
+        <li class="friends__list">
+            <a class="friends__list-link" href="">
+                <img class="friends__list-usericon" src="/images/images/IMG_20200822_112338.jpg">
+                <!-- <img class="friends__list-usericon" src=""> -->
+                <div class="friends__list-username">たくみ</div>
+                <div class="friends__list-talk">
+                    <p class="friends__list-talk-content">やっぴ～</p>
+                    <p class="friends__list-talk-time">12:18</p>
+                </div>
+            </a>
+        </li>
+        <li class="friends__list">
+            <a class="friends__list-link" href="">
+                <img class="friends__list-usericon" src="/images/images/IMG_20200822_112338.jpg">
+                <!-- <img class="friends__list-usericon" src=""> -->
+                <div class="friends__list-username">たくみ</div>
+                <div class="friends__list-talk">
+                    <p class="friends__list-talk-content">やっぴ～</p>
+                    <p class="friends__list-talk-time">12:18</p>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
