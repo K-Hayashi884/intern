@@ -121,4 +121,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 # AUTH_USER_MODEL = 'myapp.User'
 MEDIA_ROOT = os.path.join(BASE_DIR, "images")
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/friends'
