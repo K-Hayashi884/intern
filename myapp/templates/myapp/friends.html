@@ -1,11 +1,18 @@
-<link rel="stylesheet" type="text/css" href="../../static/myapp/css/friends.css">
-<!-- <link rel="stylesheet" type="text/css" href=""> -->
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}">
+{% endblock %}
+
+{% block header-title %}友達{% endblock %}
+
+{% block content %}
 <div class="friends">
     <div class="friends__search"></div>
     <ul class="friends__list-wrap">
         {% for friend in friends %}
         <li class="friends__list">
-            <a class="friends__list-link" href="">
+            <a class="friends__list-link" href="{% url 'talk_room' friend.username %}">
                 {% for user_img in user_img %}
                 {% if user_img.user.username == friend.username %}
                 {% comment %}
@@ -25,3 +32,5 @@
         {% endfor %}
     </ul>
 </div>
+
+{% endblock content %}

@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import (
     FileExtensionValidator
 )
-from .models import User
+# from .models import User
 
 class SignUpForm(UserCreationForm):
     img = forms.ImageField(
@@ -28,3 +28,6 @@ class LoginForm(AuthenticationForm):
        #htmlの表示を変更可能にします
        self.fields['username'].widget.attrs['class'] = 'form-control'
        self.fields['password'].widget.attrs['class'] = 'form-control'
+    
+class TalkForm(forms.Form):
+    talk = forms.CharField(label='talk')

@@ -1,11 +1,40 @@
-<link rel="stylesheet" type="text/css" href="../../static/myapp/css/talk_room.css">
-<!-- <link rel="stylesheet" type="text/css" href=""> -->
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}">
+{% endblock %}
+
+{% block header-title %}{{ friend.username }}{% endblock %}
+
+{% block content %}
 <div class="talk_room">
-    <div class="talk_room__chatboard">
-        {{ friend.username }}
-    </div>
-    <div class="talk_room__sendbox">
-        <input class="talk_room__sendbox-textbox">
-        <button class="talk_room__sendbox-btn">送信</button>
-    </div>
+    <ul class="talk_room__chatboard">
+        {% for talk in talk %}
+        {% if talk.talk_from == user %}
+        <li class="talk_room__chatboard-content talk_room__chatboard-content-user">
+            <p class="talk_room__chatboard-content-name">＞{{ talk.talk_from }}</p>
+            <p class="talk_room__chatboard-content-text">{{ talk.talk }}</p>
+        </li>
+        {% else %}
+        <li class="talk_room__chatboard-content talk_room__chatboard-content-friend">
+            <p class="talk_room__chatboard-content-name">＞{{ talk.talk_from }}</p>
+            <p class="talk_room__chatboard-content-text">{{ talk.talk }}</p>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    <form class="talk_room__sendbox" method="POST">
+        {% csrf_token %}
+        {{ form.talk }}
+        <button class="talk_room__sendbox-btn" type="submit">送信</button>
+    </form>
 </div>
+{% endblock content %}
+
+{% block footer %}{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('id_talk').setAttribute('autocomplete', 'off');
+</script>
+{% endblock %}

@@ -1,5 +1,5 @@
 .friends{
-
+    padding: 64px 0;
 }
 
 .friends__search{
@@ -8,7 +8,7 @@
 
 .friends__list{
     width: calc(100% - 32px);
-    height: 12rem;
+    height: 4rem;
     padding: 8px 16px;
     list-style: none;
     border-bottom: solid 1px #888;
@@ -31,33 +31,33 @@
 
 .friends__list-usericon{
     position: absolute;
-    height: calc(12rem - 16px);
-    width: calc(12rem - 16px);
-    border: solid 6px #000;
+    height: calc(4rem - 16px);
+    width: calc(4rem - 16px);
+    border: solid 3px #000;
     border-radius: 50%;
     float: left;
     object-fit: cover;
 }
 
 .friends__list-username{
-    font-size: 3.6rem;
-    width: calc(100% - 12rem - 32px);
+    font-size: 1.2rem;
+    width: calc(100% - 4rem - 8px);
     margin: 0 0 0 auto;
 }
 
 .friends__list-talk{
-    width: calc(100% - 12rem - 32px);
+    width: calc(100% - 4rem - 8px);
     margin: 1rem 0 1rem auto;
     display: -webkit-flex;
     display: flex;
     -webkit-justify-content: space-between;
     justify-content: space-between;
-    font-size: 2.4rem;
+    font-size: 0.8rem;
     color: #888;
 }
 
 .friends__list-talk-content{
-    max-width: calc(100% - 8rem - 64px);
+    max-width: calc(100% - 2.4rem - 16px);
     margin: auto 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -65,11 +65,16 @@
 }
 
 .friends__list-talk-time{
-    width: 8rem;
+    width: 2.4rem;
     margin: auto 0;
 }
 
 
+header{
+    position: fixed;
+    background-color: #eee;
+}
 
-/* baseに移して消す */
-body{margin:0;}
+.footer-container{
+    background-color: #eee;
+}

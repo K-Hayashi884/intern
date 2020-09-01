@@ -1,18 +1,80 @@
 .talk_room{
-
+    padding: 64px 0;
 }
 
 .talk_room__chatboard{
+    margin: 0;
+    padding: 0;
+}
+
+/* ここから簡易版のトーク画面 */
+/* .talk_room__chatboard-content{
+    list-style: none;
+    border-bottom: solid 2px #eee;
+    padding: 4px 8px;
+}
+
+.talk_room__chatboard-content:first-child{
+    border-top: solid 2px #eee;
+}
+
+.talk_room__chatboard-content-user{
 
 }
 
+.talk_room__chatboard-content-friend{
+
+}
+
+.talk_room__chatboard-content-name{
+    margin: 0 0 4px;
+    font-size: 0.8rem;
+}
+
+.talk_room__chatboard-content-text{
+    margin: 0;
+} */
+/* ここまでが簡易版 */
+
+/* ここからLINEに寄せたトーク画面 */
+.talk_room__chatboard-content{
+    list-style: none;
+    padding: 8px 12px;
+    width: max-content;
+    max-width: 70%;
+    border-radius: 16px;
+}
+
+.talk_room__chatboard-content:first-child{
+    /* border-top: solid 2px #eee; */
+}
+
+.talk_room__chatboard-content-user{
+    margin: 4px 2% 4px auto;
+    background-color: #98fb98;
+}
+
+.talk_room__chatboard-content-friend{
+    margin: 4px auto 4px 2%;
+    background-color: #eee;
+}
+
+.talk_room__chatboard-content-name{
+    display: none;
+}
+
+.talk_room__chatboard-content-text{
+    margin: 0;
+}
+/* ここまでがLINEに寄せたトーク画面 */
+
 .talk_room__sendbox{
     width: 100%;
-    min-height: 8rem;
+    min-height: 3rem;
     position: fixed;
     left: 0;
     bottom: 0;
-    background-color: #00ff7f;
+    background-color: #eee;
     font-size: 2rem;
     display: -webkit-flex;
     display: flex;
@@ -20,19 +82,38 @@
     justify-content: space-around;
 }
 
-.talk_room__sendbox-textbox{
-    font-size: 3rem;
-    width: calc(100% - 10rem - 4rem);
+/* .talk_room__sendbox-textbox{
+    font-size: 1rem;
+    width: calc(100% - 6rem);
     margin: 8px auto;
-    border: solid 4px #000;
+    border: solid 2px #000;
+    border-radius: 32px;
+} */
+
+input{
+    font-size: 1rem;
+    width: calc(100% - 6rem);
+    margin: 8px auto;
+    border: solid 2px #000;
     border-radius: 32px;
 }
 
 .talk_room__sendbox-btn{
-    font-size: 3rem;
+    font-size: 1rem;
     margin: auto 8px;
-    width: 10rem;
+    width: 4rem;
     border: solid 2px #131313;
     background: none;
     border-radius: 32px;
+}
+
+
+
+header{
+    position: fixed;
+    background-color: #eee;
+}
+
+.footer-container{
+    background-color: #eee;
 }

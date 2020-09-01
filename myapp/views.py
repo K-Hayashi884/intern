@@ -1,13 +1,15 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,get_user
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-from .forms import SignUpForm,LoginForm
-from django.contrib import messages 
+from .forms import SignUpForm,LoginForm,TalkForm
+from django.contrib import messages
+from django.db.models import Q
+from django.contrib.auth.models import User
 
 # Create your views here.
-from .models import User,UserImage
+from .models import UserImage,Talk
 
 
 def index(request):
@@ -73,14 +75,38 @@ def friends(request):
     return render (request, "myapp/friends.html", params)
 
 def talk_room(request,friend_username):
-    user = request.user
+    user = get_user(request)
     friend = User.objects.get(username=friend_username)
+    talk = Talk.objects.filter(Q(talk_from=user, talk_to=friend) | Q(talk_to=user, talk_from=friend))
+    talk = talk.orderd_by('time')
+    form = TalkForm()
+    if request.method == "POST":
+        post = TalkForm(request.POST)
+        params = {
+            "form": form,
+            "user": user,
+            "friend": friend, 
+            "talk": talk,
+        }
+        if post.is_valid():
+            text = post.cleaned_data.get('talk')
+            now = datetime.datetime.now()
+            new_talk = Talk(talk=text, talk_from=user, talk_to=friend, time=now)
+            new_talk.save()
+            # models.Talk.objects.create(**form.cleaned_data)
+
+            return render(request,"myapp/talk_room.html",params)
+            
+        return render(request,"myapp/talk_room.html",params)
     
-    params = {
-        "user": user,
-        "friend": friend, 
-    }
-    return render (request, "myapp/talk_room.html", params)
+    else:      
+        params = {
+            "form": form,
+            "user": user,
+            "friend": friend, 
+            "talk": talk,
+        }
+        return render(request,"myapp/talk_room.html",params)
 
 def setting(request):
     return render (request, "myapp/setting.html")
