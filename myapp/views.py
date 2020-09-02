@@ -3,9 +3,14 @@ from django.contrib.auth import authenticate,login
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-from .forms import SignUpForm,LoginForm
+from .forms import (
+    SignUpForm,LoginForm,
+    UserSettingForm,
+    ImageSettingForm
+)
 from django.contrib import messages 
-
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 from .models import User,UserImage
 
@@ -41,11 +46,13 @@ def signup_view(request):
         return render(request,"myapp/signup.html",params)
         
 def login_view(request):
+    print("login_view")
     if request.method == "GET":
         form = LoginForm()
         params = {"form":form}
         return render (request, "myapp/login.html",params)
     elif request.method == "POST":
+        print("login_view post")
         form = LoginForm(request.POST)
         username = request.POST['username'] 
         password = request.POST['password'] 
@@ -65,5 +72,54 @@ def friends(request):
 def talk_room(request):
     return render (request, "myapp/talk_room.html")
 
+@login_required
 def setting(request):
-    return render (request, "myapp/setting.html")
+    print('setting')
+    user = request.user
+    if request.method == "GET":
+        print("GET")
+        try:
+            user_img = UserImage.objects.get(user=user)
+        except ObjectDoesNotExist:
+            user_img = UserImage.objects.none()
+        setting_form = UserSettingForm(instance=user)
+        image_setting_form = ImageSettingForm(instance=user)
+        params = {
+            "user_img":user_img,
+            "setting_form":setting_form,
+            "image_setting_form":image_setting_form,
+        }
+    elif request.method == "POST":
+        print('POST')
+        setting_form = UserSettingForm(request.POST)
+        image_setting_form = ImageSettingForm(request.POST,request.FILES)
+        user_data = User.objects.filter(pk=user.pk)
+        try:
+            user_img = UserImage.objects.get(user=user)
+        except ObjectDoesNotExist:
+            user_img = UserImage.objects.none()
+        if setting_form.is_valid() and image_setting_form.is_valid():
+            username = request.POST["username"]
+            email = request.POST["email"]
+            password = request.POST["password1"]
+            if username is not None:
+                user_data.update(username=username)
+            if email is not None:
+                user_data.update(email=email)
+            if password is not None:
+                user_data.update(password=password)
+            try:
+                user_img = UserImage.objects.get(user=user)
+            except ObjectDoesNotExist:
+                user_img = UserImage.objects.none()
+            user_img.delete()
+            image_setting_data = image_setting_form.save(commit=False)
+            image_setting_data.user = user
+            image_setting_data.save()
+            params = {"setting_done":True}
+        else:
+            params = {
+                "setting_form":setting_form,
+                "image_setting_form":image_setting_form,
+            }
+    return render (request, "myapp/setting.html",params)

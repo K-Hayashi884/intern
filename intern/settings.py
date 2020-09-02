@@ -120,5 +120,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # AUTH_USER_MODEL = 'myapp.User'
-MEDIA_ROOT = os.path.join(BASE_DIR, "images")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'login_view'
