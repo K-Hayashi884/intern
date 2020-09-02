@@ -119,6 +119,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# 画像（ユーザーアイコン）にアクセスするための指定
+MEDIA_URL = "/images/"
+# ここを指定してからurls.pyを指定する
+
 # AUTH_USER_MODEL = 'myapp.User'
 MEDIA_ROOT = os.path.join(BASE_DIR, "images")
 LOGIN_REDIRECT_URL = '/'
