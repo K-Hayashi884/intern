@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
 import myapp.views as myapp
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('myapp.urls')),
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
+    {'document_root':settings.MEDIA_ROOT}),
 ]
