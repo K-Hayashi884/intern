@@ -8,21 +8,36 @@
 
 {% block content %}
 <div class="friends">
-    <div class="friends__search"></div>
+
+    <!-- バックエンド追加機能・友人の検索機能 -->
+    <!-- Coming Soon -->
+    <!-- <div class="friends__search"></div> -->
+    
+    <!-- 友達のリスト表示部分 -->
     <ul class="friends__list-wrap">
+        <!-- =================== -->
+        <!-- 友達に応じて表示    -->
+        <!-- ＞for文を回して表示 -->
+        <!-- =================== -->
         {% for friend in friends %}
         <li class="friends__list">
+            <!-- それぞれが別のトーク画面に飛ぶようにリンクをはる -->
             <a class="friends__list-link" href="{% url 'talk_room' friend.username %}">
+                <!-- ========================================== -->
+                <!-- ユーザーに応じたアイコンを表示するために、 -->
+                <!-- ユーザー名に合うかどうかを1個ずつチェック  -->
+                <!-- forとifを組み合わせて調べ上げる            -->
+                <!-- ========================================== -->
                 {% for user_img in user_img %}
                 {% if user_img.user.username == friend.username %}
-                {% comment %}
-                <img class="friends__list-usericon" src="{{ user_img.filter(username=friend.username) }}">
-                {% endcomment %}
                 <img class="friends__list-usericon" src="/images/{{ user_img.image }}">
+                {% else %}
+                <img class="friends__list-usericon" src="">
                 {% endif %}
                 {% endfor %}
-                <!-- <img class="friends__list-usericon" src=""> -->
+                <!-- ユーザーアイコンのforここまで -->
                 <div class="friends__list-username">{{ friend.username }}</div>
+                <!-- LINEのようにユーザーの最後のやりとりを表示できるようにしてみる -->
                 <div class="friends__list-talk">
                     <p class="friends__list-talk-content">やっぴ～aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
                     <p class="friends__list-talk-time">12:18</p>

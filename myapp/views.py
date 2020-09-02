@@ -7,6 +7,7 @@ from .forms import SignUpForm,LoginForm,TalkForm
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.models import User
+import datetime
 
 # Create your views here.
 from .models import UserImage,Talk
@@ -65,7 +66,8 @@ def friends(request):
     user = request.user
     # usernameの重複は許されていないので、usernameだけで一意に定まる
     friends = User.objects.exclude(username=user.username)
-    # user_img = UserImage.objects.get(user=user)
+    # とりあえずすべてのユーザーアイコンを持っていく
+    # ＞html内の組み込みにて、各ユーザーの該当するアイコンを表示することにする
     user_img = UserImage.objects.all()
     params = {
         "user": user,
@@ -75,37 +77,45 @@ def friends(request):
     return render (request, "myapp/friends.html", params)
 
 def talk_room(request,friend_username):
+    # ユーザ・友達をともにオブジェクトで取得
     user = get_user(request)
     friend = User.objects.get(username=friend_username)
+    # 自分→友達、友達→自分のトークを全て取得
     talk = Talk.objects.filter(Q(talk_from=user, talk_to=friend) | Q(talk_to=user, talk_from=friend))
-    talk = talk.orderd_by('time')
+    # 時系列で並べ直す
+    talk = talk.order_by('time')
+    # 送信form
     form = TalkForm()
+    # メッセージ送信だろうが更新だろが、表示に必要なパラメーターは変わらないので、この時点でまとめて指定
+    params = {
+        "form": form,
+        "user": user,
+        "friend": friend, 
+        "talk": talk,
+        "is_talk_room": True,
+    }
+    
+    # POST（メッセージ送信あり）
     if request.method == "POST":
+        # 送信内容を取得
         post = TalkForm(request.POST)
-        params = {
-            "form": form,
-            "user": user,
-            "friend": friend, 
-            "talk": talk,
-        }
+
+        # 送信内容があった場合
         if post.is_valid():
+            # 送信内容からメッセージを取得
             text = post.cleaned_data.get('talk')
             now = datetime.datetime.now()
+            # 送信者、受信者、メッセージ、タイムスタンプを割り当てて保存
             new_talk = Talk(talk=text, talk_from=user, talk_to=friend, time=now)
             new_talk.save()
-            # models.Talk.objects.create(**form.cleaned_data)
-
+            # 更新
             return render(request,"myapp/talk_room.html",params)
-            
+
+        # 送信内容がなかった場合（ただの更新と同じ）
         return render(request,"myapp/talk_room.html",params)
     
+    # POSTでない（リダイレクトorただの更新）
     else:      
-        params = {
-            "form": form,
-            "user": user,
-            "friend": friend, 
-            "talk": talk,
-        }
         return render(request,"myapp/talk_room.html",params)
 
 def setting(request):
