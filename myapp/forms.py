@@ -16,13 +16,14 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
-class LoginForm(AuthenticationForm):
+class LoginForm(AuthenticationForm):        
     def confirm_login_allowed(self, user):
         if not user.is_active:
             raise ValidationError(
                 _("This account is inactive."),
                 code='inactive',
             )
+
     def __init__(self, *args, **kwargs):
        super().__init__(*args, **kwargs)
        #htmlの表示を変更可能にします

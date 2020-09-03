@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate,login,get_user
+from django.contrib.auth import get_user
+from django.contrib.auth import authenticate,login
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
@@ -42,25 +44,11 @@ def signup_view(request):
             return redirect("/")
         params = {"form":form,}
         return render(request,"myapp/signup.html",params)
-        
-def login_view(request):
-    if request.method == "GET":
-        form = LoginForm()
-        params = {"form":form}
-        return render (request, "myapp/login.html",params)
-    elif request.method == "POST":
-        form = LoginForm(request.POST)
-        username = request.POST['username'] 
-        password = request.POST['password'] 
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return redirect("/") 
-        else: 
-            messages.error(request,'username or password not correct') 
-            params = {"form":form}
-            return render(request,"myapp/login.html",params)
+            
+class Login(LoginView):
+    """ログインページ"""
+    form_class = LoginForm
+    template_name = 'myapp/login.html'
 
 def friends(request):
     user = request.user
