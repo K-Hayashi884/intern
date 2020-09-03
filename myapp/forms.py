@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import (
     FileExtensionValidator
 )
-from .models import User
+# from .models import User
 
 class SignUpForm(UserCreationForm):
     img = forms.ImageField(
@@ -29,3 +29,8 @@ class LoginForm(AuthenticationForm):
        #htmlの表示を変更可能にします
        self.fields['username'].widget.attrs['class'] = 'form-control'
        self.fields['password'].widget.attrs['class'] = 'form-control'
+    
+# トークの送信のためのform
+# メッセージを送信するだけで、誰から誰か、時間は全て自動で対応できるのでこれだけで十分
+class TalkForm(forms.Form):
+    talk = forms.CharField(label='talk')
