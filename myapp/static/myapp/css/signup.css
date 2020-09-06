@@ -1,0 +1,9 @@
+h1 {
+    font-size: 25px;
+    font-family: sans-serif;
+    font-weight: lighter;
+    text-align: center;
+}
+input {
+  border: static thin gray;
+}
