@@ -4,9 +4,43 @@
 }
 
 /* バックエンド追加機能・友人の検索機能 */
-/* .friends__search{
+.friends__search{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 8px;
+    position: fixed;
+    width: calc(100% - 16px);
+    background-color: #ccc;
+    height: calc(2rem + 12px);
+}
 
-} */
+.friends__search i{
+    font-size: 2rem;
+    padding: 6px;
+    color: #888;
+}
+
+#id_keyword{
+    border: none;
+    border-bottom: solid 1px #888;
+    margin: 8px 0;
+    width: calc(100% - 8rem);
+    border-radius: 0.4rem;
+    padding: 0 4px;
+}
+
+.friends__search button{
+    margin: 8px 0;
+    border: solid 2px #888;
+    background: none;
+    border-radius: 1rem;
+    color: #888;
+}
+
+.friends__list-wrap-search_text{
+    text-align: center;
+    color: #888;
+}
 
 /* margin:autoと横幅の指定でcalcを上手く利用することで、 */
 /* 単位が違う横幅指定をしつつ                            */
@@ -32,6 +66,7 @@
 .friends__list-wrap{
     width: 100%;
     margin: 0;
+    margin-top:calc(2rem + 12px);
     padding: 0;
 }
 
@@ -79,7 +114,7 @@
     width: 2.4rem;
     margin: auto 0;
 }
-
+/* ここまで　LINEのようにユーザーの最後のやりとりを表示できるようにしてみる */
 
 /* ここはbaseに入れたいな */
 header{
