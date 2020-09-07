@@ -55,7 +55,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
     email = models.EmailField(max_length=100)
-    img = models.ImageField(upload_to='img/upload', height_field=None, width_field=None, max_length=100)
+    img = models.ImageField(upload_to='img/upload/', height_field=None, width_field=None, max_length=100)
     objects = MyUserManager()
 
     USERNAME_FIELD = 'username'

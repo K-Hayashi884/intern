@@ -4,6 +4,17 @@ h1 {
     font-weight: lighter;
     text-align: center;
 }
-input {
-  border: static thin gray;
+table {
+  margin: 30px auto;
+}
+input[type="submit"]{
+  border: solid thin gray;
+  width: 90px;
+  height: 30px;
+  border-radius: 0.5rem;
+  background-color: white;
+  margin-top: 20px;
+}
+form p {
+  text-align: center;
 }

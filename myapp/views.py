@@ -1,8 +1,6 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.views.generic.edit import CreateView
 from .models import User
 from .forms import SignUpForm
 from django.urls import reverse_lazy
@@ -18,17 +16,15 @@ def signup_view(request):
 
     if (request.method == 'POST'):
         obj = User()
-        user = SignUpForm(request.POST, instance=obj)
-        if user.is_valid():
-            user.save()
+        form = SignUpForm(request.POST,request.FILES, instance=obj)
+        if form.is_valid():
+            form.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             image = form.cleaned_data.get('img')
-            user = User.objects.get(username, password=password)
-            login(request, user)
             user = User.objects.get(username=username)
             return redirect(to='/')
-        params = {'form': user}
+        params = {'form': form}
     return render(request, "myapp/signup.html",params)
 
 def login_view(request):
