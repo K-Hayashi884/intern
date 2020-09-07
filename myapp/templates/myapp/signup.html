@@ -1,6 +1,7 @@
 {% extends 'myapp/base.html' %}
 {% block content %}
   {# signup処理部分 #}
+  <!-- 画像が含まれるformは enctype="multipart/form-data"　が必須。 -->
 <form method="post" action="{% url 'signup_view' %}" enctype="multipart/form-data">
     <table>
         <tr>

@@ -15,6 +15,10 @@ class SignUpForm(UserCreationForm):
     )
     class Meta:
         model = User
+        """
+        Django標準のUserに存在するfieldです。
+        上のimgは元々のものには無いので、自分で作ります。
+        """
         fields = ('username', 'email', 'password1', 'password2')
 
 class LoginForm(AuthenticationForm):
@@ -58,7 +62,13 @@ class ImageSettingForm(forms.ModelForm):
         exclude = ("user",)
 
 class PasswordChangeForm(PasswordChangeForm):
-    """パスワード変更フォーム"""
+    """
+    Django標準パスワード変更フォーム
+    Djangoはユーザモデルに未加工の (単なるテキストの) パスワードは保存せず
+    ハッシュ値でのみ保存します。
+    したがって、ユーザのパスワード属性を直接操作できない。
+    よってパスワード編集のために標準で用意されているformを使います。
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
