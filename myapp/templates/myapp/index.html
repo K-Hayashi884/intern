@@ -4,6 +4,7 @@
     {% if request.user.is_authenticated %}
         ログイン済み
         {{request.user}}さんようこそ
+        <a href="{% url 'logout_view' %}">log out</a>
     {% else %}
         <a href="{% url 'signup_view' %}">sign up</a>
         <a href="{% url 'login_view' %}">login</a>

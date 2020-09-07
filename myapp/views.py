@@ -3,10 +3,17 @@ from django.contrib.auth import authenticate,login
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import (
+    LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
+)
 from .forms import (
-    SignUpForm,LoginForm,
-    UserSettingForm,
-    ImageSettingForm
+    SignUpForm,
+    LoginForm,
+    MailSettingForm,
+    ImageSettingForm,
+    PasswordChangeForm,
+    UserNameSettingForm,
 )
 from django.contrib import messages 
 from django.contrib.auth.decorators import login_required
@@ -44,27 +51,16 @@ def signup_view(request):
             return redirect("/")
         params = {"form":form,}
         return render(request,"myapp/signup.html",params)
-        
-def login_view(request):
-    print("login_view")
-    if request.method == "GET":
-        form = LoginForm()
-        params = {"form":form}
-        return render (request, "myapp/login.html",params)
-    elif request.method == "POST":
-        print("login_view post")
-        form = LoginForm(request.POST)
-        username = request.POST['username'] 
-        password = request.POST['password'] 
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return redirect("/") 
-        else: 
-            messages.error(request,'username or password not correct') 
-            params = {"form":form}
-            return render(request,"myapp/login.html",params)
+
+
+class Login(LoginView):
+    """ログインページ"""
+    form_class = LoginForm
+    template_name = 'myapp/login.html'
+
+class Logout(LoginRequiredMixin, LogoutView):
+    """ログアウトページ"""
+    template_name = 'myapp/login.html'
 
 def friends(request):
     return render (request, "myapp/friends.html")
@@ -74,52 +70,90 @@ def talk_room(request):
 
 @login_required
 def setting(request):
-    print('setting')
+    return render (request, "myapp/setting.html")
+
+@login_required
+def user_img_change(request):
+    user = request.user
+    try:
+        user_img = UserImage.objects.get(user=user)
+    except ObjectDoesNotExist:
+        user_img = UserImage.objects.none()
+    if request.method == "GET":
+        form = ImageSettingForm(instance=user)
+        params = {
+            "form":form,
+            "user_img":user_img,
+        }
+        return render(request,"myapp/user_img_change.html",params)
+    elif request.method == "POST":
+        form = ImageSettingForm(request.POST,request.FILES)
+        if form.is_valid():
+            user_img.image=request.FILES["image"]
+            user_img.save()
+            return user_img_change_done(request)
+        params = {
+            "form":form,
+            "user_img":user_img,
+        }
+        return render(request,"myapp/user_img_change.html",params)
+
+
+@login_required
+def user_img_change_done(request):
+    return render(request,"myapp/user_img_change_done.html")
+@login_required
+def mail_change(request):
+    print("mail_change")
     user = request.user
     if request.method == "GET":
-        print("GET")
-        try:
-            user_img = UserImage.objects.get(user=user)
-        except ObjectDoesNotExist:
-            user_img = UserImage.objects.none()
-        setting_form = UserSettingForm(instance=user)
-        image_setting_form = ImageSettingForm(instance=user)
+        form = MailSettingForm(instance=user)
         params = {
-            "user_img":user_img,
-            "setting_form":setting_form,
-            "image_setting_form":image_setting_form,
+            "form":form,
         }
+        return render (request,"myapp/mail_change.html",params)
     elif request.method == "POST":
-        print('POST')
-        setting_form = UserSettingForm(request.POST)
-        image_setting_form = ImageSettingForm(request.POST,request.FILES)
-        user_data = User.objects.filter(pk=user.pk)
-        try:
-            user_img = UserImage.objects.get(user=user)
-        except ObjectDoesNotExist:
-            user_img = UserImage.objects.none()
-        if setting_form.is_valid() and image_setting_form.is_valid():
-            username = request.POST["username"]
-            email = request.POST["email"]
-            password = request.POST["password1"]
-            if username is not None:
-                user_data.update(username=username)
-            if email is not None:
-                user_data.update(email=email)
-            if password is not None:
-                user_data.update(password=password)
-            try:
-                user_img = UserImage.objects.get(user=user)
-            except ObjectDoesNotExist:
-                user_img = UserImage.objects.none()
-            user_img.delete()
-            image_setting_data = image_setting_form.save(commit=False)
-            image_setting_data.user = user
-            image_setting_data.save()
-            params = {"setting_done":True}
-        else:
-            params = {
-                "setting_form":setting_form,
-                "image_setting_form":image_setting_form,
-            }
-    return render (request, "myapp/setting.html",params)
+        form = MailSettingForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+            return mail_change_done(request)
+        params = {
+            "form":form,
+        }
+        return render(request,"myapp/mail_change.html",params)
+@login_required
+def mail_change_done(request):
+    return render(request,"myapp/mail_change_done.html")
+
+@login_required
+def username_change(request):
+    print("username_change")
+    user = request.user
+    if request.method == "GET":
+        form = UserNameSettingForm(instance=user)
+        params = {
+            "form":form,
+        }
+        return render (request,"myapp/username_change.html",params)
+    elif request.method == "POST":
+        form = UserNameSettingForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+            return username_change_done(request)
+        params = {
+            "form":form,
+        }
+        return render(request,"myapp/mail_change.html",params)
+@login_required
+def username_change_done(request):
+    return render(request,"myapp/username_change_done.html")
+
+class PasswordChange(PasswordChangeView):
+    """パスワード変更ビュー"""
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('register:password_change_done')
+    template_name = 'myapp/password_change.html'
+
+class PasswordChangeDone(PasswordChangeDoneView):
+    """パスワード変更しました"""
+    template_name = 'myapp/password_change_done.html'

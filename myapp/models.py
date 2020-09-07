@@ -7,6 +7,6 @@ class User(User):
     pass
 class UserImage(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,related_name="user_img")
-    image = models.ImageField(verbose_name="画像",null=True,blank=True,upload_to="images")
+    image = models.ImageField(verbose_name="画像",upload_to="images")
     def __str__(self):
         return "{}の写真".format(self.user)

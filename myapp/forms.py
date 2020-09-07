@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import (
+    UserCreationForm,PasswordChangeForm,AuthenticationForm
+    )
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import (
@@ -29,12 +30,21 @@ class LoginForm(AuthenticationForm):
        self.fields['username'].widget.attrs['class'] = 'form-control'
        self.fields['password'].widget.attrs['class'] = 'form-control'
 
-class UserSettingForm(forms.ModelForm):
-    password1 = forms.CharField(widget=forms.PasswordInput,label="Password")
-    password2 = forms.CharField(widget=forms.PasswordInput,label="Password(確認用)")
+class MailSettingForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username','email',)
+        fields = ('email',)
+    def __init__(self, *args, **kwargs):
+       super().__init__(*args, **kwargs)
+       for field in self.fields.values():
+           default_label = str(field.label)
+           new_label = "new" + default_label
+           field.label = new_label
+
+class UserNameSettingForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username',)
     def __init__(self, *args, **kwargs):
        super().__init__(*args, **kwargs)
        for field in self.fields.values():
@@ -46,3 +56,10 @@ class ImageSettingForm(forms.ModelForm):
     class Meta:
         model = UserImage
         exclude = ("user",)
+
+class PasswordChangeForm(PasswordChangeForm):
+    """パスワード変更フォーム"""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
