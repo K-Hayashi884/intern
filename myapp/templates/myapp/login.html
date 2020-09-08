@@ -1,1 +1,44 @@
-LI
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/login.css' %}">
+{% endblock %}
+
+{% block header-title %}ログイン{% endblock %}
+
+{% block content %}
+{% if form.errors %}
+<p>ユーザーID、パスワードが一致しません。</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+
+<form action="{% url 'login_view' %}" method="POST">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>ユーザーネーム</td>
+            <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td>パスワード</td>
+            <td>{{ form.password }}</td>
+        </tr>
+    </table>
+
+    <p><input type="submit" value="ログイン"></p>
+    <input type="hidden" name="next" value="{{ next }}">
+
+
+</form>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

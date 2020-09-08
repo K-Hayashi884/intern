@@ -2,9 +2,9 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from .models import User
-from .forms import SignUpForm
+from .forms import SignUpForm, LoginForm
 from django.urls import reverse_lazy
-
+from django.contrib.auth.views import LoginView
 
 def index(request):
     return render(request, "myapp/index.html")
@@ -27,8 +27,9 @@ def signup_view(request):
         params = {'form': form}
     return render(request, "myapp/signup.html",params)
 
-def login_view(request):
-    return render(request, "myapp/login.html")
+class Login(LoginView):
+    form_class = LoginForm
+    template_name = 'myapp/login.html'
 
 def friends(request):
     return render(request, "myapp/friends.html")
