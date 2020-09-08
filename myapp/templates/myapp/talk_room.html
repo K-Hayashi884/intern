@@ -1,1 +1,25 @@
-TR
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}" />
+{% endblock %}
+
+{% block header-title %}{{you.username}}{% endblock %}
+
+{% block content %}
+    {% for talk in msg %}
+        {% if talk.sender == me %}
+            <p>自分から:</p>
+        {% else %}
+            <p>{{talk.sender}}から:</p>
+        {% endif %}
+        <p>{{talk.content}} ({{talk.pub_date.time}})</p>
+    {% endfor %}
+    <form method='POST' action='{% url "talk_room" me.id you.id %}' class='msg_form'>
+        {% csrf_token %}
+        {{form}}
+        <button type="submit">送信</button>
+    </form>
+{% endblock %}
+

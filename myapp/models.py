@@ -1,9 +1,9 @@
-from django.db import models
+from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
-from django.contrib.auth.base_user import BaseUserManager
 from django.core.validators import MinLengthValidator
+from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -87,3 +87,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
         #abstract = True # ここを削除しないといけないことを忘れない！！！！！！！！！！
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_sender')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_receiver')
+    content = models.TextField(max_length=1000)
+    pub_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.content) + '(' + str(self.sender) + ')'
+    
+    class Meta:
+        ordering = ('pub_date',)
