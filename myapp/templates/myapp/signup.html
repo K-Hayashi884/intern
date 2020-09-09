@@ -4,8 +4,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/signup.css' %}" />
 {% endblock %}
 {% block header-title %}会員登録{% endblock %}
-{% block content %}
-
+{% block content %}  
 {# signup処理部分 #}
 <form method="post" action="{% url 'signup_view' %}" enctype="multipart/form-data" class="signup-form">
     <table>

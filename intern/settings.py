@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myapp',
 ]
+"""
+今回myappにlogin周りの機能も入れていますが別々にする時はappを追加するのを忘れないようにする
+"""
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -120,10 +123,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/'
+
+LOGIN_URL = 'login_view'
 # 画像（ユーザーアイコン）にアクセスするための指定
 MEDIA_URL = "/images/"
 # ここを指定してからurls.pyを指定する
-
 # AUTH_USER_MODEL = 'myapp.User'
 MEDIA_ROOT = os.path.join(BASE_DIR, "images")
 LOGIN_REDIRECT_URL = '/friends'

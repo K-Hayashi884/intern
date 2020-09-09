@@ -1,1 +1,10 @@
-S
+{% extends 'myapp/base.html' %}
+
+{% block content %}
+    <ul>
+        <li><a href="{% url 'username_change' %}">ユーザ名変更</a></li>
+        <li><a href="{% url 'mail_change' %}">メールアドレス変更</a></li>
+        <li><a href="{% url 'user_img_change' %}">アイコン変更</a></li>
+        <li><a href="{% url 'password_change' %}">パスワード変更</a></li>
+    </ul>
+{% endblock content %}S
