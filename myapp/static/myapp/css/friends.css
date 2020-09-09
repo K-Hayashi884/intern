@@ -1,3 +1,38 @@
-a {
+
+.search_box {
+    background-color: #000033;
+    color: white;
+    text-align: right;
+}
+
+.friend-block {
+    border-bottom: solid 1px #9b9b9b;
+    margin-bottom: 0px;
+    padding-bottom: 10px;
+}
+
+body a {
     display: block;
+    color: black;
+    text-decoration: none;
+}
+
+.friend-name {
+    font-size: 18px;
+}
+
+.message_content {
+    position: absolute;
+    margin-top: 7px;
+    font-size: 15px;
+    color: #777;
+}
+
+.message_time {
+    position: relative;
+    color: #777;
+    text-align: right;
+    margin-top: 7px;
+    margin-right: 20px;
+    font-size: 12px;
 }

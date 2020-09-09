@@ -9,17 +9,28 @@
 
 {% block content %}
     {% for talk in msg %}
-        {% if talk.sender == me %}
-            <p>自分から:</p>
-        {% else %}
-            <p>{{talk.sender}}から:</p>
-        {% endif %}
-        <p>{{talk.content}} ({{talk.pub_date.time}})</p>
+        <div class="message_box">
+            <div class="message_sender">
+                {% if talk.sender == me %}
+                    自分から:
+                {% else %}
+                    {{talk.sender}}から:
+                {% endif %}
+            </div>
+            <div class="message_time">
+                {{talk.pub_date|date:"n/j"}}
+                <br>
+                {{talk.pub_date|date:"H:i:s"}}
+            </div>
+            <p class="message_text">{{talk.content}}</p>
+        </div>
     {% endfor %}
-    <form method='POST' action='{% url "talk_room" me.id you.id %}' class='msg_form'>
-        {% csrf_token %}
-        {{form}}
-        <button type="submit">送信</button>
-    </form>
+    <div class="post_window">
+        <form method='POST' action='{% url "talk_room" me.id you.id %}' class='msg_form'>
+            {% csrf_token %}
+            {{form}}
+            <button type="submit">送信</button>
+        </form>
+    </div>
 {% endblock %}
 

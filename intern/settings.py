@@ -107,7 +107,7 @@ AUTH_USER_MODEL = 'myapp.User'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 

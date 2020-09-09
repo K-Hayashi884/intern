@@ -8,24 +8,39 @@
 {% block header-title %}友達{% endblock %}
 
 {% block content %}
-<table class="table">
+<div class="search_box">
+    <form action="{% url 'friends' id %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit" class="btn btn-secondary">検索</button>
+    </form>
+</div>
 {% for friend in user %}
 {% if friend != me %}
-<tr>
-    {{friend.img}}
-    <a href="{% url 'talk_room' %}/{{me.id}}/{{friend.id}}">
+<a href="{% url 'talk_room' %}/{{me.id}}/{{friend.id}}">
+    <div class="friend-block">
         <div class="friend-name">{{friend.username}}</div>
-    </a>
-    {% for latest_msg in msg %}
+        {% for latest_msg in msg %}
         {% if latest_msg.sender.id == friend.id %}
-        <p>{{latest_msg.content}}   {{latest_msg.pub_date}}</p>
+            <div class="message_content">
+                {{latest_msg.content}}
+            </div>
+            <div class="message_time">
+                {{latest_msg.pub_date|date:"n/j H:i"}}
+            </div>
         {% endif %}
         {% if latest_msg.receiver.id == friend.id %}
-        <p>{{latest_msg.content}}   {{latest_msg.pub_date}}</p>
+            <div class="message_content">
+                {{latest_msg.content}}
+            </div>
+            <div class="message_time">
+                {{latest_msg.pub_date|date:"n/j H:i"}}
+            </div>
         {% endif %}
-    {% endfor %}
-</tr>
+        {% endfor %}
+    </div>
+</a>
 {% endif %}
 {% endfor %}
-</table>
+
 {% endblock %}

@@ -1,0 +1,29 @@
+.logoutbox a{
+    border: solid 1px darkblue;
+    margin-top: 8%;
+    margin-bottom: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 13px;
+    text-align: center;
+    height: 35px;
+    width: 140px;
+    border-radius: 20px;
+    color: darkblue;
+    text-decoration: none;
+    display: block;
+}
+
+button {
+    background-color: #fff;
+    border: solid 1px darkblue;
+    color: darkblue;
+    margin-top: 8%;
+    margin-left: 9px;
+    text-align: center;
+    height: 35px;
+    width: 140px;
+    border-radius: 20px;
+    text-decoration: none;
+    display: block;
+}

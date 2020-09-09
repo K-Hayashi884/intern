@@ -17,3 +17,6 @@ class LoginForm (AuthenticationForm):
 
 class MessageForm(forms.Form):
     content = forms.CharField(label='')
+
+class FindForm(forms.Form):
+    find = forms.CharField(label='search', required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
