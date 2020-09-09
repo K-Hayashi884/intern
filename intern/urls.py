@@ -19,10 +19,15 @@ from django.urls import path, include
 import myapp.views as myapp
 from django.contrib.staticfiles.urls import static
 
+# 画像表示のためにimport
+from django.conf.urls.static import static
+from django.conf import settings
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('myapp.urls')),
 ]
+
 """ 
 画像をローカルに保存するために必要
 """

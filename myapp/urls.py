@@ -6,7 +6,11 @@ urlpatterns = [
     path('signup', views.signup_view, name='signup_view'),
     path('login', views.Login.as_view(), name='login_view'),
     path('friends', views.friends, name='friends'),
-    path('talk_room', views.talk_room, name='talk_room'),
+    
+    # トーク画面
+    # 誰とのトークかを、URLにて判別
+    # ユーザー名に重複が許されていないので、ユーザー名で判別
+    path('talk_room/<friend_username>/', views.talk_room, name='talk_room'),
     path('setting', views.setting, name='setting'),
     path('logout',views.Logout.as_view(), name='logout_view'),
     path('password_change/', views.PasswordChange.as_view(), name='password_change'),

@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import (
     FileExtensionValidator
 )
+
 from .models import User,UserImage
 
 class SignUpForm(UserCreationForm):
@@ -21,13 +22,14 @@ class SignUpForm(UserCreationForm):
         """
         fields = ('username', 'email', 'password1', 'password2')
 
-class LoginForm(AuthenticationForm):
+class LoginForm(AuthenticationForm):        
     def confirm_login_allowed(self, user):
         if not user.is_active:
             raise ValidationError(
                 _("This account is inactive."),
                 code='inactive',
             )
+
     def __init__(self, *args, **kwargs):
        super().__init__(*args, **kwargs)
        #htmlの表示を変更可能にします
@@ -73,3 +75,13 @@ class PasswordChangeForm(PasswordChangeForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+
+# 友達の中から任意のユーザーを検索
+class FriendsSearchForm(forms.Form):
+    keyword = forms.CharField(label='検索',required=False,widget=forms.TextInput(attrs={'placeholder': 'ユーザー名で検索'}))
+    
+# トークの送信のためのform
+# メッセージを送信するだけで、誰から誰か、時間は全て自動で対応できるのでこれだけで十分
+class TalkForm(forms.Form):
+    talk = forms.CharField(label='talk')
+
