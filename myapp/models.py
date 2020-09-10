@@ -1,11 +1,12 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import AbstractUser,UserManager
 from django.utils.translation import gettext_lazy as _
 import datetime
 
-# class User(User):
-#     pass
+class User(AbstractUser):
+    pass
+
 class UserImage(models.Model):
 
     user = models.OneToOneField(User,on_delete=models.CASCADE,related_name="user_img")
