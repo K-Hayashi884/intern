@@ -31,7 +31,7 @@ from django.views.generic.edit import CreateView
 from .forms import SignUpForm,LoginForm,TalkForm,FriendsSearchForm
 from django.contrib import messages
 from django.db.models import Q
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 import datetime
 
 def index(request):
@@ -139,7 +139,7 @@ def friends(request):
 
             # ※※時間のソートをかける際に、0やnullでは型が違ってsortできない
             # ＞databaseの初めのメッセージの時間を用いると、必ず降順の最後に置かれる
-            talk_list.append([friend, last_message, time_flag, Talk.objects.all().first().time])
+            talk_list.append([friend, last_message, time_flag, datetime.datetime(1,1,1)])
 
     # 最後の要素（＝そのトークのtime）でソートすることで、html上の組み込みでforを回すだけで最新から順に表示することができる
     talk_list = sorted(talk_list, reverse=True, key=lambda x: x[3])
