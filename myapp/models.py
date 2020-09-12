@@ -81,4 +81,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+class Message(models.Model):
+    send_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='send_to')
+    send_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='send_from')
+    message = models.CharField(max_length=1000)
+    posted_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return 'to:' + str(self.send_to) + ', from:' + str(self.send_from) + ', message:' + str(self.message) + ', date:' + str(self.posted_date)
+
+    class Meta:
+        ordering = ['posted_date',]

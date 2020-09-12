@@ -14,3 +14,6 @@ class LoginForm(AuthenticationForm):
         _('This account is inactive.'),
         code='inactive',
         )
+
+class FindForm(forms.Form):
+    find = forms.CharField(label='search', required=False)
