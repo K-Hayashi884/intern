@@ -9,10 +9,9 @@
 
 {% block content %}
 <div class="search_box">
-    <form action="{% url 'friends' id %}" method="post">
-        {% csrf_token %}
+    <form action="" method="GET">
         {{ form }}
-        <button type="submit" class="btn btn-secondary">検索</button>
+        <button id=search type="submit" class="btn btn-secondary">検索</button>
     </form>
 </div>
 {% for friend in user %}
@@ -42,5 +41,20 @@
 </a>
 {% endif %}
 {% endfor %}
+<script>
+  const searchBtn = document.getElementById("search");
+  const searchInput = document.getElementById("id_find");
 
+  searchBtn.addEventListener("click",function(e){
+    e.preventDefault();
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET","{% url 'search_user' %}?q=" + searchInput.value);
+    xhr.send();
+    xhr.addEventListener("load",function(){
+      console.log(xhr.response)
+      const json_data = JSON.parse(xhr.response)
+      console.log(typeof json_data)
+    })
+  })
+</script>
 {% endblock %}

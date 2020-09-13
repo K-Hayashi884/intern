@@ -3,6 +3,8 @@ from django.contrib.auth import login,logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
+from django.http import JsonResponse, HttpResponse
+from django.core import serializers
 
 from .forms import UserForm,LoginForm,MessageForm,FindForm
 from .models import User, Message
@@ -33,7 +35,7 @@ def signup_view(request):
     # if (request.method == 'POST'):
     #     obj = User()
     #     user = UserForm(request.POST, instance=obj)
-        
+
     #     user.save()
     #     return redirect(to='/')
     # params = {
@@ -129,6 +131,12 @@ def friends(request, num=1):
         'me': me,
     }
     return render(request, "myapp/friends.html", params)
+
+def search_user(request):
+    q = request.GET.get("q","")
+    user_qs = User.objects.filter(username__contains=q)[:5]
+    user_json = serializers.serialize('json',user_qs)
+    return HttpResponse(user_json, content_type='application/json')
 
 @login_required(redirect_field_name='redirect_to')
 def talk_room(request, me=1, you=2):
