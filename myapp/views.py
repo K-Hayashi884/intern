@@ -1,7 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth import login,logout, authenticate
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Max, Prefetch, Value, Subquery, OuterRef
+from django.db.models.functions.comparison import Greatest
+from django.db.models.functions import Coalesce
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.core import serializers
@@ -74,60 +76,38 @@ def login_view(request):
         return render(request, "myapp/login.html", {'form': form,})
 
 @login_required(redirect_field_name='redirect_to')
-def friends(request, num=1):
+def friends(request):
+    me = request.user
+    form = FindForm(request.POST or None)
     if request.method == 'POST':
-        form = FindForm(request.POST)
         find = request.POST['find']
         found_qs = User.objects.filter(username__contains=find)
         user = User.objects.exclude(username__contains=find)
-        found_user = []
-        for found in found_qs:
-            found_user.append(found)
-        found_user.reverse()
+        # 続きの処理は書いていください。
     else:
-        form = FindForm()
-        found_user = []
-        user = User.objects.all()
-    me = User.objects.get(id=num)
-    msg = []
-    sorted_user = []
-    unsorted_found_msg = []
-    unsorted_found_no_msg = []
-    unsorted_user_msg = []
-    unsorted_user_no_msg = []
-    for friend in found_user:
-        message = Message.objects.filter( Q(sender=friend,receiver=me) | Q(sender=me,receiver=friend) ).order_by("-pub_date")
-        if(len(message)>0):
-            msg.append(message[0])
-            unsorted_found_msg.append({'user': friend, 'latest': message[0].pub_date})
-        else:
-            unsorted_found_no_msg.append({'user': friend, 'id': -friend.id})
-    for friend in user:
-        message = Message.objects.filter( Q(sender=friend,receiver=me) | Q(sender=me,receiver=friend) ).order_by("-pub_date")
-        if(len(message)>0):
-            msg.append(message[0])
-            unsorted_user_msg.append({'user': friend, 'latest': message[0].pub_date})
-        else:
-            unsorted_user_no_msg.append({'user': friend, 'id': -friend.id})
-    unsorted_found_msg.sort(key=lambda x: x['latest'])
-    unsorted_found_msg.reverse()
-    unsorted_found_no_msg.sort(key=lambda x: x['id'])
-    unsorted_user_msg.sort(key=lambda x: x['latest'])
-    unsorted_user_msg.reverse()
-    unsorted_user_no_msg.sort(key=lambda x: x['id'])
-    for ob in unsorted_found_msg:
-        sorted_user.append(ob['user'])
-    for ob in unsorted_found_no_msg:
-        sorted_user.append(ob['user'])
-    for ob in unsorted_user_msg:
-        sorted_user.append(ob['user'])
-    for ob in unsorted_user_no_msg:
-        sorted_user.append(ob['user'])
+        latest_msg = Message.objects.filter(
+                        Q(sender=OuterRef("pk"),receiver=me) | Q(sender=me,receiver=OuterRef("pk"))
+                    ).order_by('-pub_date')
+
+        user_qs = (User.objects
+            .exclude(id=me.id)
+            .annotate(
+                latest_msg_id=Subquery(
+                    latest_msg.values("pk")[:1]
+                ),
+                latest_msg_content=Subquery(
+                    latest_msg.values("content")[:1]
+                ),
+                latest_msg_pub_date=Subquery(
+                    latest_msg.values("pub_date")[:1]
+                ),
+            )
+            .order_by("-latest_msg_id")
+        )
+
     params = {
         'form': form,
-        'id': num,
-        'user': sorted_user,
-        'msg': msg,
+        'user_qs':user_qs,
         'me': me,
     }
     return render(request, "myapp/friends.html", params)
@@ -139,12 +119,11 @@ def search_user(request):
     return HttpResponse(user_json, content_type='application/json')
 
 @login_required(redirect_field_name='redirect_to')
-def talk_room(request, me=1, you=2):
-    user_me = User.objects.get(id=me)
+def talk_room(request, you):
+    user_me = request.user
     user_you = User.objects.get(id=you)
     msg = Message.objects.filter( Q(sender=user_me,receiver=user_you) | Q(sender=user_you,receiver=user_me) ).order_by("pub_date")
     params = {
-        'id': me,
         'me': user_me,
         'you': user_you,
         'msg': msg,

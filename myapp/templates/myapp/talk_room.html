@@ -26,7 +26,7 @@
         </div>
     {% endfor %}
     <div class="post_window">
-        <form method='POST' action='{% url "talk_room" me.id you.id %}' class='msg_form'>
+        <form method='POST' action='{% url "talk_room" you.id %}' class='msg_form'>
             {% csrf_token %}
             {{form}}
             <button type="submit">送信</button>

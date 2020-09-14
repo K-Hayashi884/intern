@@ -96,6 +96,6 @@ class Message(models.Model):
 
     def __str__(self):
         return str(self.content) + '(' + str(self.sender) + ')'
-    
+
     class Meta:
         ordering = ('pub_date',)
