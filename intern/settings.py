@@ -126,3 +126,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 LOGIN_URL = '/login'
 
 LOGOUT_REDIRECT_URL = '/'
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

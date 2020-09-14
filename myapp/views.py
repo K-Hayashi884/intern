@@ -1,7 +1,11 @@
+import json
 from django.contrib import messages
 from django.contrib.auth import login,logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.core.serializers.json import DjangoJSONEncoder
+from django.core import serializers
 from django.db.models import Q
+from django.http import HttpResponse,JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 
 from .forms import UserForm,LoginForm,MessageForm,FindForm
@@ -129,6 +133,69 @@ def friends(request, num=1):
         'me': me,
     }
     return render(request, "myapp/friends.html", params)
+
+def search_user(request):
+    # num = request.user.id
+    find = request.GET.get('q','')
+    user_list = User.objects.filter(username__contains=find)
+    # found_qs = User.objects.filter(username__contains=find)
+    # user = User.objects.exclude(username__contains=find)
+    # found_user = []
+    # for found in found_qs:
+    #     found_user.append(found)
+    # found_user.reverse()
+    # me = User.objects.get(id=num)
+    # msg = []
+    # sorted_user = []
+    # unsorted_found_msg = []
+    # unsorted_found_no_msg = []
+    # unsorted_user_msg = []
+    # unsorted_user_no_msg = []
+    # for friend in found_user:
+    #     message = Message.objects.filter( Q(sender=friend,receiver=me) | Q(sender=me,receiver=friend) ).order_by("-pub_date")
+    #     if(len(message)>0):
+    #         msg.append(message[0])
+    #         unsorted_found_msg.append({'user': friend, 'latest': message[0].pub_date})
+    #     else:
+    #         unsorted_found_no_msg.append({'user': friend, 'id': -friend.id})
+    # for friend in user:
+    #     message = Message.objects.filter( Q(sender=friend,receiver=me) | Q(sender=me,receiver=friend) ).order_by("-pub_date")
+    #     if(len(message)>0):
+    #         msg.append(message[0])
+    #         unsorted_user_msg.append({'user': friend, 'latest': message[0].pub_date})
+    #     else:
+    #         unsorted_user_no_msg.append({'user': friend, 'id': -friend.id})
+    # unsorted_found_msg.sort(key=lambda x: x['latest'])
+    # unsorted_found_msg.reverse()
+    # unsorted_found_no_msg.sort(key=lambda x: x['id'])
+    # unsorted_user_msg.sort(key=lambda x: x['latest'])
+    # unsorted_user_msg.reverse()
+    # unsorted_user_no_msg.sort(key=lambda x: x['id'])
+    # for ob in unsorted_found_msg:
+    #     sorted_user.append(ob['user'])
+    # for ob in unsorted_found_no_msg:
+    #     sorted_user.append(ob['user'])
+    # for ob in unsorted_user_msg:
+    #     sorted_user.append(ob['user'])
+    # for ob in unsorted_user_no_msg:
+    #     sorted_user.append(ob['user'])
+    # for u in sorted_user:
+    #     print(u)
+    # params = {
+    #     'id': num,
+    #     'user': sorted_user,
+    #     'msg': msg,
+    #     'me': me,
+    # }
+    user_json = serializers.serialize('json',user_list)
+    user_data = [
+        {
+            'id':user.id,
+            'name':user.username,
+        }
+        for user in user_list
+    ]
+    return JsonResponse({'user_data':user_data})
 
 @login_required(redirect_field_name='redirect_to')
 def talk_room(request, me=1, you=2):

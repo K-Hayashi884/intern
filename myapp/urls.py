@@ -12,4 +12,5 @@ urlpatterns = [
     path('setting', views.setting, name='setting'),
     path('setting/<int:num>', views.setting, name='setting'),
     path('logout/', views.logout_view, name='logout'),
+    path('search_user', views.search_user, name='search_user'),
 ]

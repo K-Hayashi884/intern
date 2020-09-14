@@ -9,10 +9,10 @@
 
 {% block content %}
 <div class="search_box">
-    <form action="{% url 'friends' id %}" method="post">
+    <form action="" method="GET">
         {% csrf_token %}
         {{ form }}
-        <button type="submit" class="btn btn-secondary">検索</button>
+        <button type="submit" class="btn btn-secondary" id="search">検索</button>
     </form>
 </div>
 {% for friend in user %}
@@ -23,7 +23,8 @@
         {% for latest_msg in msg %}
         {% if latest_msg.sender.id == friend.id %}
             <div class="message_content">
-                {{latest_msg.content}}
+                <p>
+                {{latest_msg.content}}</p>
             </div>
             <div class="message_time">
                 {{latest_msg.pub_date|date:"n/j H:i"}}
@@ -31,7 +32,8 @@
         {% endif %}
         {% if latest_msg.receiver.id == friend.id %}
             <div class="message_content">
-                {{latest_msg.content}}
+                <p>
+                {{latest_msg.content}}</p>
             </div>
             <div class="message_time">
                 {{latest_msg.pub_date|date:"n/j H:i"}}
@@ -42,5 +44,20 @@
 </a>
 {% endif %}
 {% endfor %}
-
+<script>
+    const searchBtn = document.getElementById("search");
+    const searcInput = document.getElementById("id_find");
+    searchBtn.addEventListener("click",function(e){
+        e.preventDefault();
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET","{% url 'search_user' %}?q=" + searcInput.value);
+        xhr.send();
+        xhr.addEventListener("load",function(){
+            console.log(xhr.status);
+            console.log(typeof xhr.response)
+            var json = JSON.parse(xhr.response);
+            console.log(json.user_data);
+        });
+    })
+</script>
 {% endblock %}
