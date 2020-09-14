@@ -27,7 +27,7 @@
             <span class="username">{{ friend }}</span>
             {% for latest_msg in latest_msgs %}
                 {% if latest_msg.send_to == friend or latest_msg.send_from == friend %}
-                    <span class="message">{{ latest_msg.message }}</span>
+                    <span class="message">{{ latest_msg.message|safe }}</span>
                     <span class="date">{{ latest_msg.posted_date|date:"n/j, G:i" }}</span>
                 {% endif %}
             {% endfor %}

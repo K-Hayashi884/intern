@@ -1,0 +1,57 @@
+
+.header-item {
+  position: absolute;
+  top: 15px;
+}
+.logs {
+  padding-bottom: 20vh;
+}
+.log {
+  border: solid 1px whitesmoke;
+  padding-left: 10px;
+  position: relative;
+}
+.send_from {
+  padding: 0;
+  font-size: 14px;
+}
+.message {
+  font-size: 16px;
+}
+.date {
+  display: inline;
+  font-size: 12px;
+  color: gray;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+.time {
+  display: inline;
+  font-size: 12px;
+  color: gray;
+  position: absolute;
+  top: 20px;
+  right: 10px;
+}
+footer {
+  width: 100vw;
+  background-color: #ebecf0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+}
+.post_message {
+  display: flex;
+  justify-content: center;
+}
+input[type='text'] {
+  width: 80vw;
+  height: 4vh;
+  border-radius: 1em;
+}
+input[type='submit'] {
+  border-radius: 1em;
+  background-color: #ebecf0;
+}

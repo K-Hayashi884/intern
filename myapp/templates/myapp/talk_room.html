@@ -2,12 +2,43 @@
 {% load static %}
 
 {% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}">
 {% endblock %}
 
 {% block header-title %}{{ user.username }}{% endblock %}
+{% block header-item %}
+<a href="{% url 'friends' %}"><img src="/media/img/upload/back.png" alt="back" width="40vw"></a>
+{% endblock %}
 
 {% block content %}
+<!-- トーク履歴 -->
+<div class="logs">
+    {% for show_message in message_log %}
+    <div class="log">
+        {% if show_message.send_from == me %}
+            <img src="/media/{{ me.img }}" alt="アイコン" width="15vw" height="15vh">
+            <p class="send_from">{{ me.username }}:</p>
+        {% else %}
+            <img src="/media/{{ friend.img }}" alt="アイコン" width="15vw" height="15vh">
+            <p class="send_from">{{ friend.username}}:</p>
+        {% endif %}
+        <p class="message">{{ show_message.message|safe }}</p>
+        <p class="date">{{ show_message.posted_date|date:"m/d" }}</p>
+        <p class="time">{{ show_message.posted_date|date:"H:i" }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
 
-
+{% block footer %}
+<!-- 送信 -->
+<footer>
+    <form action="{% url 'talk_room' friend.id %}" method="POST">
+        {% csrf_token %}
+        <div class="post_message">
+            {{ form }}
+            <input type="submit" value="送信">
+        </div>
+    </form>
+</footer>
 {% endblock %}

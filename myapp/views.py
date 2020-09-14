@@ -2,11 +2,12 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from .models import User, Message
-from .forms import SignUpForm, LoginForm, FindForm
+from .forms import SignUpForm, LoginForm, FindForm, MessageForm
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     return render(request, "myapp/index.html")
@@ -33,6 +34,7 @@ class Login(LoginView):
     form_class = LoginForm
     template_name = 'myapp/login.html'
 
+@login_required(login_url='/')
 @csrf_exempt
 def friends(request):
     me = request.user
@@ -73,8 +75,30 @@ def friends(request):
     }
     return render(request, "myapp/friends.html", params)
 
+@login_required(login_url='/')
+@csrf_exempt
 def talk_room(request, num):
-    return render(request, "myapp/talk_room.html", {'id': num, 'user': User.objects.get(id=num)})
+    me = User.objects.get(id=request.user.id)
+    friend = User.objects.get(id=num)
+    # トーク履歴を時系列に並べてリストに入れる
+    message_log = Message.objects.filter(Q(send_to=me, send_from=friend)| Q(send_to=friend, send_from=me)).order_by('posted_date')
+    form = MessageForm()
 
+    if request.method=='POST':
+        posted_msg = request.POST['message']
+        message = Message(send_to=friend, send_from=me, message=posted_msg)
+        message.save()
+
+    params = {
+        'id': num,
+        'friend': friend,
+        'message_log': message_log,
+        'me': me,
+        'form': form,
+    }
+
+    return render(request, "myapp/talk_room.html", params)
+
+@login_required(login_url='/')
 def setting(request):
     return render(request, "myapp/setting.html")
