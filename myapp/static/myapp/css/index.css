@@ -1,0 +1,34 @@
+@charset "UTF-8";
+
+/* buttonbox */
+.buttonbox {
+  position: absolute;
+  top: 40%;
+  width: 100%;
+}
+
+
+.buttonbox a {
+  text-decoration: none;
+}
+
+.button:hover {
+  background-color: #eeeeee;
+}
+
+
+/* button */
+.button {
+  display: block;
+  width: 15%;
+  margin: 10px auto;
+  padding: 5px 0px;
+  text-align: center;
+
+  border: solid 1px rgba(0, 0, 0, 0.397);
+  border-radius: 5px;
+
+  font-size: 18px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+

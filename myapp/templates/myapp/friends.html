@@ -1,0 +1,33 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}" />
+{% endblock %}
+
+{% block header-title %}
+Friends
+{% endblock %}
+
+{% block content %}
+<div class="friends">
+  <ul class="friends__list-wrap">
+    {% for friend in friends %}
+    <li class="friends__list">
+      <a class="friends__list-link" href="{% url 'talk_room' friend.username %}">
+        {% for user_img in user_imgs %}
+        {% if user_img.user.username == friend.username %}
+        <img class="friends__list-usericon" src="{{ user_img.image }}">
+        {% else %}
+        <img class="friends__list-usericon" src="{{ noimage.png }}">
+        {% endif %}
+        {% endfor %}
+        <div class="friends__list-username">{{ friend.username }}</div>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+
+
+</div>
+{% endblock %}

@@ -1,1 +1,35 @@
-LI
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/login.css' %}" />
+{% endblock %}
+
+{% block header-title %}
+log in
+{% endblock %}
+
+{% block content %}
+<form action="{% url 'login_view' %}" method="POST" class="login-form">
+  {% csrf_token %}
+  <div class='login__username'>
+    <label>username:</label>
+    {{ form.username }}
+  </div>
+
+  <div class='login__password'>
+    <label>password:</label>
+    {{ form.password }}
+  </div>
+
+  {% for error in form.non_field_errors %}
+  <div class="login-error-message">
+    <p>{{ error }}</p>
+  </div>
+  {% endfor %}
+
+  <button type="submit" class='login__button'>log in</button>
+</form>
+{% endblock content %}
+
+{% block footer %}{% endblock %}

@@ -1,1 +1,41 @@
-TR
+{% extends 'myapp/base.html'%}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}" />
+{% endblock %}
+
+{% block header-title %}
+{{ partner.username }}
+{% endblock %}
+
+
+{% block content %}
+<ul class="talk_room__chatboard" id="talk_room__chatboard">
+  {% for message in history %}
+  {% if message.person_from == user %}
+  <li class="talk_room__chatboard-content talk_room__chatboard-content-user">
+    <p class="talk_room__chatboard-content-name">＞{{ message.person_from }}</p>
+    <p class="talk_room__chatboard-content-text">{{ message.talk }}</p>
+    <p class="talk_room__chatboard-content-time">{{ message.time|date:"m/d" }}<br>{{ message.time|date:"H:i" }}</p>
+  </li>
+  {% else %}
+  <li class="talk_room__chatboard-content talk_room__chatboard-content-friend">
+    <p class="talk_room__chatboard-content-name">＞{{ message.person_from }}</p>
+    <p class="talk_room__chatboard-content-text">{{ message.talk }}</p>
+    <p class="talk_room__chatboard-content-time">{{ message.time|date:"m/d" }}<br>{{ message.time|date:"H:i" }}</p>
+  </li>
+  {% endif %}
+  {% endfor %}
+</ul>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer">
+  <form class="talk_room__sendbox" method="POST">
+    {% csrf_token %}
+    {{ form.talk }}
+    <button class="talk_room__sendbox-btn" type="submit">送信</button>
+  </form>
+</footer>
+{% endblock %}
