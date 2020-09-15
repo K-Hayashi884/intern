@@ -47,7 +47,7 @@ def friends(request):
     if request.method == 'POST':
         form = FindForm(request.POST)
         find = request.POST.get('find')
-        users = User.objects.filter(username=find, is_superuser=False).exclude(username=me).order_by('date_joined')
+        users = User.objects.filter(username__icontains=find, is_superuser=False).exclude(username=me).order_by('date_joined')
     else:
         form = FindForm()
         users = User.objects.filter(is_superuser=False).exclude(username=me).order_by('date_joined')
