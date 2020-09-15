@@ -2,12 +2,13 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from .models import User, Message
-from .forms import SignUpForm, LoginForm, FindForm, MessageForm
+from .forms import SignUpForm, LoginForm, FindForm, MessageForm, EmailChangeForm, UsernameChangeForm, IconChangeForm
 from django.urls import reverse_lazy
-from django.contrib.auth.views import LoginView
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 def index(request):
     return render(request, "myapp/index.html")
@@ -34,8 +35,8 @@ class Login(LoginView):
     form_class = LoginForm
     template_name = 'myapp/login.html'
 
+
 @login_required(login_url='/')
-@csrf_exempt
 def friends(request):
     me = request.user
     sorted_msgs = []
@@ -76,7 +77,6 @@ def friends(request):
     return render(request, "myapp/friends.html", params)
 
 @login_required(login_url='/')
-@csrf_exempt
 def talk_room(request, num):
     me = User.objects.get(id=request.user.id)
     friend = User.objects.get(id=num)
@@ -102,3 +102,72 @@ def talk_room(request, num):
 @login_required(login_url='/')
 def setting(request):
     return render(request, "myapp/setting.html")
+
+@login_required(login_url='/')
+def change_username(request):
+    form = UsernameChangeForm()
+
+    if request.method=='POST':
+        user = request.user
+        form = UsernameChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect(to='/setting/username/done')
+    params = {
+        'title': 'ユーザ名変更',
+        'form': form,
+        'change': 'change_username',
+    }
+    return render(request, "myapp/change.html", params)
+
+@login_required(login_url='/')
+def change_username_done(request):
+    return render(request, "myapp/change_done.html", {'title': 'ユーザ名変更'})
+
+@login_required(login_url='/')
+def change_email(request):
+    form = EmailChangeForm()
+
+    if request.method=='POST':
+        user = request.user
+        form = EmailChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+
+            return redirect(to='/setting/email/done')
+    params = {
+        'title': 'メールアドレス変更',
+        'form':form,
+        'change': 'change_email',
+    }
+    return render(request, "myapp/change.html", params)
+
+@login_required(login_url='/')
+def change_email_done(request):
+    return render(request, "myapp/change_done.html", {'title': 'メールアドレス変更'})
+
+@login_required(login_url='/')
+def change_icon(request):
+    form = IconChangeForm()
+
+    if request.method=='POST':
+        user_id = request.user.id
+        user = User.objects.get(id=user_id)
+        form = IconChangeForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            user.img = form.cleaned_data.get('img')
+            user.save()
+            return redirect(to='/setting/icon/done')
+
+    return render(request, "myapp/change_icon.html", {'form': form})
+
+@login_required(login_url='/')
+def change_icon_done(request):
+    return render(request, "myapp/change_done.html", {'title': 'アイコン変更'})
+
+class PasswordChange(LoginRequiredMixin, PasswordChangeView):
+    template_name = 'myapp/password_change.html'
+    success_url = '/setting/password/done'
+
+class PasswordChangeDone(LoginRequiredMixin, PasswordChangeDoneView):
+    template_name = 'myapp/change_done.html'

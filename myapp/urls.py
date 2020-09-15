@@ -9,8 +9,16 @@ urlpatterns = [
     path('signup', views.signup_view, name='signup_view'),
     path('login', views.Login.as_view(), name='login_view'),
     path('friends', views.friends, name='friends'),
-    # path('friends', views.find, name='find'),
     path('talk_room/<int:num>', views.talk_room, name='talk_room'),
     path('setting', views.setting, name='setting'),
+    path('setting/username', views.change_username, name='change_username'),
+    path('setting/username/done', views.change_username_done, name='change_username_done'),
+    path('setting/email', views.change_email, name='change_email'),
+    path('setting/email/done', views.change_email_done, name='change_email_done'),
+    path('setting/icon', views.change_icon, name='change_icon'),
+    path('setting/icon/done', views.change_icon_done, name='change_icon_done'),
+    path('setting/password', views.PasswordChange.as_view(), name='change_password'),
+    path('setting/password/done', views.PasswordChangeDone.as_view(), name='password_change_done'),
+    path('logout', auth_views.LogoutView.as_view(), name='logout_view'),
 ]
 urlpatterns  += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
