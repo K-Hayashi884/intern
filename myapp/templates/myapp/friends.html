@@ -12,22 +12,35 @@ Friends
 {% block content %}
 <div class="friends">
   <ul class="friends__list-wrap">
-    {% for friend in friends %}
+    {% for talk in friend_info %}
     <li class="friends__list">
-      <a class="friends__list-link" href="{% url 'talk_room' friend.username %}">
-        {% for user_img in user_imgs %}
-        {% if user_img.user.username == friend.username %}
-        <img class="friends__list-usericon" src="{{ user_img.image }}">
+      <a class="friends__list-link" href="{% url 'talk_room' talk.0.username %}">
+        {% if talk.1 %}
+        <!-- 無ければNoimage用の画像を表示 -->
+        <img class="friends__list-usericon" src="/media/images/noimage.png">
         {% else %}
-        <img class="friends__list-usericon" src="{{ noimage.png }}">
+        {% for user_img in user_imgs %}
+        {% if user_img.user.username == talk.0.username %}
+        <img class="friends__list-usericon" src="/media/{{ user_img.image }}">
         {% endif %}
         {% endfor %}
-        <div class="friends__list-username">{{ friend.username }}</div>
+        {% endif %}
+        <!-- ユーザーアイコンのforここまで -->
+        <div class="friends__list-username">{{ talk.0.username }}</div>
+        <!-- ここから最新のトークを表示する部分 -->
+        <div class="friends__list-talk">
+          <p class="friends__list-talk-content">{{ talk.1.talk }}</p>
+          <!-- 時間表示のflagをチェックして、時間を表示するか日付を表示するかを分岐 -->
+          {% if talk.2 == "time" %}
+          <p class="friends__list-talk-time">{{ talk.1.time|date:"H:i" }}</p>
+          {% else %}
+          <p class="friends__list-talk-time">{{ talk.1.time|date:"m/d" }}</p>
+          {% endif %}
+        </div>
       </a>
     </li>
     {% endfor %}
   </ul>
-
-
 </div>
+
 {% endblock %}

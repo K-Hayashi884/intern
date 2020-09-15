@@ -1,8 +1,12 @@
 from django.shortcuts import redirect, render
+from django.http import HttpResponseRedirect
 from .forms import SignUpForm
 from .forms import LoginForm
 from .forms import TalkForm
 from .forms import PasswordChangeForm
+from .forms import NameChangeForm
+from .forms import EmailChangeForm
+from .forms import IconChangeForm
 from django.contrib.auth import authenticate, get_user, login
 from .models import User, UserImage, Talk
 from django.contrib.auth.views import LoginView
@@ -10,6 +14,12 @@ from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 import datetime
 from django.db.models import Q
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import FormView
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import logout
+from PIL import Image
+
 
 
 def index(request):
@@ -50,11 +60,39 @@ class Login(LoginView):
 def friends(request):
     user = request.user
     friends = User.objects.exclude(username=user.username)
-    user_imgs = UserImage.objects.all()
+    user_imgs = UserImage.objects.exclude(user=user)
+    friend_info = []
+    for friend in friends:
+        img = UserImage.objects.filter(user=friend)
+        if img:
+            noimg = False
+        else:
+            noimg = True
+        try:
+            last_message = Talk.objects.filter(Q(person_from=user, person_to=friend) | Q(person_from=friend, person_to=user)).last()
+            # ここからは教材より引用
+             # 今日のトークであれば時刻を表示、それより前なら日付を表示
+           # 表示に関してはhtml上の組み込みでのフォーマットで対応できるので、ここではflagのみを準備する
+            if "{0:%Y-%m-%d}".format(last_message.time) == "{0:%Y-%m-%d}".format(datetime.date.today()):
+               time_flag = "time"
+            else:
+               time_flag = "date"
+           # htmlで表示するにあたって必要な情報を紐づけたリストを作成する
+            friend_info.append([friend, noimg, last_message, time_flag, last_message.time])
+            # トーク履歴がない場合、nullで登録する
+        except:
+            last_message = ''
+            mes= ''
+            time_flag = ''
+           # htmlで表示するにあたって必要な情報を紐づけたリストを作成する
+           # ※※時間のソートをかける際に、0やnullでは型が違ってsortできない
+           # ＞databaseの初めのメッセージの時間を用いると、必ず降順の最後に置かれる
+            friend_info.append([friend, noimg, last_message, time_flag, Talk.objects.all().first().time])
+            # 最後の要素（＝そのトークのtime）でソートすることで、html上の組み込みでforを回すだけで最新から順に表示することができる
+    friend_info = sorted(friend_info, reverse=True, key=lambda x: x[3])
     params = {
-        "user":user,
         "user_imgs":user_imgs,
-        "friends":friends,
+        "friend_info":friend_info,
     }
     return render(request, "myapp/friends.html", params)
 
@@ -85,18 +123,6 @@ def talk_room(request, partner_name):
 def setting(request):
     return render(request, "myapp/setting.html")
 
-def change_name(request):
-    user = request.user
-    return render(request, "myapp/setting.html")
-
-def change_mail(request):
-    return render(request, "myapp/setting.html")
-
-def change_icon(request):
-    return render(request, "myapp/setting.html")
-
-def change_pass(request):
-    return render(request, "myapp/setting.html")
 
 class PasswordChange(PasswordChangeView):
    form_class = PasswordChangeForm
@@ -106,11 +132,69 @@ class PasswordChange(PasswordChangeView):
 class PasswordChangeDone(PasswordChangeDoneView):
    template_name = 'myapp/change_success.html'
 
+class NameChangeView(LoginRequiredMixin, FormView):
+    template_name = 'myapp/change_name.html'
+    form_class = NameChangeForm
+    success_url = 'success/username'
+    
+    def form_valid(self, form):
+        #formのupdateメソッドにログインユーザーを渡して更新
+        form.name_update(user=self.request.user)
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        # 更新前のユーザー情報をkwargsとして渡す
+        kwargs.update({
+            'username' : self.request.user.username,
+        })
+        return kwargs
+
+class IconChangeView(LoginRequiredMixin, FormView):
+    template_name = 'myapp/change_icon.html'
+    form_class = IconChangeForm
+    success_url = 'success/icon'
+    
+    def form_valid(self, form):
+        #formのupdateメソッドにログインユーザーを渡して更新
+        form.icon_update(user=self.request.user)
+        return super().form_valid(form)
+
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     myname = self.request.user.username
+    #     user = User.objects.get(username=myname)
+    #     user_img = UserImage.objects.get(user=user)
+    #     kwargs.update({
+    #         'image' : user_img,
+    #     })
+    #     return kwargs
+
+class EmailChangeView(LoginRequiredMixin, FormView):
+    template_name = 'myapp/change_mail.html'
+    form_class = EmailChangeForm
+    success_url = 'success/email'
+    
+    def form_valid(self, form):
+        #formのupdateメソッドにログインユーザーを渡して更新
+        form.email_update(user=self.request.user)
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        # 更新前のユーザー情報をkwargsとして渡す
+        kwargs.update({
+            'email' : self.request.user.email,
+        })
+        return kwargs
+
 def change_success(request, name):
     params = {
         "name":name,
     }
     return render(request, "myapp/change_success.html", params)
 
-def logout(request):
-    return render(request, "myapp/setting.html")
+def logout_view(request):
+    logout(request)
+    return render(request,"myapp/index.html")
+
