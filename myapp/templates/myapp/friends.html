@@ -29,12 +29,12 @@ Friends
         <div class="friends__list-username">{{ talk.0.username }}</div>
         <!-- ここから最新のトークを表示する部分 -->
         <div class="friends__list-talk">
-          <p class="friends__list-talk-content">{{ talk.1.talk }}</p>
+          <p class="friends__list-talk-content">{{ talk.2.talk }}</p>
           <!-- 時間表示のflagをチェックして、時間を表示するか日付を表示するかを分岐 -->
-          {% if talk.2 == "time" %}
-          <p class="friends__list-talk-time">{{ talk.1.time|date:"H:i" }}</p>
+          {% if talk.3 == "time" %}
+          <p class="friends__list-talk-time">{{ talk.2.time|date:"H:i" }}</p>
           {% else %}
-          <p class="friends__list-talk-time">{{ talk.1.time|date:"m/d" }}</p>
+          <p class="friends__list-talk-time">{{ talk.2.time|date:"m/d" }}</p>
           {% endif %}
         </div>
       </a>
