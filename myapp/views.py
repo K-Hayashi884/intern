@@ -88,7 +88,7 @@ def friends(request):
            # ＞databaseの初めのメッセージの時間を用いると、必ず降順の最後に置かれる
             friend_info.append([friend, noimg, last_message, time_flag, Talk.objects.all().first().time])
             # 最後の要素（＝そのトークのtime）でソートすることで、html上の組み込みでforを回すだけで最新から順に表示することができる
-    friend_info = sorted(friend_info, reverse=True, key=lambda x: x[3])
+    friend_info = sorted(friend_info, reverse=True, key=lambda x: x[4])
     params = {
         "user_imgs":user_imgs,
         "friend_info":friend_info,
