@@ -2,15 +2,20 @@
 {% load static %}
 
 {% block extra_style %}
-<link rel="stylesheet" href="{% static 'myapp/css/setting.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'myapp/css/change.css' %}" type="text/css">
 {% endblock %}
 
 {% block header-title %}{{title}}{% endblock %}
-
 {% block content %}
-<form action="{% url change %}" method="POST">
-    {% csrf_token %}
-    {{form}}
-    <button type="submit">submit</button>
-</form>
+<div class="before">
+    <p>現在の{{change_what}}：{{ me.username }}</p>
+</div>
+<div class="form">
+
+    <form action="{% url change %}" method="POST">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit">変更</button>
+    </form>
+</div>
 {% endblock %}

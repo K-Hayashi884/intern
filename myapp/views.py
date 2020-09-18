@@ -117,6 +117,8 @@ def change_username(request):
             return redirect(to='/setting/username/done')
     params = {
         'title': 'ユーザ名変更',
+        'me': request.user,
+        'change_what': 'ユーザ名',
         'form': form,
         'change': 'change_username',
     }
@@ -139,6 +141,8 @@ def change_email(request):
             return redirect(to='/setting/email/done')
     params = {
         'title': 'メールアドレス変更',
+        'me': request.user,
+        'change_what': 'メールアドレス',
         'form':form,
         'change': 'change_email',
     }
@@ -160,8 +164,12 @@ def change_icon(request):
             user.img = form.cleaned_data.get('img')
             user.save()
             return redirect(to='/setting/icon/done')
+    params = {
+        'form': form,
+        'me': request.user,
+    }
 
-    return render(request, "myapp/change_icon.html", {'form': form})
+    return render(request, "myapp/change_icon.html", params)
 
 @login_required(login_url='/')
 def change_icon_done(request):

@@ -28,6 +28,7 @@ class EmailChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email']
+        labels = {'email': '新しいメールアドレス'}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -45,7 +46,7 @@ class UsernameChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username']
-        labels = {'username': 'New Username'}
+        labels = {'username': '新しいユーザ名'}
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
@@ -62,4 +63,4 @@ class IconChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['img']
-        labels = {'img': 'New Icon'}
+        labels = {'img': '新しいアイコン'}

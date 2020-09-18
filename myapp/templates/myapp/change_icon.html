@@ -2,15 +2,20 @@
 {% load static %}
 
 {% block extra_style %}
-<link rel="stylesheet" href="{% static 'myapp/css/setting.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'myapp/css/change_icon.css' %}" type="text/css">
 {% endblock %}
 
 {% block header-title %}アイコン変更{% endblock %}
 
 {% block content %}
-<form action="{% url 'change_icon' %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form}}
-    <button type="submit">submit</button>
-</form>
+<div class="before">
+    <p>現在のアイコン：<img src="/media/{{me.img}}" alt="現在のアイコン" width="30vw" height="30vw"></p>
+</div>
+<div class="form">
+    <form action="{% url 'change_icon' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit">変更</button>
+    </form>
+</div>
 {% endblock %}
