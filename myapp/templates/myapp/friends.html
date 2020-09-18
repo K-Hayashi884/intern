@@ -19,6 +19,11 @@
 </div>
 
 <div class="all_friends">
+    <div class="friend">
+        <img src="/media/{{ me.img }}" alt="アイコン" width="30vw" height="30vh">
+        <span class="username">{{ me.username }}</span>
+
+    </div>
     {% for friend in log_exist_friends %}
 
     <div class="friend">

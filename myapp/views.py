@@ -39,6 +39,7 @@ class Login(LoginView):
 @login_required(login_url='/')
 def friends(request):
     me = request.user
+
     sorted_msgs = []
     latest_msgs = []
     no_log_friends = []
@@ -69,6 +70,7 @@ def friends(request):
             no_log_friends.append(friend)
 
     params = {
+        'me': me,
         'log_exist_friends': log_exist_friends,
         'no_log_friends': no_log_friends,
         'form': form,
