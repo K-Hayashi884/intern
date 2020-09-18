@@ -21,4 +21,5 @@ import myapp.views as myapp
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('myapp.urls')),
+    path('', include('pwa.urls')),
 ]

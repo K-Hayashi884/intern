@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pwa',
     'myapp',
 ]
 
@@ -134,3 +135,33 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/friends'
 LOGOUT_REDIRECT_URL = '/'
+
+PWA_APP_NAME = 'My App'
+PWA_APP_DESCRIPTION = 'This is a SNS app.'
+PWA_APP_THEME_COLOR = '#33322f'
+PWA_APP_BACKGROUND_COLOR = '#f8f4e6'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCORE = '/'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_ICONS = [
+    {
+        'src': 'static/myapp/img/sns_icon.png',
+        'sizes': '160x160'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': 'static/myapp/img/sns_icon.png',
+        'sizes': '160x160'
+    }
+]
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src': 'static/myapp/img/sns_splash.png',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+PWA_APP_DIR = '1tr'
+PWA_APP_LANG = 'ja'
