@@ -19,3 +19,15 @@ class Talk(models.Model):
    time = models.DateTimeField()
    person_from = models.ForeignKey(User, related_name="person_from", on_delete=models.CASCADE)
    person_to = models.ForeignKey(User, related_name="person_to", on_delete=models.CASCADE)
+
+class HeaderImage(models.Model):
+   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="header_img")
+   image = models.ImageField(
+        verbose_name="画像", null=True, blank=True, upload_to="header"
+    )
+   def __int__(self):
+       return "{}の写真".format(self.user)
+
+class prof_msg(models.Model):
+   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profile")
+   prof_msg = models.CharField(max_length=140)

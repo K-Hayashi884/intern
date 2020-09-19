@@ -10,37 +10,63 @@ Friends
 {% endblock %}
 
 {% block content %}
-<div class="friends">
-  <ul class="friends__list-wrap">
-    {% for talk in friend_info %}
-    <li class="friends__list">
-      <a class="friends__list-link" href="{% url 'talk_room' talk.0.username %}">
-        {% if talk.1 %}
-        <!-- 無ければNoimage用の画像を表示 -->
-        <img class="friends__list-usericon" src="/media/images/noimage.png">
-        {% else %}
-        {% for user_img in user_imgs %}
-        {% if user_img.user.username == talk.0.username %}
-        <img class="friends__list-usericon" src="/media/{{ user_img.image }}">
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-        <!-- ユーザーアイコンのforここまで -->
-        <div class="friends__list-username">{{ talk.0.username }}</div>
-        <!-- ここから最新のトークを表示する部分 -->
-        <div class="friends__list-talk">
-          <p class="friends__list-talk-content">{{ talk.2.talk }}</p>
-          <!-- 時間表示のflagをチェックして、時間を表示するか日付を表示するかを分岐 -->
-          {% if talk.3 == "time" %}
-          <p class="friends__list-talk-time">{{ talk.2.time|date:"H:i" }}</p>
+<div class="Friends">
+  <ul class="list">
+    <div class="me_block">
+      <div class="block_title">
+        You
+      </div>
+      {% for me in me_info %}
+      <a href="">
+        <li class="friends__list">
+          {% for user_img in user_imgs %}
+          {% if user_img.user.username == me.1 %}
+          {% if user.img.image %}
+          <img class="friends__list-usericon" src="/media/{{ user_img.image }}">
+          <!-- 無ければNoimage用の画像を表示 -->
           {% else %}
-          <p class="friends__list-talk-time">{{ talk.2.time|date:"m/d" }}</p>
+          <img class="friends__list-usericon" src="/media/images/noimage.png">
           {% endif %}
-        </div>
+          {% endif %}
+          {% endfor %}
+          <span class="name">
+            {{ me.1 }}
+          </span>
+          <span class="prof_msg">
+            aaaaaaaaaaaaaaaaaaaaaaa
+          </span>
+        </a>
+      </li>
+      {% endfor %}
+    </div>
+
+    <div class="block_title">
+      Friends
+    </div>
+    {% for user in user_info %}
+    <div class="friend_block">
+      <li class="friends__list">
+        <a href="">
+          {% for user_img in user_imgs %}
+          {% if user_img.user.username == user.1 %}
+          {% if user_img.image %}
+          <img class="friends__list-usericon" src="/media/{{ user_img.image }}">
+          {% else %}
+          <!-- 無ければNoimage用の画像を表示 -->
+          <img class="friends__list-usericon" src="/media/images/noimage.png">
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+          <span class="name">
+            {{ user.1 }}
+          </span>
+          <span class="prof_msg">
+            aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          </span>
+      </li>
       </a>
-    </li>
+    </div>
     {% endfor %}
   </ul>
 </div>
-
 {% endblock %}

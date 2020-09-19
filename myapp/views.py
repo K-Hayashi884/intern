@@ -24,6 +24,40 @@ from django.contrib.auth import logout
 def index(request):
     return render(request, "myapp/index.html")
 
+def talklist_view(request):
+    user = request.user
+    friends = User.objects.exclude(username=user.username)
+    user_imgs = UserImage.objects.exclude(user=user)
+    friend_info = []
+    for friend in friends:
+        try:
+            last_message = Talk.objects.filter(Q(person_from=user, person_to=friend) | Q(person_from=friend, person_to=user)).last()
+            # ここからは教材より引用
+             # 今日のトークであれば時刻を表示、それより前なら日付を表示
+           # 表示に関してはhtml上の組み込みでのフォーマットで対応できるので、ここではflagのみを準備する
+            if "{0:%Y-%m-%d}".format(last_message.time) == "{0:%Y-%m-%d}".format(datetime.date.today()):
+               time_flag = "time"
+            else:
+               time_flag = "date"
+           # htmlで表示するにあたって必要な情報を紐づけたリストを作成する
+            friend_info.append([friend, last_message, time_flag, last_message.time])
+            # トーク履歴がない場合、nullで登録する
+        except:
+            last_message = ''
+            mes= ''
+            time_flag = ''
+           # htmlで表示するにあたって必要な情報を紐づけたリストを作成する
+           # ※※時間のソートをかける際に、0やnullでは型が違ってsortできない
+           # ＞databaseの初めのメッセージの時間を用いると、必ず降順の最後に置かれる
+            friend_info.append([friend, last_message, time_flag, Talk.objects.all().first().time])
+            # 最後の要素（＝そのトークのtime）でソートすることで、html上の組み込みでforを回すだけで最新から順に表示することができる
+    friend_info = sorted(friend_info, reverse=True, key=lambda x: x[3])
+    params = {
+        "user_imgs":user_imgs,
+        "friend_info":friend_info,
+    }
+    return render(request, "myapp/talklist.html", params)
+
 def signup_view(request):
     if request.method == "GET":
         signup_form = SignUpForm()
@@ -56,42 +90,26 @@ class Login(LoginView):
     form_class = LoginForm
     template_name= 'myapp/login.html'
 
+#friendリストを作りたい
 def friends(request):
-    user = request.user
-    friends = User.objects.exclude(username=user.username)
-    user_imgs = UserImage.objects.exclude(user=user)
-    friend_info = []
-    for friend in friends:
-        img = UserImage.objects.filter(user=friend)
-        if img:
-            noimg = False
-        else:
-            noimg = True
+    me = request.user
+    #自分と友人は分けて表示したいので、別々に作成
+    me_info = []
+    me_img = UserImage.objects.filter(user=me)
+    me_info.append([me, me.username])
+    users = User.objects.exclude(username=me.username)
+    user_imgs = UserImage.objects.all()
+    user_info = []
+    for user in users:
         try:
-            last_message = Talk.objects.filter(Q(person_from=user, person_to=friend) | Q(person_from=friend, person_to=user)).last()
-            # ここからは教材より引用
-             # 今日のトークであれば時刻を表示、それより前なら日付を表示
-           # 表示に関してはhtml上の組み込みでのフォーマットで対応できるので、ここではflagのみを準備する
-            if "{0:%Y-%m-%d}".format(last_message.time) == "{0:%Y-%m-%d}".format(datetime.date.today()):
-               time_flag = "time"
-            else:
-               time_flag = "date"
-           # htmlで表示するにあたって必要な情報を紐づけたリストを作成する
-            friend_info.append([friend, noimg, last_message, time_flag, last_message.time])
-            # トーク履歴がない場合、nullで登録する
+            user_info.append([user, user.username])
         except:
-            last_message = ''
-            mes= ''
-            time_flag = ''
-           # htmlで表示するにあたって必要な情報を紐づけたリストを作成する
-           # ※※時間のソートをかける際に、0やnullでは型が違ってsortできない
-           # ＞databaseの初めのメッセージの時間を用いると、必ず降順の最後に置かれる
-            friend_info.append([friend, noimg, last_message, time_flag, Talk.objects.all().first().time])
-            # 最後の要素（＝そのトークのtime）でソートすることで、html上の組み込みでforを回すだけで最新から順に表示することができる
-    friend_info = sorted(friend_info, reverse=True, key=lambda x: x[4])
+            user_info.append([user, user.username])
+    user_info = sorted(user_info, key=lambda x: x[1])
     params = {
+        "me_info":me_info,
         "user_imgs":user_imgs,
-        "friend_info":friend_info,
+        "user_info":user_info,
     }
     return render(request, "myapp/friends.html", params)
 
