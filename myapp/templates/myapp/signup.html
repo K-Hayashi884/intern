@@ -6,14 +6,14 @@
 
 {% block header-title %}会員登録{% endblock %}
 {% block content %}
-<form action="{% url 'signup_view' %}" method="POST">
+<form action="{% url 'signup_view' %}" method="POST" enctype="multipart/form-data">
     <table>
         {{ form.as_table }}
     </table>
     {% csrf_token %}
     <button type="submit" class="signup_btn">submit</button>
 </form>
-{{error_msg}}
+{{error_msg|safe}}
 {% endblock %}
 
 {% block footer %}{% endblock %}

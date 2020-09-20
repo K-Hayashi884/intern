@@ -1,0 +1,22 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/setting.css' %}" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    crossorigin="anonymous">
+{% endblock %}
+
+{% block header-title %}設定{% endblock %}
+
+{% block content %}
+<ul class="setting_menu_list">
+    <li class="setting_item_wrapper"><a href="{% url 'setting' 'change_username'%}"
+            class="setting_menu_item">ユーザー名変更</a></li>
+    <li class="setting_item_wrapper"><a href="{% url 'setting' 'change_mail'%}" class="setting_menu_item">メールアドレス変更</a>
+    </li>
+    <li class="setting_item_wrapper"><a href="{% url 'setting' 'change_img'%}" class="setting_menu_item">アイコン変更</a></li>
+    <li class="setting_item_wrapper"><a href="{% url 'setting' 'change_password'%}"
+            class="setting_menu_item">パスワード変更</a></li>
+    <li class="setting_item_wrapper"><a href="{% url 'setting' 'logout'%}" class="setting_menu_item">ログアウト</a></li>
+</ul>
+{% endblock %}

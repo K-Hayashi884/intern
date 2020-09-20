@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     {% block extra_style %}{% endblock %}
     <title>DeMiAインターン</title>
 </head>
+
 <body>
     {% block header %}
     <header class="header">
@@ -32,7 +34,7 @@
                 </a>
             </div>
             <div class="footer-container__item">
-                <a href="{% url 'setting' %}" class="footer-item__link">
+                <a href="{% url 'setting' 'menu' %}" class="footer-item__link">
                     <span class="footer-item__icon"><img src="{% static 'myapp/img/settings-black-18dp.svg' %}"></span>
                     <span class="footer-item__text">設定</span>
                 </a>
@@ -41,4 +43,5 @@
     </footer>
     {% endblock %}
 </body>
+
 </html>

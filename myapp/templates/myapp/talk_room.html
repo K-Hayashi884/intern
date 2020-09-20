@@ -1,1 +1,43 @@
-TR
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}" />
+    <title>DeMiAインターン</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header class="talkroom_header">
+            <a href="http://127.0.0.1:8000/friends" class="talkroom_back">&lt;</a>
+            <p class="talkroom_title">{{recipient}}</p>
+            <a href="#" class="talkroom_update">更新</a>
+        </header>
+
+        <ul class="talks_list">
+            {% for talk in data %}
+            <li class="talks_list_item">
+                <div class="talk_date">{{talk.date}}</div>
+                <div class="talk_time">{{talk.time}}</div>
+                <div class="talk_sender">&lt;{{talk.sender}}<br></div>
+                <div class="talk_content">{{talk.content}}</div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <footer class="talkroom_footer">
+            <div class="footer_wrapper">
+                <form action={{self_url}} method="POST">
+                    <div class="talkroom_form">
+                        {{ form.as_p }}
+                    </div>
+                    {% csrf_token %}
+                    <button type="submit" class="talkroom_btn clearfix">送信</button>
+                </form>
+            </div>
+        </footer>
+    </div>
+</body>

@@ -1,0 +1,48 @@
+.clearfix::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.friends_list{
+    padding-left: 0 !important;
+}
+
+@media screen and (max-width: 479px){
+    .friends_list_item{
+        margin: 0 auto;
+        width: 100%;
+        height: 50px;
+        padding-top: 10px;
+        padding-left: 0;
+        border-bottom:solid 1px gray;
+        list-style: none;
+    }
+}
+
+@media screen and (min-width: 479px){
+    .friends_list_item{
+        margin: 0 auto;
+        width: 479px;
+        height: 50px;
+        padding-top: 10px;
+        padding-left: 0;
+        border-bottom: solid 1px gray;
+        list-style: none;
+    }
+}
+
+.friend_image{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border: black;
+    float: left;
+}
+
+.friend_name{
+    font-weight: bolder;
+    padding-left: 10px;
+    font-size: 15px;
+    float: left;
+}

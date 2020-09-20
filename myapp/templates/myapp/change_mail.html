@@ -1,0 +1,23 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/setting.css' %}" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    crossorigin="anonymous">
+{% endblock %}
+
+{% block header-title %}メールアドレス変更{% endblock %}
+
+{% block content %}
+<form action="{% url 'setting' 'change_mail' %}" method="POST" class="set_mail_form">
+    <table>
+        {{form.as_table}}
+    </table>
+    {% csrf_token %}
+    <input type="submit" class="set_mail_btn">
+</form>
+
+<div class="setting_msg">
+    {{msg}}
+</div>
+{% endblock %}
