@@ -13,14 +13,13 @@
     <div class="wrapper">
         <header class="talkroom_header">
             <a href="http://127.0.0.1:8000/friends" class="talkroom_back">&lt;</a>
-            <p class="talkroom_title">{{recipient}}</p>
+            <p class="talkroom_title">{{friend}}</p>
             <a href="#" class="talkroom_update">更新</a>
         </header>
 
         <ul class="talks_list">
             {% for talk in data %}
             <li class="talks_list_item">
-                <div class="talk_date">{{talk.date}}</div>
                 <div class="talk_time">{{talk.time}}</div>
                 <div class="talk_sender">&lt;{{talk.sender}}<br></div>
                 <div class="talk_content">{{talk.content}}</div>

@@ -10,8 +10,22 @@
 <ul class="friends_list">
     {% for friend in friends %}
     <li class="friends_list_item">
-        <img src={{friend.img.url}} class="friend_image clearfix">
-        <div class="friend_name clearfix">{{friend.username}}</div>
+        <a href="talk_room/{{friend.id}}" class="friend_link">
+            <img src={{friend.img.url}} class="friend_image clearfix">
+            <div class="friend_name clearfix">{{friend.username}}</div>
+            {% if friend.latest_msg_content != None %}
+                <div class="talk_content clearfix">{{friend.latest_msg_content | truncatechars:15 }}</div>
+                <div class="talk_time clearfix">{{friend.latest_msg_time}}</div>
+            {% endif %}
+        </a>
+    </li>
+    {% endfor %}
+    {% for friend in not_talked %}
+    <li class="friends_list_item">
+        <a href="talk_room/{{friend.id}}" class="friend_link">
+            <img src={{friend.img.url}} class="friend_image clearfix">
+            <div class="friend_name clearfix">{{friend.username}}</div>
+        </a>
     </li>
     {% endfor %}
 </ul>
