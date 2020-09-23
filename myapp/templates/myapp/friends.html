@@ -17,11 +17,11 @@ Friends
         You
       </div>
       {% for me in me_info %}
-      <a href="">
+      <a href="profile/{{ me.1 }}">
         <li class="friends__list">
           {% for user_img in user_imgs %}
           {% if user_img.user.username == me.1 %}
-          {% if user.img.image %}
+          {% if user_img.image %}
           <img class="friends__list-usericon" src="/media/{{ user_img.image }}">
           <!-- 無ければNoimage用の画像を表示 -->
           {% else %}
@@ -33,7 +33,9 @@ Friends
             {{ me.1 }}
           </span>
           <span class="prof_msg">
-            aaaaaaaaaaaaaaaaaaaaaaa
+          {% if me.2 %}
+          {{ me.2.prof_msg }}
+          {% endif %}
           </span>
         </a>
       </li>
@@ -46,7 +48,7 @@ Friends
     {% for user in user_info %}
     <div class="friend_block">
       <li class="friends__list">
-        <a href="">
+        <a href="profile/{{ user.1 }}">
           {% for user_img in user_imgs %}
           {% if user_img.user.username == user.1 %}
           {% if user_img.image %}
@@ -61,7 +63,14 @@ Friends
             {{ user.1 }}
           </span>
           <span class="prof_msg">
-            aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          {% for prof_msg in prof_msgs %}
+          {% if prof_msg.user.username == user.1 %}
+          {% if prof_msg.prof_msg %}
+          {{ prof_msg.prof_msg }}
+          {% else %}
+          {% endif %}
+          {% endif %}
+          {% endfor %}
           </span>
       </li>
       </a>

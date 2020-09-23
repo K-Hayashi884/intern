@@ -30,4 +30,4 @@ class HeaderImage(models.Model):
 
 class prof_msg(models.Model):
    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profile")
-   prof_msg = models.CharField(max_length=140)
+   prof_msg = models.CharField(max_length=140, null=True, blank=True)

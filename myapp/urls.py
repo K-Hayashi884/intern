@@ -16,8 +16,10 @@ urlpatterns = [
     path('change_mail', views.EmailChangeView.as_view(), name='change_mail'),
     path('change_icon', views.IconChangeView.as_view(), name='change_icon'),
     path('change_pass', views.PasswordChange.as_view(), name='change_pass'),
+    path('change_prof_msg', views.Prof_msgChangeView.as_view(), name='change_prof_msg'),
     path('success/<name>', views.change_success, name='change_success'),
     path('logout', views.logout_view, name='logout'),
+    path('profile/<myname>', views.profile, name="profile"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #追加

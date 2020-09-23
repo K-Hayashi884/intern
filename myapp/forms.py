@@ -6,7 +6,7 @@ from django.core.validators import (
   FileExtensionValidator
 )
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User, UserImage
+from .models import User, UserImage, prof_msg
 from django.contrib.auth.forms import PasswordChangeForm
 from django.forms import ModelForm
 
@@ -86,3 +86,23 @@ class IconChangeForm(ModelForm):
     user_img = UserImage.objects.filter(user=user)
     user_img.image = self.cleaned_data['image']
     user_img.update()
+
+
+class Prof_msgChangeForm(ModelForm):
+  class Meta:
+    model = prof_msg
+    fields = [
+      'prof_msg',
+    ]
+
+  def __init__(self, prof_msg=None, *args, **kwargs):
+    kwargs.setdefault('label_suffix', '')
+    super().__init__(*args, **kwargs)
+    # ユーザーの更新前情報をフォームに挿入
+    if prof_msg:
+      self.fields['prof_msg'].widget.attrs['value'] = prof_msg
+
+  def prof_msg_update(self, user):
+    msg = prof_msg.objects.get(user=user)
+    msg.prof_msg = self.cleaned_data['prof_msg']
+    msg.save()

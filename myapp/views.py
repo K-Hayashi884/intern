@@ -7,8 +7,9 @@ from .forms import PasswordChangeForm
 from .forms import NameChangeForm
 from .forms import EmailChangeForm
 from .forms import IconChangeForm
+from .forms import Prof_msgChangeForm
 from django.contrib.auth import authenticate, get_user, login
-from .models import User, UserImage, Talk
+from .models import User, UserImage, Talk, HeaderImage, prof_msg
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 import datetime
@@ -75,29 +76,36 @@ def signup_view(request):
             user_img = UserImage(
                user=user,
                image=image,
-           )
+            )
             user_img.save()
+            #Register prof_msg and HeaderImage with Null in advance
+            user_prof_msg = prof_msg(
+                user=user,
+            )
+            user_prof_msg.save()
+            user_header_img = HeaderImage(
+                user=user,
+            )
+            user_header_img.save()
             return redirect(to="/")
     params = {
         "form":signup_form
     }
     return render(request, "myapp/signup.html", params)
 
-# def login_view(request):
-#     return render(request, "myapp/login.html")
-
 class Login(LoginView):
     form_class = LoginForm
     template_name= 'myapp/login.html'
 
-#friendリストを作りたい
+#I wanna make a friend-list
 def friends(request):
     me = request.user
     #自分と友人は分けて表示したいので、別々に作成
+    me_msg = prof_msg.objects.get(user=me)
     me_info = []
-    me_img = UserImage.objects.filter(user=me)
-    me_info.append([me, me.username])
+    me_info.append([me, me.username, me_msg])
     users = User.objects.exclude(username=me.username)
+    prof_msgs = prof_msg.objects.exclude(user=me)
     user_imgs = UserImage.objects.all()
     user_info = []
     for user in users:
@@ -110,6 +118,7 @@ def friends(request):
         "me_info":me_info,
         "user_imgs":user_imgs,
         "user_info":user_info,
+        "prof_msgs":prof_msgs
     }
     return render(request, "myapp/friends.html", params)
 
@@ -205,6 +214,27 @@ class EmailChangeView(LoginRequiredMixin, FormView):
         })
         return kwargs
 
+class Prof_msgChangeView(LoginRequiredMixin, FormView):
+    template_name = 'myapp/change_prof_msg.html'
+    form_class = Prof_msgChangeForm
+    success_url = 'success/Profile message'
+    
+    def form_valid(self, form):
+        #formのupdateメソッドにログインユーザーを渡して更新
+        form.prof_msg_update(user=self.request.user)
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        msg = prof_msg.objects.get(user=self.request.user).prof_msg
+        if msg:
+        # 更新前のユーザー情報をkwargsとして渡す
+            kwargs.update({
+                'prof_msg' : msg,
+            })
+        return kwargs
+        
+
 def change_success(request, name):
     params = {
         "name":name,
@@ -215,3 +245,14 @@ def logout_view(request):
     logout(request)
     return render(request,"myapp/index.html")
 
+def profile(request, myname):
+    myname = myname
+    page_owner = User.objects.get(username=myname)
+    icon = UserImage.objects.get(user=page_owner)
+    header = HeaderImage.objects.get(user=page_owner)
+    params = {
+        'myname':myname,
+        'icon':icon,
+        'header':header,
+    }
+    return render(request, "myapp/profile.html", params)
