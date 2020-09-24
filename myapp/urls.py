@@ -15,6 +15,7 @@ urlpatterns = [
     path('change_name', views.NameChangeView.as_view(), name='change_name'),
     path('change_mail', views.EmailChangeView.as_view(), name='change_mail'),
     path('change_icon', views.IconChangeView.as_view(), name='change_icon'),
+    path('change_header', views.HeaderChangeView.as_view(), name='change_header'),
     path('change_pass', views.PasswordChange.as_view(), name='change_pass'),
     path('change_prof_msg', views.Prof_msgChangeView.as_view(), name='change_prof_msg'),
     path('success/<name>', views.change_success, name='change_success'),

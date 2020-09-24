@@ -1,0 +1,38 @@
+/* .images {
+  width: 100%;
+} */
+
+.header_image{
+  border-bottom: 1px solid #eeeeee;
+}
+
+.images {
+  
+}
+
+
+.header_image img{
+  width: 100%;
+
+  padding: 0 5px;
+  position: absolute;
+  z-index: -1;
+}
+
+.icon {
+  text-align: center;
+}
+
+.icon img {
+  position: relative;
+  bottom: 0px;
+
+  width: 150px;
+  height: 150px;
+
+  border: 1px black solid;
+  border-radius: 50%;
+  object-fit: cover;
+
+  z-index: 10;
+}

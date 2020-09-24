@@ -6,7 +6,7 @@ from django.core.validators import (
   FileExtensionValidator
 )
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User, UserImage, prof_msg
+from .models import User, UserImage, prof_msg, HeaderImage
 from django.contrib.auth.forms import PasswordChangeForm
 from django.forms import ModelForm
 
@@ -83,9 +83,28 @@ class IconChangeForm(ModelForm):
   #     self.fields['image'].widget.attrs['value'] = image
 
   def icon_update(self, user):
-    user_img = UserImage.objects.filter(user=user)
+    user_img = UserImage.objects.get(user=user)
     user_img.image = self.cleaned_data['image']
-    user_img.update()
+    user_img.save()
+
+class HeaderChangeForm(ModelForm):
+  class Meta:
+    model = HeaderImage
+    fields = [
+      'image',
+    ]
+
+  # def __init__(self, image=None, *args, **kwargs):
+  #   kwargs.setdefault('label_suffix', '')
+  #   super().__init__(*args, **kwargs)
+  #   # ユーザーの更新前情報をフォームに挿入
+  #   if image:
+  #     self.fields['image'].widget.attrs['value'] = image
+
+  def header_update(self, user):
+    user_img = HeaderImage.objects.get(user=user)
+    user_img.image = self.cleaned_data['image']
+    user_img.save()
 
 
 class Prof_msgChangeForm(ModelForm):

@@ -7,16 +7,16 @@ from .forms import PasswordChangeForm
 from .forms import NameChangeForm
 from .forms import EmailChangeForm
 from .forms import IconChangeForm
+from .forms import HeaderChangeForm
 from .forms import Prof_msgChangeForm
 from django.contrib.auth import authenticate, get_user, login
 from .models import User, UserImage, Talk, HeaderImage, prof_msg
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeDoneView
 import datetime
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import FormView
+from django.views.generic import FormView, UpdateView
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import logout
 
@@ -176,6 +176,7 @@ class NameChangeView(LoginRequiredMixin, FormView):
         })
         return kwargs
 
+
 class IconChangeView(LoginRequiredMixin, FormView):
     template_name = 'myapp/change_icon.html'
     form_class = IconChangeForm
@@ -184,6 +185,26 @@ class IconChangeView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         #formのupdateメソッドにログインユーザーを渡して更新
         form.icon_update(user=self.request.user)
+        return super().form_valid(form)
+
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     myname = self.request.user.username
+    #     user = User.objects.get(username=myname)
+    #     user_img = UserImage.objects.get(user=user)
+    #     kwargs.update({
+    #         'image' : user_img,
+    #     })
+    #     return kwargs
+
+class HeaderChangeView(LoginRequiredMixin, FormView):
+    template_name = 'myapp/change_header.html'
+    form_class = HeaderChangeForm
+    success_url = 'success/header'
+    
+    def form_valid(self, form):
+        #formのupdateメソッドにログインユーザーを渡して更新
+        form.header_update(user=self.request.user)
         return super().form_valid(form)
 
     # def get_form_kwargs(self):

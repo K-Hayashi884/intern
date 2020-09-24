@@ -1,23 +1,29 @@
 {% load static %}
 
-<div>
-  {% if header.image %}
-  <img class="friends__list-usericon" src="/media/{{ header.image }}">
-  {% else %}
-  <!-- 無ければNoimage用の画像を表示 -->
-  <img class="friends__list-usericon" src="/media/images/noimagebig.png">
-  {% endif %}
-</div>
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/profile.css' %}" />
+{% endblock %}
 
+<div class="images">
+  <div class="header_image">
+    {% if header.image %}
+    <img class="friends__list-usericon" src="/media/{{ header.image }}">
+    {% else %}
+    <!-- 無ければNoimage用の画像を表示 -->
+    <img class="friends__list-usericon" src="/media/images/noimagebig.png">
+    {% endif %}
+  </div>
+  
+  <div class="icon">
+    {% if icon.image %}
+    <img class="friends__list-usericon" src="/media/{{ icon.image }}">
+    {% else %}
+    <!-- 無ければNoimage用の画像を表示 -->
+    <img class="friends__list-usericon" src="/media/images/noimage.png">
+    {% endif %}
+  </div>
+</div>
+  
 <div>
   this is the profile site of {{ myname }}
-</div>
-
-<div>
-  {% if icon.image %}
-  <img class="friends__list-usericon" src="/media/{{ icon.image }}">
-  {% else %}
-  <!-- 無ければNoimage用の画像を表示 -->
-  <img class="friends__list-usericon" src="/media/images/noimage.png">
-  {% endif %}
 </div>
