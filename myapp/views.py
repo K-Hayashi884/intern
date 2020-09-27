@@ -31,7 +31,7 @@ def talklist_view(request):
     latest_msg = Talk.objects.filter(
         Q(person_from=OuterRef("pk"), person_to=user) | Q(person_from=user, person_to=OuterRef("pk"))
     ).order_by('-time')
-    user_qs =(User.objects.exclude(user=user).annotate(
+    user_qs =(User.objects.exclude(username=user.username).annotate(
         latest_msg_id=Subquery(
             latest_msg.values("pk")[:1]
         ),
