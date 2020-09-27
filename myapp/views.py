@@ -50,7 +50,8 @@ def talklist_view(request):
            # htmlで表示するにあたって必要な情報を紐づけたリストを作成する
            # ※※時間のソートをかける際に、0やnullでは型が違ってsortできない
            # ＞databaseの初めのメッセージの時間を用いると、必ず降順の最後に置かれる
-            if Talk.objects.all():    
+            talks = Talk.objects.all()
+            if talks:    
                 friend_info.append([friend, last_message, time_flag, Talk.objects.all().first().time])
             else:
                 friend_info.append([friend, last_message, time_flag, datetime.datetime.now()])
