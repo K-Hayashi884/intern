@@ -14,7 +14,7 @@ Talk List
   <ul class="friends__list-wrap">
     {% for user in user_qs %}
     <li class="friends__list">
-      <a class="friends__list-link" href="{% url 'talk_room' talk.0.username %}">
+      <a class="friends__list-link" href="{% url 'talk_room' user.username %}">
         {% for user_img in user_imgs %}
         {% if user_img.user.username == user.username %}
         {% if user_img.image %}
