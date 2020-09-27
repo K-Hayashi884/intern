@@ -176,7 +176,6 @@ class NameChangeView(LoginRequiredMixin, FormView):
         })
         return kwargs
 
-
 class IconChangeView(LoginRequiredMixin, FormView):
     template_name = 'myapp/change_icon.html'
     form_class = IconChangeForm
