@@ -50,7 +50,10 @@ def talklist_view(request):
            # htmlで表示するにあたって必要な情報を紐づけたリストを作成する
            # ※※時間のソートをかける際に、0やnullでは型が違ってsortできない
            # ＞databaseの初めのメッセージの時間を用いると、必ず降順の最後に置かれる
-            friend_info.append([friend, last_message, time_flag, Talk.objects.all().first().time])
+            if Talk.objects.all():    
+                friend_info.append([friend, last_message, time_flag, Talk.objects.all().first().time])
+            else:
+                friend_info.append([friend, last_message, time_flag, datetime.datetime.now()])
             # 最後の要素（＝そのトークのtime）でソートすることで、html上の組み込みでforを回すだけで最新から順に表示することができる
     friend_info = sorted(friend_info, reverse=True, key=lambda x: x[3])
     params = {
