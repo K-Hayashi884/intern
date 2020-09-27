@@ -1,13 +1,24 @@
+.header {
+  background-color: #bbbbbb;
+  z-index: 100;
+  position: fixed;
+  top: 0%;
+}
+
 ul{
 
   list-style: none;
 
   padding: 0;
 
+  padding-top: 64px;
+
 }
 
 
 .setting-button{
+
+  z-index: -100;
 
   display: block;
 
@@ -30,3 +41,8 @@ ul{
   color: #000;
 
 }
+
+.footer-container {
+  background-color: #bbbbbb;
+}
+

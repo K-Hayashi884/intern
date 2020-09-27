@@ -33,10 +33,24 @@
 
 {% block footer %}
 <footer class="footer">
-  <form class="talk_room__sendbox" method="POST">
+  <form class="talk_room__sendbox" id="id_talk" method="POST">
     {% csrf_token %}
     {{ form.talk }}
     <button class="talk_room__sendbox-btn" type="submit">送信</button>
   </form>
 </footer>
+{% endblock %}
+
+{% block extra_js %}
+<!-- 機能を載せるために不可避だったので、ここだけコピペで実装してください -->
+<script>
+   // 入力予測の表示をさせない（めっちゃ邪魔）
+   document.getElementById('id_talk').setAttribute('autocomplete', 'off');
+   // トークの表示を新しいものを下にしているため、最下にスクロールさせる
+   function scrollToBottom(){
+       var height = document.getElementById("talk_room__chatboard");
+       window.scroll(0, height.scrollHeight);
+   }
+       scrollToBottom();
+</script>
 {% endblock %}
