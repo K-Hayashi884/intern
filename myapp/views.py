@@ -36,7 +36,7 @@ def talklist_view(request):
             latest_msg.values("pk")[:1]
         ),
         latest_msg_content=Subquery(
-                    latest_msg.values("content")[:1]
+                    latest_msg.values("talk")[:1]
         ),
         latest_msg_time=Subquery(
                     latest_msg.values("time")[:1]
