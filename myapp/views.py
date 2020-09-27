@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate, get_user, login
 from .models import User, UserImage, Talk, HeaderImage, prof_msg
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeDoneView
 import datetime
-from django.db.models import Q
+from django.db.models import Q, Value, Subquery, OuterRef
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import FormView, UpdateView
@@ -27,33 +27,26 @@ def index(request):
 
 def talklist_view(request):
     user = request.user
-    friends = User.objects.exclude(username=user.username)
     user_imgs = UserImage.objects.exclude(user=user)
-    friend_info = []
-    for friend in friends:
-        try:
-            last_message = Talk.objects.filter(Q(person_from=user, person_to=friend) | Q(person_from=friend, person_to=user)).last()
-            # ここからは教材より引用
-             # 今日のトークであれば時刻を表示、それより前なら日付を表示
-           # 表示に関してはhtml上の組み込みでのフォーマットで対応できるので、ここではflagのみを準備する
-            if "{0:%Y-%m-%d}".format(last_message.time) == "{0:%Y-%m-%d}".format(datetime.date.today()):
-               time_flag = "time"
-            else:
-               time_flag = "date"
-           # htmlで表示するにあたって必要な情報を紐づけたリストを作成する
-            friend_info.append([friend, last_message, time_flag, last_message.time])
-            # トーク履歴がない場合、nullで登録する
-        except:
-            last_message = ''
-            mes= ''
-            time_flag = ''
-           # htmlで表示するにあたって必要な情報を紐づけたリストを作成する
-           # ※※時間のソートをかける際に、0やnullでは型が違ってsortできない
-            friend_info.append([friend, last_message, time_flag, datetime.datetime.now(2020, 9, 27, 17, 00)])
-    friend_info = sorted(friend_info, reverse=True, key=lambda x: x[3])
+    latest_msg = Talk.objects.filter(
+        Q(person_from=OuterRef("pk"), person_to=user) | Q(person_from=user, person_to=OuterRef("pk"))
+    ).order_by('-time')
+    user_qs =(User.objects.exclude(user=user).annotate(
+        latest_msg_id=Subquery(
+            latest_msg.values("pk")[:1]
+        ),
+        latest_msg_content=Subquery(
+                    latest_msg.values("content")[:1]
+        ),
+        latest_msg_time=Subquery(
+                    latest_msg.values("time")[:1]
+        ),
+    ).order_by("latest_msg_id")
+    )
     params = {
+        "user":user,
         "user_imgs":user_imgs,
-        "friend_info":friend_info,
+        "user_qs":user_qs,
     }
     return render(request, "myapp/talklist.html", params)
 

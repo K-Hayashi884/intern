@@ -12,11 +12,11 @@ Talk List
 {% block content %}
 <div class="friends">
   <ul class="friends__list-wrap">
-    {% for talk in friend_info %}
+    {% for user in user_qs %}
     <li class="friends__list">
       <a class="friends__list-link" href="{% url 'talk_room' talk.0.username %}">
         {% for user_img in user_imgs %}
-        {% if user_img.user.username == talk.0.username %}
+        {% if user_img.user.username == user.username %}
         {% if user_img.image %}
         <img class="friends__list-usericon" src="/media/{{ user_img.image }}">
         <!-- 無ければNoimage用の画像を表示 -->
@@ -26,16 +26,12 @@ Talk List
         {% endif %}
         {% endfor %}
         <!-- ユーザーアイコンのforここまで -->
-        <div class="friends__list-username">{{ talk.0.username }}</div>
+        <div class="friends__list-username">{{ user.username }}</div>
         <!-- ここから最新のトークを表示する部分 -->
         <div class="friends__list-talk">
-          <p class="friends__list-talk-content">{{ talk.1.talk }}</p>
+          <p class="friends__list-talk-content">{{ user.latest_msg_content }}</p>
           <!-- 時間表示のflagをチェックして、時間を表示するか日付を表示するかを分岐 -->
-          {% if talk.3 == "time" %}
-          <p class="friends__list-talk-time">{{ talk.1.time|date:"H:i" }}</p>
-          {% else %}
-          <p class="friends__list-talk-time">{{ talk.1.time|date:"m/d" }}</p>
-          {% endif %}
+          <p class="friends__list-talk-time">{{ user.latest_msg_time|date:"n/j H:i" }}</p>
         </div>
       </a>
     </li>
