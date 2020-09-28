@@ -10,6 +10,10 @@
   border: solid 1px whitesmoke;
   padding-left: 10px;
   position: relative;
+  width: 95%;
+}
+.log .message {
+  word-wrap: break-word;
 }
 .send_from {
   padding: 0;
