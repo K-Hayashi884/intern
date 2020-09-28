@@ -56,11 +56,13 @@ a {
   position: absolute;
   top: auto;
   left: 50%;
+  width: 30%;
+  word-wrap: break-word;
   font-size: 14px;
 }
 .date {
   position: absolute;
   top: 7px;
-  left: 70%;
+  left: 85%;
   font-size: 10px;
 }

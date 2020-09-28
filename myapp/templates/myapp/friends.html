@@ -29,10 +29,10 @@
     <div class="friend">
         <a href="{% url 'talk_room' friend.id %}">
             <img src="/media/{{ friend.img }}" alt="アイコン" width="30vw" height="30vh">
-            <span class="username">{{ friend }}</span>
+            <span class="username">{{ friend|truncatechars:12 }}</span>
             {% for latest_msg in latest_msgs %}
                 {% if latest_msg.send_to == friend or latest_msg.send_from == friend %}
-                    <span class="message">{{ latest_msg.message|safe }}</span>
+                    <span class="message">{{ latest_msg.message|safe|truncatechars:15 }}</span>
                     <span class="date">{{ latest_msg.posted_date|date:"n/j, G:i" }}</span>
                 {% endif %}
             {% endfor %}
