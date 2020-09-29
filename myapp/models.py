@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.contrib.auth.models import AbstractUser,UserManager
 from django.utils.translation import gettext_lazy as _
+from django.core import validators
 
 class User(User):
    pass
@@ -29,5 +30,16 @@ class HeaderImage(models.Model):
        return "{}の写真".format(self.user)
 
 class prof_msg(models.Model):
-   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profile")
+   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profile_msg")
    prof_msg = models.CharField(max_length=140, null=True, blank=True)
+
+class Profile(models.Model):
+   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profile")
+   height = models.IntegerField(
+      validators=[validators.MinValueValidator(0),
+                    validators.MaxValueValidator(300)]
+   )
+   weight = models.IntegerField(
+      validators=[validators.MinValueValidator(0),
+                    validators.MaxValueValidator(1000)]
+   )

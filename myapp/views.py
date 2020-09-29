@@ -41,7 +41,7 @@ def talklist_view(request):
         latest_msg_time=Subquery(
                     latest_msg.values("time")[:1]
         ),
-    ).order_by("latest_msg_id")
+    ).order_by("-latest_msg_id")
     )
     params = {
         "user":user,
