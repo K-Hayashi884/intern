@@ -4,11 +4,12 @@ from django.http import HttpResponse
 
 
 
+
 def index(request):
     return render(request, "myapp/index.html")
 
 def signup_view(request):
-    params = {'form':signup()}
+     params = {'form':signup()}
 
     
     return render(request, "myapp/signup.html")
