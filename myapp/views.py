@@ -1,10 +1,16 @@
 from django.shortcuts import redirect, render
 from .forms import signup
+from django.http import HttpResponse
+
+
 
 def index(request):
     return render(request, "myapp/index.html")
 
 def signup_view(request):
+    params = {'form':signup()}
+
+    
     return render(request, "myapp/signup.html")
 
 def login_view(request):
