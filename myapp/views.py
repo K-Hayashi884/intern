@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-
+from .forms import signup
 
 def index(request):
     return render(request, "myapp/index.html")
