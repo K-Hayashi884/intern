@@ -9,7 +9,7 @@ def index(request):
     return render(request, "myapp/index.html")
 
 def signup_view(request):
-     params = {'form':signup()}
+     
 
     
     return render(request, "myapp/signup.html")
