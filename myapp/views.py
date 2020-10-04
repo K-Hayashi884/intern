@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import get_user
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
@@ -156,7 +156,7 @@ def friends(request):
                 # ＞検索結果がなかった
                 if not friends:
                     params["no_result"] = True
-                return render (request, "myapp/friends.html", params)
+                return render(request, "myapp/friends.html", params)
 
     # ここまで　検索機能あり　上級
 
@@ -169,14 +169,17 @@ def friends(request):
         # 最新トーク表示（上級）機能がなければparamsに入れない
         "friends": friends,
     }
-    return render (request, "myapp/friends.html", params)
+    return render(request, "myapp/friends.html", params)
 
 
 @login_required
-def talk_room(request,friend_username):
+def talk_room(request, friend_username):
     # ユーザ・友達をともにオブジェクトで取得
-    user = get_user(request)
-    friend = User.objects.get(username=friend_username)
+    user = request.user
+    try:
+        friend = User.objects.get(username=friend_username)
+    except ObjectDoesNotExist:
+        raise Http404
     # 自分→友達、友達→自分のトークを全て取得
     talk = Talk.objects.filter(Q(talk_from=user, talk_to=friend) | Q(talk_to=user, talk_from=friend))
     # 時系列で並べ直す
@@ -197,38 +200,31 @@ def talk_room(request,friend_username):
     # POST（メッセージ送信あり）
     if request.method == "POST":
         # 送信内容を取得
-        post = TalkForm(request.POST)
+        form = TalkForm(request.POST)
 
         # 送信内容があった場合
-        if post.is_valid():
+        if form.is_valid():
             # 送信内容からメッセージを取得
-            text = post.cleaned_data.get('talk')
+            text = form.cleaned_data.get('talk')
             now = datetime.datetime.now()
             # 送信者、受信者、メッセージ、タイムスタンプを割り当てて保存
             new_talk = Talk(talk=text, talk_from=user, talk_to=friend, time=now)
             new_talk.save()
             # 更新
-            return render(request,"myapp/talk_room.html",params)
+            return render(request, "myapp/talk_room.html", params)
             
     # POSTでない（リダイレクトorただの更新）&POSTでも入力がない場合
-    return render(request,"myapp/talk_room.html",params)
+    return render(request, "myapp/talk_room.html", params)
 
-    #     # 送信内容がなかった場合（ただの更新と同じ）
-    #     return render(request,"myapp/talk_room.html",params)
-    
-    # # POSTでない（リダイレクトorただの更新）
-    # else:      
-    #     return render(request,"myapp/talk_room.html",params)
 
 @login_required
 def setting(request):
-    return render (request, "myapp/setting.html")
-"""
-setting以下のchange系の関数は
-request.methodが'GET'か'POST'かで明示的に分けています。
-これはformの送信があった時とそうで無いときを区別しています
-"""
+    return render(request, "myapp/setting.html")
 
+
+# setting以下のchange系の関数は
+# request.methodが'GET'か'POST'かで明示的に分けています。
+# これはformの送信があった時とそうで無いときを区別しています。
 @login_required
 def user_img_change(request):
     user = request.user
@@ -237,36 +233,35 @@ def user_img_change(request):
     except ObjectDoesNotExist:
         user_img = UserImage.objects.none()
     if request.method == "GET":
-        """
-        モデルフォームには(instance=user)をつけることで
-        userの情報が入った状態のFormを参照できます。
-        今回はユーザ情報の変更の関数が多いのでこれをよく使います。
-        """
+        # モデルフォームには(instance=user)をつけることで
+        # userの情報が入った状態のFormを参照できます。
+        # 今回はユーザ情報の変更の関数が多いのでこれをよく使います。        
         form = ImageSettingForm(instance=user)
         params = {
             "form":form,
             "user_img":user_img,
         }
-        """
-        画像に関しては、formに入った状態では表示できないので
-        保存されたものを直接参照する必要があります。
-        """
-        return render(request,"myapp/user_img_change.html",params)
+        # 画像に関しては、formに入った状態では表示できないので
+        # 保存されたものを直接参照する必要があります。
+        return render(request, "myapp/user_img_change.html", params)
+    
     elif request.method == "POST":
         form = ImageSettingForm(request.POST,request.FILES)
         if form.is_valid():
-            user_img.image=form.cleaned_data.get('image')
+            user_img.image = form.cleaned_data.get('image')
             user_img.save()
             return user_img_change_done(request)
         params = {
             "form":form,
             "user_img":user_img,
         }
-        return render(request,"myapp/user_img_change.html",params)
+        return render(request, "myapp/user_img_change.html", params)
+
 
 @login_required
 def user_img_change_done(request):
-    return render(request,"myapp/user_img_change_done.html")
+    return render(request, "myapp/user_img_change_done.html")
+
 
 @login_required
 def mail_change(request):
@@ -276,7 +271,8 @@ def mail_change(request):
         params = {
             "form":form,
         }
-        return render (request,"myapp/mail_change.html",params)
+        return render (request, "myapp/mail_change.html", params)
+
     elif request.method == "POST":
         form = MailSettingForm(request.POST,instance=user)
         if form.is_valid():
@@ -286,9 +282,12 @@ def mail_change(request):
             "form":form,
         }
         return render(request,"myapp/mail_change.html",params)
+
+
 @login_required
 def mail_change_done(request):
-    return render(request,"myapp/mail_change_done.html")
+    return render(request, "myapp/mail_change_done.html")
+
 
 @login_required
 def username_change(request):
@@ -298,7 +297,8 @@ def username_change(request):
         params = {
             "form":form,
         }
-        return render (request,"myapp/username_change.html",params)
+        return render (request, "myapp/username_change.html", params)
+
     elif request.method == "POST":
         form = UserNameSettingForm(request.POST,instance=user)
         if form.is_valid():
@@ -307,13 +307,16 @@ def username_change(request):
         params = {
             "form":form,
         }
-        return render(request,"myapp/mail_change.html",params)
+        return render(request, "myapp/mail_change.html", params)
+
+
 @login_required
 def username_change_done(request):
     """
     ユーザ名変更後の関数
     """
-    return render(request,"myapp/username_change_done.html")
+    return render(request, "myapp/username_change_done.html")
+
 
 class PasswordChange(PasswordChangeView):
     """
@@ -329,6 +332,7 @@ class PasswordChange(PasswordChangeView):
     form_class = PasswordChangeForm
     success_url = reverse_lazy('password_change_done')
     template_name = 'myapp/password_change.html'
+
 
 class PasswordChangeDone(PasswordChangeDoneView):
     """Django標準パスワード変更後ビュー"""
