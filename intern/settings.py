@@ -25,7 +25,7 @@ SECRET_KEY = 'oaab#2kr%trbj2h-w9ycf0&f$7dgi2+p=37!cjw$*y0@26pq77'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -107,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
 TIME_ZONE = 'Asia/Tokyo'
 
@@ -121,19 +121,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+AUTH_USER_MODEL = 'myapp.user'
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = '/static/'
 
+# 画像（ユーザーアイコン）にアクセスするための指定
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
 
 LOGIN_URL = 'login_view'
-# 画像（ユーザーアイコン）にアクセスするための指定
-MEDIA_URL = "/images/"
-# ここを指定してからurls.pyを指定する
-# AUTH_USER_MODEL = 'myapp.User'
-MEDIA_ROOT = os.path.join(BASE_DIR, "images")
 LOGIN_REDIRECT_URL = '/friends'
-
-AUTH_USER_MODEL = 'myapp.user'
-
 LOGOUT_REDIRECT_URL = '/'

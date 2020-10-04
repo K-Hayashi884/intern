@@ -1,19 +1,16 @@
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import (
-    UserCreationForm,PasswordChangeForm,AuthenticationForm
-    )
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm
 from django.core.exceptions import ValidationError
-from django.core.validators import (
-    FileExtensionValidator
-)
+from django.core.validators import FileExtensionValidator
 
-from .models import User,UserImage
+from .models import User, UserImage
+
 
 class SignUpForm(UserCreationForm):
     img = forms.ImageField(
         required=False, validators=[FileExtensionValidator(["jpg", "jpeg", "png"])],
     )
+
     class Meta:
         model = User
         """
@@ -21,6 +18,7 @@ class SignUpForm(UserCreationForm):
         上のimgは元々のものには無いので、自分で作ります。
         """
         fields = ('username', 'email', 'password1', 'password2')
+
 
 class LoginForm(AuthenticationForm):        
     def confirm_login_allowed(self, user):
@@ -36,21 +34,25 @@ class LoginForm(AuthenticationForm):
        self.fields['username'].widget.attrs['class'] = 'form-control'
        self.fields['password'].widget.attrs['class'] = 'form-control'
 
+
 class MailSettingForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ('email', )
+
     def __init__(self, *args, **kwargs):
        super().__init__(*args, **kwargs)
        for field in self.fields.values():
            default_label = str(field.label)
            new_label = "new" + default_label
            field.label = new_label
+
 
 class UserNameSettingForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ('username', )
+
     def __init__(self, *args, **kwargs):
        super().__init__(*args, **kwargs)
        for field in self.fields.values():
@@ -58,10 +60,12 @@ class UserNameSettingForm(forms.ModelForm):
            new_label = "new" + default_label
            field.label = new_label
 
+
 class ImageSettingForm(forms.ModelForm):
     class Meta:
         model = UserImage
-        exclude = ("user",)
+        exclude = ("user", )
+
 
 class PasswordChangeForm(PasswordChangeForm):
     """
@@ -76,12 +80,13 @@ class PasswordChangeForm(PasswordChangeForm):
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
+
 # 友達の中から任意のユーザーを検索
 class FriendsSearchForm(forms.Form):
-    keyword = forms.CharField(label='検索',required=False,widget=forms.TextInput(attrs={'placeholder': 'ユーザー名で検索'}))
+    keyword = forms.CharField(label='検索', required=False, widget=forms.TextInput(attrs={'placeholder': 'ユーザー名で検索'}))
     
+
 # トークの送信のためのform
 # メッセージを送信するだけで、誰から誰か、時間は全て自動で対応できるのでこれだけで十分
 class TalkForm(forms.Form):
     talk = forms.CharField(label='talk')
-

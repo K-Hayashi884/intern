@@ -21,23 +21,23 @@
         <!-- ＞違いを見出してclassの違いに反映              -->
         <!-- ＞cssにて表示に違いを出す                      -->
         <!-- ============================================== -->
-        {% if talk.talk_from == user %}
-        <li class="talk_room__chatboard-content talk_room__chatboard-content-user">
-            <p class="talk_room__chatboard-content-name">＞{{ talk.talk_from }}</p>
-            <p class="talk_room__chatboard-content-text">{{ talk.talk }}</p>
-            <!-- LINEっぽく -->
-            <p class="talk_room__chatboard-content-time">{{ talk.time|date:"m/d" }}<br>{{ talk.time|date:"H:i" }}</p>
-            <!-- LINEここまで -->
-        </li>
-        {% else %}
-        <li class="talk_room__chatboard-content talk_room__chatboard-content-friend">
-            <p class="talk_room__chatboard-content-name">＞{{ talk.talk_from }}</p>
-            <p class="talk_room__chatboard-content-text">{{ talk.talk }}</p>
-            <!-- LINEっぽく -->
-            <p class="talk_room__chatboard-content-time">{{ talk.time|date:"m/d" }}<br>{{ talk.time|date:"H:i" }}</p>
-            <!-- LINEここまで -->
-        </li>
-        {% endif %}
+            {% if talk.talk_from == user %}
+            <li class="talk_room__chatboard-content talk_room__chatboard-content-user">
+                <p class="talk_room__chatboard-content-name">＞{{ talk.talk_from }}</p>
+                <p class="talk_room__chatboard-content-text">{{ talk.talk }}</p>
+                <!-- LINEっぽく -->
+                <p class="talk_room__chatboard-content-time">{{ talk.time|date:"m/d" }}<br>{{ talk.time|date:"H:i" }}</p>
+                <!-- LINEここまで -->
+            </li>
+            {% else %}
+            <li class="talk_room__chatboard-content talk_room__chatboard-content-friend">
+                <p class="talk_room__chatboard-content-name">＞{{ talk.talk_from }}</p>
+                <p class="talk_room__chatboard-content-text">{{ talk.talk }}</p>
+                <!-- LINEっぽく -->
+                <p class="talk_room__chatboard-content-time">{{ talk.time|date:"m/d" }}<br>{{ talk.time|date:"H:i" }}</p>
+                <!-- LINEここまで -->
+            </li>
+            {% endif %}
         {% endfor %}
     </ul>
 
