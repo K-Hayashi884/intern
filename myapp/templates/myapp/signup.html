@@ -9,13 +9,16 @@
     crossorigin="anonymous">
 </head>
 <body class="container">
-    <h1>会員登録</h1>
-    <form action="{% url 'create' %}" method="POST">
+    <h1>{{title}}</h1>
+    <form action="{% url 'signup_view' %}" method="POST">
+        
         {% csrf_token %}
         {{form.as_p}}
         <input type="submit" value="click" >
 
     </form>
+ 
+     
 </body>
 </html>
 

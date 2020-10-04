@@ -1,1 +1,20 @@
-LI
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+     <meta charset="utf-8">
+     <title> index </title>
+    <link rel="stylesheet" type="text/css" herf="{% static 'myapp/css/base.css' %}"/>
+</head>
+<body>
+    <h1>ログイン</h1>
+    <form action="{% url 'login_view' %}" method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="click" >
+
+    </form>
+    
+
+</body>
+</html>

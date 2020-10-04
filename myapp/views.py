@@ -21,7 +21,7 @@ def signup_view(request):
         mem.save()
         return redirect(to='/')
      
-    return render(request, "myapp/signup.html")
+    return render(request, "myapp/signup.html",params)
 
 def login_view(request):
     return render(request, "myapp/login.html")
