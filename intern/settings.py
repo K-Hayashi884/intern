@@ -37,9 +37,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'pwa',
     'myapp',
 ]
+
+SITE_ID = 1
+
+# ユーザ登録確認メールを送信
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = True
+# コンソール上にメッセージを表示
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -68,6 +81,13 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    # needed to login by username in django admin, regardless of 'allauth'
+    'django.contrib.auth.backends.ModelBackend',
+    # 'allauth' specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 WSGI_APPLICATION = 'intern.wsgi.application'
@@ -133,7 +153,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGIN_URL = '/login'
+LOGIN_URL = 'accounts/login'
 LOGIN_REDIRECT_URL = '/friends'
 LOGOUT_REDIRECT_URL = '/'
 

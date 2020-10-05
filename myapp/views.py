@@ -35,6 +35,11 @@ class Login(LoginView):
     form_class = LoginForm
     template_name = 'myapp/login.html'
 
+def confirm_email(request):
+    if request.method=='POST':
+        return redirect(to='/accounts/confirm-email')
+    return render(request, "myapp/confirm-email.html")
+
 
 @login_required(login_url='/')
 def friends(request):
