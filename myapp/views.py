@@ -36,9 +36,10 @@ class Login(LoginView):
     template_name = 'myapp/login.html'
 
 def confirm_email(request):
+    params = {'title': '登録'}
     if request.method=='POST':
         return redirect(to='/accounts/confirm-email')
-    return render(request, "myapp/confirm-email.html")
+    return render(request, "myapp/confirm-email.html", params)
 
 
 @login_required(login_url='/')

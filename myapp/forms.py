@@ -3,9 +3,17 @@ from .models import User, MyUserManager, Message
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 class SignUpForm(UserCreationForm):
+    def __init__(self, *args, **kwd):
+        super(SignUpForm, self).__init__(*args, **kwd)
+        self.fields['img'].required=False
     class Meta:
         model = User
         fields = ['username', 'email', 'img', 'password1', 'password2']
+
+    def signup(self, request, user):
+        user.img = self.cleaned_data['img']
+        user.save()
+        return user
 
 class LoginForm(AuthenticationForm):
     def confirm_login_allowed(self, user):
