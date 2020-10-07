@@ -53,6 +53,13 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True
 # コンソール上にメッセージを表示
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'kinako.fukiko.0822@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'kinako.fukiko.0822@gmail.com'
+EMAIL_HOST_PASSWORD = 'karutafuki'
+EMAIL_USE_TLS = True
 
 MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
