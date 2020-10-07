@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}">
 {% endblock %}
 
-{% block header-title %}{{ user.username }}{% endblock %}
+{% block header-title %}{{ friend.username }}{% endblock %}
 {% block header-item %}
 <a href="{% url 'friends' %}"><img src="/media/img/upload/back.png" alt="back" width="40vw"></a>
 {% endblock %}
@@ -16,10 +16,18 @@
     {% for show_message in message_log %}
     <div class="log">
         {% if show_message.send_from == me %}
-            <img src="/media/{{ me.img }}" alt="アイコン" width="15vw" height="15vh">
+            {% if friend.img %}
+            <img src="/media/{{ me.img }}" alt="icon" width="30vw" height="30vh">
+            {% else %}
+            <img src="/media/img/upload/person.png" alt="icon" width="30vw" height="30vw">
+            {% endif %}
             <p class="send_from">{{ me.username }}:</p>
         {% else %}
-            <img src="/media/{{ friend.img }}" alt="アイコン" width="15vw" height="15vh">
+            {% if friend.img %}
+            <img src="/media/{{ friend.img }}" alt="icon" width="30vw" height="30vh">
+            {% else %}
+            <img src="/media/img/upload/person.png" alt="icon" width="30vw" height="30vw">
+            {% endif %}
             <p class="send_from">{{ friend.username}}:</p>
         {% endif %}
         <p class="message">{{ show_message.message|safe }}</p>

@@ -20,7 +20,11 @@
 
 <div class="all_friends">
     <div class="friend">
-        <img src="/media/{{ me.img }}" alt="アイコン" width="30vw" height="30vh">
+        {% if me.img %}
+        <img src="/media/{{ me.img }}" alt="icon" width="30vw" height="30vh">
+        {% else %}
+        <img src="/media/img/upload/person.png" alt="icon" width="30vw" height="30vw">
+        {% endif %}
         <span class="username">{{ me.username }}</span>
 
     </div>
@@ -28,7 +32,11 @@
 
     <div class="friend">
         <a href="{% url 'talk_room' friend.id %}">
-            <img src="/media/{{ friend.img }}" alt="アイコン" width="30vw" height="30vh">
+            {% if friend.img %}
+            <img src="/media/{{ friend.img }}" alt="icon" width="30vw" height="30vh">
+            {% else %}
+            <img src="/media/img/upload/person.png" alt="icon" width="30vw" height="30vw">
+            {% endif %}
             <span class="username">{{ friend|truncatechars:12 }}</span>
             {% for latest_msg in latest_msgs %}
                 {% if latest_msg.send_to == friend or latest_msg.send_from == friend %}
@@ -43,7 +51,11 @@
     {% for friend in no_log_friends %}
     <div class="friend">
         <a href="{% url 'talk_room' friend.id %}">
-            <img src="/media/{{ friend.img }}" alt="アイコン" width="30vw" height="30vh">
+            {% if friend.img %}
+            <img src="/media/{{ friend.img }}" alt="icon" width="30vw" alt="30vw">
+            {% else %}
+            <img src="/media/img/upload/person.png" alt="icon" width="30vw" height="30vh">
+            {% endif %}
             <span class="username">{{ friend }}</span>
         </a>
     </div>
