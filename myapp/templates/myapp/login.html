@@ -3,12 +3,15 @@
 <html lang="ja">
 <head>
      <meta charset="utf-8">
-     <title> index </title>
+     <title> login </title>
     <link rel="stylesheet" type="text/css" herf="{% static 'myapp/css/base.css' %}"/>
 </head>
 <body>
     <h1>ログイン</h1>
-    <form action="{% url 'login_view' %}" method="POST">
+       {% if form.erros %}
+       <h2>エラーです！</h2>
+       {% endif %}
+    <form action="{% url 'login_view' %}" method="POST" enctype="=multipart/from-data">
         {% csrf_token %}
         {{form.as_p}}
         <input type="submit" value="click" >

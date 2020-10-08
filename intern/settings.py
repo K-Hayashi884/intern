@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-from django.contrib.staticfiles.urls import static,staticfiles_urlpatterns
+
 
 import os
 
@@ -77,6 +77,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'intern.wsgi.application'
 
+AUTH_USER_MODEL = "myapp.User"
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -126,3 +127,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+LOGIN_URL='register:login'
+LOGIN_REDIRECT_URL='register:top'

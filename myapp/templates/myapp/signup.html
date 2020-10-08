@@ -10,7 +10,7 @@
 </head>
 <body class="container">
     <h1>{{title}}</h1>
-    <form action="{% url 'signup_view' %}" method="POST">
+    <form action="{% url 'signup_view' %}" method="POST" enctype="multipart/form-data">
         
         {% csrf_token %}
         {{form.as_p}}
