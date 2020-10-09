@@ -1,6 +1,5 @@
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import User, Message
 from .forms import SignUpForm, LoginForm, FindForm, MessageForm, EmailChangeForm, UsernameChangeForm, IconChangeForm
 from django.urls import reverse_lazy
@@ -9,6 +8,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def index(request):
     return render(request, "myapp/index.html")
@@ -43,7 +43,7 @@ def confirm_email(request):
 
 
 @login_required(login_url='/')
-def friends(request):
+def friends(request, num=1):
     me = request.user
 
     sorted_msgs = []
@@ -75,12 +75,14 @@ def friends(request):
         else:
             no_log_friends.append(friend)
 
+    all_friends = log_exist_friends + no_log_friends
+    page_obj = paginate_query(request, all_friends, 10)
+
     params = {
         'me': me,
-        'log_exist_friends': log_exist_friends,
-        'no_log_friends': no_log_friends,
         'form': form,
         'latest_msgs': latest_msgs,
+        'page_obj': page_obj
     }
     return render(request, "myapp/friends.html", params)
 
@@ -187,3 +189,14 @@ class PasswordChange(LoginRequiredMixin, PasswordChangeView):
 
 class PasswordChangeDone(LoginRequiredMixin, PasswordChangeDoneView):
     template_name = 'myapp/change_done.html'
+
+def paginate_query(request, queryset, count):
+    paginator = Paginator(queryset, count)
+    page = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    return page_obj

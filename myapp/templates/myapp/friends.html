@@ -28,7 +28,7 @@
         <span class="username">{{ me.username }}</span>
 
     </div>
-    {% for friend in log_exist_friends %}
+    {% for friend in page_obj %}
 
     <div class="friend">
         <a href="{% url 'talk_room' friend.id %}">
@@ -48,7 +48,7 @@
     </div>
     {% endfor %}
 
-    {% for friend in no_log_friends %}
+    <!-- {% for friend in no_log_friends %}
     <div class="friend">
         <a href="{% url 'talk_room' friend.id %}">
             {% if friend.img %}
@@ -59,7 +59,32 @@
             <span class="username">{{ friend }}</span>
         </a>
     </div>
-    {% endfor %}
+    {% endfor %} -->
+
+    <div class="pagination">
+        <span class="step_links">
+            <!-- <ul class="page_link"> -->
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a href="?page=1">&laquo; Top</a></li>
+                <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item">{{ num }}</li>
+                {% else %}
+                    <li class="page-item"><a href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item"><a href="?page={{ page_obj.next_page_number }}">next</a></li>
+                <li class="page-item"><a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+            {% endif %}
+            <!-- </ul> -->
+            </span>
+    </div>
+
 
 </div>
 
