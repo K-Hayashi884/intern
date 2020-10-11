@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 # from .models import member,User
 from .models import User
 from django.contrib.auth.views import LoginView ,LogoutView,PasswordChangeView
-from django.contrib.auth import authenticate,login,get_user
+from django.contrib.auth import authenticate,get_user
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import Http404,HttpResponseRedirect
@@ -38,9 +38,9 @@ def signup_view(request):
 def login_view(request):
 
 
-    
-    
-    
+         
+
+
 
     return render(request, "myapp/login.html")
 
@@ -52,3 +52,8 @@ def talk_room(request):
 
 def setting(request):
     return render(request, "myapp/setting.html")
+
+
+class login(LoginView):
+    authentication_form=loginform
+    template_name='myapp/login.html'

@@ -11,10 +11,20 @@
        {% if form.erros %}
        <h2>エラーです！</h2>
        {% endif %}
-    <form action="{% url 'login_view' %}" method="POST" enctype="=multipart/from-data">
+    <form action="{% url 'login_view' %}" method="POST" enctype="=multipart/from-data" class='login_form'>
         {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="click" >
+        <div class="login__username">
+            <label>username </label>
+            {{form.username}}
+            {{form.username.erros}}
+        </div>
+        <div class='login__password'>
+            <label>password</label>
+            {{form.password}}
+            {{form.password.erros}}
+        
+        </div>
+        <button type="submit" >login</button>
 
     </form>
     

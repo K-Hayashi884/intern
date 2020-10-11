@@ -129,5 +129,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-LOGIN_URL='register:login'
-LOGIN_REDIRECT_URL='register:top'
+
+LOGIN_REDIRECT_URL='friends'
