@@ -35,10 +35,11 @@ def signup_view(request):
     }
     return render(request, "myapp/signup.html",params)
 
+class Login(LoginView):
+    authentication_form=loginform
+    template_name='myapp/login.html'
+
 def login_view(request):
-    class login(LoginView):
-         authentication_form=loginform
-         template_name='myapp/login.html'
 
          
 
