@@ -15,13 +15,13 @@
         {% csrf_token %}
         <div class="login__username">
             <label>username </label>
-            {{form.username}}
-            {{form.username.erros}}
+            {{form.fields.username}}
+            {{form.fields.username.erros}}
         </div>
         <div class='login__password'>
             <label>password</label>
-            {{form.password}}
-            {{form.password.erros}}
+            {{form.fields.password}}
+            {{form.fields.password.erros}}
         
         </div>
         <button type="submit" >login</button>
