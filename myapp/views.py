@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .forms import signup,loginform
+from .forms import signup,loginform,FriendSearch
 from django.http import HttpResponse
 from django.shortcuts import redirect
 # from .models import member,User
@@ -41,14 +41,14 @@ class Login(LoginView):
 
 def login_view(request):
 
-         
-
-
-
     return render(request, "myapp/login.html")
 
 def friends(request):
-    return render(request, "myapp/friends.html")
+    form=FriendSearch()
+    params={
+            "form" :form,
+    }
+    return render(request, "myapp/friends.html",params)
 
 def talk_room(request):
     return render(request, "myapp/talk_room.html")

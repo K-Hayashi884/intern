@@ -19,3 +19,9 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+class Chatroom(models.Model):
+    chat=models.CharField(max_length=140)
+    talkfrom=models.ForeignKey(User,on_delete=models.CASCADE,related_name="talkfrom")
+    talkto=models.ForeignKey(User,on_delete=models.CASCADE,related_name="talkto")
+    time=models.DateTimeField(null=True)

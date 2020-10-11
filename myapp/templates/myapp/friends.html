@@ -1,0 +1,16 @@
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+     <meta charset="utf-8">
+     <title> login </title>
+    <link rel="stylesheet" type="text/css" herf="{% static 'myapp/css/base.css' %}"/>
+</head>
+<body>
+<h1>your friends</h1>
+<form method="GET">
+    {{form.friendname}}
+    <button type="submit">search</button>
+</form>
+</body>
+</html>
