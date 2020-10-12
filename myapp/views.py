@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from .models import User, Message
 from .forms import SignUpForm, LoginForm, FindForm, MessageForm, EmailChangeForm, UsernameChangeForm, IconChangeForm
 from django.urls import reverse_lazy
@@ -51,6 +51,7 @@ def friends(request, num=1):
     no_log_friends = []
     log_exist_friends = []
     unread_message_num = {}
+    global all_unread_message
     all_unread_message = 0
     # 検索機能----
     if request.method == 'POST':
@@ -213,3 +214,5 @@ def paginate_query(request, queryset, count):
         page_obj = paginator.page(paginator.num_pages)
     return page_obj
 
+def my_context_processor(request: HttpRequest):
+    return {'all_unread_message': all_unread_message}

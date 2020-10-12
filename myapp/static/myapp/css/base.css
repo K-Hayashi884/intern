@@ -80,3 +80,9 @@ body{
     font-size: 0.8rem;
     color: #000;
 }
+span.notification {
+    text-decoration: none;
+    color:#ea5550;
+    font-weight: 600;
+    font-size: 0.7rem;
+}
