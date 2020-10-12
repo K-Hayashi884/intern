@@ -50,6 +50,8 @@ def friends(request, num=1):
     latest_msgs = []
     no_log_friends = []
     log_exist_friends = []
+    unread_message_num = {}
+    all_unread_message = 0
     # 検索機能----
     if request.method == 'POST':
         form = FindForm(request.POST)
@@ -72,6 +74,8 @@ def friends(request, num=1):
         # 相手と自分のトーク履歴を最新のトーク履歴リストに入れる(latest_msgs:それぞれの友達との最新のトーク履歴だけを集めたリスト)
             latest_msgs.append(sorted_msg[0])
             log_exist_friends.append(friend)
+            unread_message_num[friend.username] = sorted_msg.filter(is_read=False, send_from=friend).count()
+            all_unread_message += int(unread_message_num[friend.username])
         else:
             no_log_friends.append(friend)
 
@@ -82,7 +86,8 @@ def friends(request, num=1):
         'me': me,
         'form': form,
         'latest_msgs': latest_msgs,
-        'page_obj': page_obj
+        'page_obj': page_obj,
+        'unread_message_num': unread_message_num,
     }
     return render(request, "myapp/friends.html", params)
 
@@ -93,6 +98,13 @@ def talk_room(request, num):
     # トーク履歴を時系列に並べてリストに入れる
     message_log = Message.objects.filter(Q(send_to=me, send_from=friend)| Q(send_to=friend, send_from=me)).order_by('posted_date')
     form = MessageForm()
+
+    # if request.method=='GET':
+    unread_messages = list(message_log.filter(is_read=False))
+    for change_to_read in unread_messages:
+        change_to_read.is_read = True
+        change_to_read.save()
+        unread_message_num = 0
 
     if request.method=='POST':
         posted_msg = request.POST['message']
@@ -200,3 +212,4 @@ def paginate_query(request, queryset, count):
     except EmptyPage:
         page_obj = paginator.page(paginator.num_pages)
     return page_obj
+

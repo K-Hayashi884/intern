@@ -35,6 +35,10 @@ a {
   top: 2px;
   left: 10%;
 }
+span.unread_message {
+  color: palevioletred;
+  font-weight: 600;
+}
 .friend span {
   display:inline-block;
   margin: 5vh 10px;
