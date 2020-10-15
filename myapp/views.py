@@ -41,7 +41,7 @@ def confirm_email(request):
         return redirect(to='/accounts/confirm-email')
     return render(request, "myapp/confirm-email.html", params)
 
-
+unread_message_num = {}
 @login_required(login_url='/')
 def friends(request, num=1):
     me = request.user
@@ -51,7 +51,7 @@ def friends(request, num=1):
     no_log_friends = []
     log_exist_friends = []
     global unread_message_num
-    unread_message_num = {}
+    # unread_message_num = {}
     # global all_unread_message
     # all_unread_message = 0
     # 検索機能----
@@ -101,12 +101,10 @@ def talk_room(request, num):
     message_log = Message.objects.filter(Q(send_to=me, send_from=friend)| Q(send_to=friend, send_from=me)).order_by('posted_date')
     form = MessageForm()
 
-    # if request.method=='GET':
     unread_messages = list(message_log.filter(is_read=False, send_to=me))
     for change_to_read in unread_messages:
         change_to_read.is_read = True
         change_to_read.save()
-        unread_message_num = 0
 
     if request.method=='POST':
         posted_msg = request.POST['message']
@@ -219,6 +217,4 @@ def my_context_processor(request: HttpRequest):
     all_unread_message = 0
     for item in unread_message_num.values():
         all_unread_message += int(item)
-        print(all_unread_message)
-    print(unread_message_num)
     return {'all_unread_message': all_unread_message }
