@@ -6,19 +6,21 @@
 {% block header-title %}設定{% endblock %}
 
 {% block content %}
-<form method='POST' action="{% url 'setting' id %}">
-    {% csrf_token %}
-    <table class="table">
-        {{ form.as_table }}
-        <tr><th><td>
-        <button type="submit" class="btn btn-secondary">変更</button>
-        </td></th></tr>
-    </table>
-</form>
+<div class="contents">
+    <form method='POST' action="{% url 'setting' %}">
+        {% csrf_token %}
+        <table class="table">
+            {{ form.as_table }}
+            <tr><th><td>
+            <button type="submit" class="btn btn-secondary">変更</button>
+            </td></th></tr>
+        </table>
+    </form>
 
-<div class="logoutbox">
-    <a href="{% url 'logout' %}">
-        ログアウト
-    </a>
+    <div class="logoutbox">
+        <a href="{% url 'logout' %}">
+            ログアウト
+        </a>
+    </div>
 </div>
 {% endblock %}

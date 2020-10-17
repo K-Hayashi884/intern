@@ -1,5 +1,10 @@
+header {
+    position: fixed;
+    top: 0;
+    z-index: 1;
+}
 
-.search_box {
+.search-box {
     background-color: #000033;
     color: white;
     text-align: right;
@@ -7,8 +12,11 @@
 
 .friend-block {
     border-bottom: solid 1px #9b9b9b;
-    margin-bottom: 0px;
-    padding-bottom: 10px;
+}
+
+.friend-block p {
+    margin-block-start: 5px;
+    margin-block-end: 5px;
 }
 
 body a {
@@ -17,22 +25,44 @@ body a {
     text-decoration: none;
 }
 
+.contents {
+    margin-top: 92px;
+}
+
 .friend-name {
+    position: absolute;
     font-size: 18px;
 }
 
 .message_content {
-    position: absolute;
-    margin-top: 7px;
+    position: relative; 
+    margin-top: 20px;
+    padding-top: 25px;
     font-size: 15px;
+    width: 80%;
     color: #777;
+    z-index: 0;
 }
 
 .message_time {
     position: relative;
     color: #777;
     text-align: right;
-    margin-top: 7px;
-    margin-right: 20px;
+    margin-top: -20px;
+    margin-right: 10px;
+    margin-bottom: 9px;
     font-size: 12px;
+    z-index: 0;
+}
+
+.page-table {
+    position: fixed;
+    bottom: 64px;
+    border: solid 1px #000;
+    width: 100%;
+    background-color: white;
+}
+
+.page-controller {
+    border: solid 1px #000;
 }

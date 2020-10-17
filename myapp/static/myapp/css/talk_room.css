@@ -1,3 +1,13 @@
+header {
+    position: fixed;
+    top: 0;
+    z-index: 1;
+}
+
+.contents {
+    margin-top: 65px;
+}
+
 .post_window {
     position: fixed;
     bottom: 64px;
@@ -10,14 +20,27 @@ input {
     width: 80%;
 }
 
-.message_box {
+/* .message_box {
     border-bottom: solid 1px #9b9b9b;
-}
+} */
 
-.message_box p {
+/* .message_box p {
     margin-block-start: 5px;
     margin-block-end: 5px;
-    /* height: 30px; */
+    height: 30px;
+} */
+
+.contents > .message_box > .right-message {
+    border: solid 1px skyblue;
+    border-radius: 15px;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.contents > .message_box > .left-message {
+    border: solid 1px magenta;
+    border-radius: 15px;
+    padding-left: 10px;
 }
 
 .message_sender {

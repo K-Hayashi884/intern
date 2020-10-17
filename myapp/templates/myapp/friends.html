@@ -5,46 +5,39 @@
 <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}" />
 {% endblock %}
 
-{% block header-title %}友達{% endblock %}
+{% block header %}
+    <header class="header">
+        <div class="header-container">
+            <span class="header-container__title">
+                {% block header-title %}友達{% endblock %}
+            </span>
+        </div>
+        <div class="search-box">
+            <form action="" method="GET">
+                {{ form }}
+                <button id=search type="submit" class="btn btn-secondary">検索</button>
+            </form>
+        </div>
+    </header>
+{% endblock %}
+
 
 {% block content %}
-<div class="search_box">
-    <form action="" method="GET">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit" class="btn btn-secondary" id="search">検索</button>
-    </form>
-</div>
-{% for friend in user %}
-{% if friend != me %}
-<a href="{% url 'talk_room' %}/{{me.id}}/{{friend.id}}">
-    <div class="friend-block">
+<div class="contents">
+<div class="friend-container" id="friend-container">
+    {% for friend in data %}
+    <a href="{% url 'talk_room' %}{{friend.id}}" class="friend-block">
         <div class="friend-name">{{friend.username}}</div>
-        {% for latest_msg in msg %}
-        {% if latest_msg.sender.id == friend.id %}
-            <div class="message_content">
-                <p>
-                {{latest_msg.content}}</p>
-            </div>
-            <div class="message_time">
-                {{latest_msg.pub_date|date:"n/j H:i"}}
-            </div>
-        {% endif %}
-        {% if latest_msg.receiver.id == friend.id %}
-            <div class="message_content">
-                <p>
-                {{latest_msg.content}}</p>
-            </div>
-            <div class="message_time">
-                {{latest_msg.pub_date|date:"n/j H:i"}}
-            </div>
-        {% endif %}
-        {% endfor %}
-    </div>
-</a>
-{% endif %}
-{% endfor %}
+        <p class="message_content">
+        {{friend.latest_msg_content}}</p>
+        <div class="message_time">
+            {{friend.latest_msg_pub_date|date:"n/j H:i"}}
+        </div>
+    </a>
+    {% endfor %}
+</div>
 <script>
+    const parent = document.getElementById('friend-container');
     const searchBtn = document.getElementById("search");
     const searcInput = document.getElementById("id_find");
     searchBtn.addEventListener("click",function(e){
@@ -55,9 +48,97 @@
         xhr.addEventListener("load",function(){
             console.log(xhr.status);
             console.log(typeof xhr.response)
-            var json = JSON.parse(xhr.response);
-            console.log(json.user_data);
+            var user_json = JSON.parse(xhr.response);
+            console.log(user_json);
+            parent.textContent = "";
+
+            for (let u of user_json) {
+                let template = document.createElement("div");
+                let name = document.createTextNode(u.fields.username);
+                template.appendChild(name);
+                let msg = document.createElement("p");
+                template.appendChild(msg);
+                parent.appendChild(template);
+            }
+            
         });
     })
 </script>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer">
+    <table class="page-table">
+        <tr>
+        {% if data.has_previous %}
+        <th class="page-controller">
+            <!-- <li class="page-item"> -->
+                <a class="page-item" href="{% url 'friends' %}">&laquo; first</a>
+            <!-- </li> -->
+        </th>
+        <th class="page-controller">
+            <!-- <li class="page-item"> -->
+                <a class="page-item" href="{% url 'friends' %}{{data.previous_page_number}}">&laquo; prev</a>
+            <!-- </li> -->
+        </th>
+        {% else %}
+        <th class="page-controller">
+            <!-- <li class="page-item"> -->
+                <a class="page-link">&laquo; first</a>
+            <!-- </li> -->
+        </th>
+        <th class="page-controller">
+            <!-- <li class="page-item"> -->
+                <a class="page-link">&laquo; prev</a>
+            <!-- </li> -->
+        </th>
+        {% endif %}
+        <th class="page-controller">
+            <!-- <li class="page-item"> -->
+                <a class="page-link">
+                    {{data.number}}/{{data.paginator.num_pages}}</a>
+            <!-- </li> -->
+        </th>
+        {% if data.has_next %}
+        <th class="page-controller">
+            <!-- <li class="page-item"> -->
+                <a class="page-item" href="{% url 'friends' %}{{data.next_page_number}}">next &raquo;</a>
+            <!-- </li> -->
+        </th>
+        <th class="page-controller">
+            <!-- <li class="page-item"> -->
+                <a class="page-item" href="{% url 'friends' %}{{data.paginator.num_pages}}">
+                    last &raquo;</a>
+            <!-- </li> -->
+        </th>
+        {% else %}
+        <th class="page-controller">
+            <!-- <li class="page-item"> -->
+                <a class="page-link">next &raquo;</a>
+            <!-- </li> -->
+        </th>
+        <th class="page-controller">
+            <!-- <li class="page-item"> -->
+                <a class="page-link">last &raquo;</a>
+            <!-- </li> -->
+        </th>
+        {% endif %}
+        </tr>
+    </table>
+    <div class="footer-container">
+        <div class="footer-container__item">
+            <a href="{% url 'friends' %}" class="footer-item__link">
+                <span class="footer-item__icon"><img src="{% static 'myapp/img/people-24px.svg' %}"></span>
+                <span class="footer-item__text">友達</span>
+            </a>
+        </div>
+        <div class="footer-container__item">
+            <a href="{% url 'setting'  %}" class="footer-item__link">
+                <span class="footer-item__icon"><img src="{% static 'myapp/img/settings-black-18dp.svg' %}"></span>
+                <span class="footer-item__text">設定</span>
+            </a>
+        </div>
+    </div>
+</footer>
 {% endblock %}

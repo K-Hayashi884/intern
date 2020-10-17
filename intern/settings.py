@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -37,7 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'debug_toolbar',
     'myapp',
+    # WebSocket関連の追記
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +52,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+APPEND_SLASH = False
+
 
 ROOT_URLCONF = 'intern.urls'
 
@@ -67,6 +73,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'intern.wsgi.application'
 
@@ -126,6 +133,54 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 LOGIN_URL = '/login'
 
 LOGOUT_REDIRECT_URL = '/'
+
+ASGI_APPLICATION = 'intern.routing.application'
+
+# WebSocket
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        # "ROUTING": "sample.routing.channel_routing",
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    }
+}
+
+if DEBUG:
+    INTERNAL_IPS = ('127.0.0.1',)
+
+    # def show_toolbar(request):
+    #     return True
+
+    
+    MIDDLEWARE += (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    )
+
+    INSTALLED_APPS += (
+        'debug_toolbar',
+    )
+    # 表示する内容
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    ]
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'INTERCEPT_REDIRECTS': False,
+        # 'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+    }
 
 try:
     from .local_settings import *

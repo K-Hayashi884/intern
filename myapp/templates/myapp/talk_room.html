@@ -8,29 +8,107 @@
 {% block header-title %}{{you.username}}{% endblock %}
 
 {% block content %}
-    {% for talk in msg %}
-        <div class="message_box">
-            <div class="message_sender">
+    <div class="contents">
+        <div class="message_box" id="room">
+            {% for talk in msg %}
+                <!-- <div class="message_sender">
+                    {% if talk.sender == me %}
+                        自分から:
+                    {% else %}
+                        {{talk.sender}}から:
+                    {% endif %}
+                </div> -->
                 {% if talk.sender == me %}
-                    自分から:
+                    <div class="right-message">
+                        {{talk.content}}
+                    </div>
                 {% else %}
-                    {{talk.sender}}から:
+                    <div class="left-message">
+                        {{talk.content}}
+                    </div>
                 {% endif %}
+                <div class="message_time">
+                    {{talk.pub_date|date:"n/j"}} 
+                    {{talk.pub_date|date:"H:i:s"}}
+                </div>
+                <!-- <p class="message_text">{{talk.content}}</p> -->
+            {% endfor %}
             </div>
-            <div class="message_time">
-                {{talk.pub_date|date:"n/j"}}
-                <br>
-                {{talk.pub_date|date:"H:i:s"}}
-            </div>
-            <p class="message_text">{{talk.content}}</p>
+        <div class="post_window">
+            <!-- <form id="chat-message-input" method='POST' action='{% url "talk_room" you.id %}' class='msg_form'>
+                {% csrf_token %}
+                {{form}}
+                <button id="chat-message-submit" type="submit">送信</button>
+            </form> -->
+            <input id="chat-message-input" type="text" size="100"/>
+            <input id="chat-message-submit" type="button" value="Send"/>
         </div>
-    {% endfor %}
-    <div class="post_window">
-        <form method='POST' action='{% url "talk_room" me.id you.id %}' class='msg_form'>
-            {% csrf_token %}
-            {{form}}
-            <button type="submit">送信</button>
-        </form>
     </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    var roomName = {{ room_name_json }};
+    var myName = {{ my_name_json }};
+    var socket=new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/talk_room/' + roomName + '/'
+    )
+
+    socket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var sender = data['sender'];
+        var message = data['message'];
+        if(message === "") return;
+        if(sender === myName) {
+            var box = document.createElement("div");
+            var time = document.createElement("div");
+            box.className = "right-message";
+            box.innerText = message;
+            const date = new Date();
+            time.className = "message_time";
+            time.innerText = (date.getMonth()+1) + '/' + date.getDate();
+            //time.appendChild("br");
+            time.innerText += " " + date.getHours() + ":" + ("00" + date.getMinutes()).slice(-2) + ":" + ("00" + date.getSeconds()).slice(-2);
+            document.getElementById("room").appendChild(box);
+            document.getElementById("room").appendChild(time);
+        }
+        else {
+            var box = document.createElement("div");
+            var time = document.createElement("div");
+            box.className = "left-message";
+            box.innerText = message;
+            const date = new Date();
+            time.className = "message_time";
+            time.innerText = (date.getMonth()+1) + '/' + date.getDate();
+            //time.appendChild("br");
+            time.innerText += " " + date.getHours() + ":" + ("00" + date.getMinutes()).slice(-2) + ":" + ("00" + date.getSeconds()).slice(-2);
+            document.getElementById("room").appendChild(box);
+            document.getElementById("room").appendChild(time);
+        }
+    };
+
+    socket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        socket.send(JSON.stringify({
+            'sender': myName,
+            'message': message
+        }));
+
+        messageInputDom.value = '';
+    };
+</script>
 {% endblock %}
 
