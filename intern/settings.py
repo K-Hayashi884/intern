@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'pwa',
     'myapp',
+    'channels',
 ]
 
 SITE_ID = 1
@@ -200,3 +201,14 @@ PWA_APP_SPLASH_SCREEN = [
 ]
 PWA_APP_DIR = '1tr'
 PWA_APP_LANG = 'ja'
+
+ASGI_APPLICATION = 'intern.routing.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND":"channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}

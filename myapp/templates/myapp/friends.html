@@ -31,7 +31,7 @@
     {% for friend in page_obj %}
 
     <div class="friend">
-        <a href="{% url 'talk_room' friend.id %}">
+        <a href="{% url 'talk_room' friend.username %}" id="room-name-submit">
             {% if friend.img %}
             <img src="/media/{{ friend.img }}" alt="icon" width="30vw" height="30vh">
             {% else %}
@@ -79,5 +79,11 @@
 
 
 </div>
-
+{% endblock %}
+{% block script %}
+<script>
+    document.querySelector('#room-name-submit').onclick = function (e) {
+        var roomName = document.querySelector('#room-name-input').value;
+    };
+</script>
 {% endblock %}

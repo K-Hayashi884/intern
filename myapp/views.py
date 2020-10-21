@@ -9,6 +9,8 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 def index(request):
     return render(request, "myapp/index.html")
@@ -94,9 +96,9 @@ def friends(request, num=1):
     return render(request, "myapp/friends.html", params)
 
 @login_required(login_url='/')
-def talk_room(request, num):
+def talk_room(request, name):
     me = User.objects.get(id=request.user.id)
-    friend = User.objects.get(id=num)
+    friend = User.objects.get(username=name)
     # トーク履歴を時系列に並べてリストに入れる
     message_log = Message.objects.filter(Q(send_to=me, send_from=friend)| Q(send_to=friend, send_from=me)).order_by('posted_date')
     form = MessageForm()
@@ -111,12 +113,20 @@ def talk_room(request, num):
         message = Message(send_to=friend, send_from=me, message=posted_msg)
         message.save()
 
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(name, {
+        "type": "chat_message",
+        "message": list
+    })
+
     params = {
-        'id': num,
+        # 'id': num,
+        'name': friend.username,
         'friend': friend,
         'message_log': message_log,
         'me': me,
         'form': form,
+        # 'num': num,
     }
 
     return render(request, "myapp/talk_room.html", params)
