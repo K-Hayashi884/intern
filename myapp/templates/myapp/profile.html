@@ -39,8 +39,58 @@
 </div>
 
 <div>
-  ここに何か追加するかも？
-</div>
+  <table>
+    <tr>
+      <td>Birthday :</td>
+      <td>
+        {% if prof.birthday %}
+        {{ prof.birthday }}
+        {% else %}
+        Not set yet
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td>Age :</td>
+      <td>
+        {% if prof.age %}
+        {{ prof.age }}
+        {% else %}
+            Not set yet
+            {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td>Location :</td>
+      <td>
+        {% if prof.location %}
+        {{ prof.location }}
+        {% else %}
+        Not set yet
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td>Hobbies :</td>
+      <td>
+        {% if prof.hobby.all %}
+          {% for hobby in prof.hobby.all %}
+            {{ hobby }}</br>
+          {% endfor %}
+        {% else %}
+        Not set yet
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+  <div class="prof_change">
+    <a href="{% url 'change_profile' %}" class="settings_link">
+      <span class="settings_icon"><i class="fas fa-cog"></i></span>
+      <span>Change Profile</span>
+      <span class="settings_icon"><i class="fas fa-cog"></i></span>
+  </a>
+  </div>
+  </div>
 
 
 {% endblock %}

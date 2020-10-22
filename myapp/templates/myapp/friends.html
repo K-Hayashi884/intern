@@ -6,7 +6,19 @@
 {% endblock %}
 
 {% block header-title %}
-Friends
+<div class="settings">
+  <a href="{% url 'setting' %}" class="settings_link">
+      <span class="settings_icon"><i class="fas fa-cog"></i></span>
+  </a>
+</div>
+<div class="title">
+  Friends
+</div>
+<div class="search">
+  <a href="{% url 'search' %}" class="search_link">
+      <span class="search_icon"><i class="fas fa-search"></i></span>
+  </a>
+</div>
 {% endblock %}
 
 {% block content %}

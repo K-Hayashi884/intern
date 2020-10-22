@@ -82,3 +82,12 @@ body {
   display: block;
   clear: both;
 }
+
+.prof_change a {
+  text-decoration: none;
+  color: black;  
+}
+
+.prof_change {
+  text-align: center;
+}

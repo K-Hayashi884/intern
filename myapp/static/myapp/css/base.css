@@ -6,6 +6,8 @@ body{
     margin: 0;
 }
 
+
+
 /* ヘッダー */
 .header{
     width: 100vw;
@@ -31,6 +33,10 @@ body{
     text-align: center;
     font-size: 1.2rem;
     color: #000;
+}
+
+.header-container__title i {
+    text-align: left;
 }
 
 /* フッター */

@@ -1,0 +1,68 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/search.css' %}" />
+{% endblock %}
+
+{% block header-title %}
+<a href="{% url 'friends' %}"><i class="fas fa-angle-left"></i></a>
+Search
+{% endblock %}
+
+
+{% block content %}
+<div class="announcement">
+  <p>{{ msg|safe }}</p>
+</div>
+
+<div class="information_form">
+  <form action="{% url 'search' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <tr>
+      <th></th>
+      <td>
+        <input type="submit" value="Search">
+      </td>
+    </tr>
+  </form>
+</div>
+
+<div class="Friends">
+  <ul class="list">
+    {% for user in user_info %}
+    <div class="friend_block">
+      <li class="friends__list">
+        <a href="profile/{{ user.1 }}">
+          {% for user_img in user_imgs %}
+          {% if user_img.user.username == user.1 %}
+          {% if user_img.image %}
+          <img class="friends__list-usericon" src="/media/{{ user_img.image }}">
+          {% else %}
+          <!-- 無ければNoimage用の画像を表示 -->
+          <img class="friends__list-usericon" src="/media/images/noimage.png">
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+          <span class="name">
+            {{ user.1 }}
+          </span>
+          <span class="prof_msg">
+            {% for prof_msg in prof_msgs %}
+            {% if prof_msg.user.username == user.1 %}
+            {% if prof_msg.prof_msg %}
+            {{ prof_msg.prof_msg }}
+            {% else %}
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+          </span>
+      </li>
+      </a>
+    </div>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

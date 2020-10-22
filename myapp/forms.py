@@ -6,9 +6,10 @@ from django.core.validators import (
   FileExtensionValidator
 )
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User, UserImage, prof_msg, HeaderImage
+from .models import User, UserImage, prof_msg, HeaderImage, Hobby, Profile
 from django.contrib.auth.forms import PasswordChangeForm
 from django.forms import ModelForm
+from .con import PREFECTURES_CHOICE
 
 class SignUpForm(UserCreationForm):
    image = forms.ImageField( required=False, validators=[FileExtensionValidator(["jpg", "jpeg", "png"])],)
@@ -125,3 +126,47 @@ class Prof_msgChangeForm(ModelForm):
     msg = prof_msg.objects.get(user=user)
     msg.prof_msg = self.cleaned_data['prof_msg']
     msg.save()
+
+class ProfileChangeForm(ModelForm):
+  class Meta:
+    model = Profile
+    fields = [
+      'birthday', 'age', 'location', 'hobby',
+    ]
+
+  def __init__(self, birthday=None, age=None, location=None, hobby=None, *args, **kwargs):
+    kwargs.setdefault('label_suffix', '')
+    super().__init__(*args, **kwargs)
+    # ユーザーの更新前情報をフォームに挿入
+    if birthday:
+      self.fields['birthday'].widget.attrs['value'] = birthday
+    if age:
+      self.fields['age'].widget.attrs['value'] = age
+    if location:
+      self.fields['location'].widget.attrs['value'] = location
+    if hobby:
+      self.fields['hobby'].widget.attrs['value'] = hobby.name
+
+  def profile_update(self, user):
+    profile = Profile.objects.get(user=user)
+    profile.age = self.cleaned_data['age']
+    profile.birthday = self.cleaned_data['birthday']
+    profile.location = self.cleaned_data['location']
+    profile.hobby.set(self.cleaned_data['hobby'])
+    profile.save()
+
+
+class FindForm(forms.Form):
+  find_name = forms.CharField(label='Name', required=False, widget=forms.TextInput)
+  find_age = forms.IntegerField(label='Age', required=False, widget=forms.NumberInput)
+  find_location = forms.ChoiceField(label='Location', required=False, widget=forms.Select(), choices=(PREFECTURES_CHOICE))
+  find_hobby = forms.ChoiceField(label='Hobby', required=False, widget=forms.Select())
+
+class AddHobbyForm(ModelForm):
+  class Meta:
+    model = Hobby
+    fields = [
+      'name',
+    ]
+
+  # def add_hobby(self):

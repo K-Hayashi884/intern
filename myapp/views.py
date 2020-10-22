@@ -9,8 +9,11 @@ from .forms import EmailChangeForm
 from .forms import IconChangeForm
 from .forms import HeaderChangeForm
 from .forms import Prof_msgChangeForm
+from .forms import ProfileChangeForm
+from .forms import FindForm 
+from .forms import AddHobbyForm
 from django.contrib.auth import authenticate, get_user, login
-from .models import User, UserImage, Talk, HeaderImage, prof_msg
+from .models import User, UserImage, Talk, HeaderImage, prof_msg, Hobby, Profile
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeDoneView
 import datetime
 from django.db.models import Q, Value, Subquery, OuterRef
@@ -19,6 +22,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import FormView, UpdateView
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import logout
+
+
 
 
 
@@ -69,7 +74,7 @@ def signup_view(request):
                image=image,
             )
             user_img.save()
-            #Register prof_msg and HeaderImage with Null in advance
+            #Register prof_msg, HeaderImage and Profile with Null in advance
             user_prof_msg = prof_msg(
                 user=user,
             )
@@ -78,6 +83,10 @@ def signup_view(request):
                 user=user,
             )
             user_header_img.save()
+            user_profile = Profile(
+                user=user,
+            )
+            user_profile.save()
             return redirect(to="/")
     params = {
         "form":signup_form
@@ -112,6 +121,50 @@ def friends(request):
         "prof_msgs":prof_msgs
     }
     return render(request, "myapp/friends.html", params)
+
+#I will make this later
+def timeline(request):
+    return render(request, "myapp/timeline.html")
+
+def search(request):
+    if (request.method == 'POST'):
+        form = FindForm(request.POST)
+        name = request.POST['find_name']
+        age = request.POST['find_age']
+        hobby = request.POST['find_hobby']
+        location = request.POST['find_location']
+        data = User.objects.filter(username__icontains=name).exclude(id=request.user.id)
+        if age:
+            data = data.filter(profile__age=age)
+        if hobby:
+            data = data.filter(profile__hobby__name=hobby)
+        if location:
+            data = data.filter(profile__location=location)
+        msg = 'Result: ' + str(data.count()) + '<br>Plese enter your friend\'s information'
+    else:
+        msg='Please enter your friend\'s information'
+        form = FindForm()
+        data = User.objects.exclude(username=request.user.username)
+    user_imgs = UserImage.objects.all()
+    user_info = []
+    for user in data:
+        user_info.append([user, user.username])
+    user_info = sorted(user_info, key=lambda x: x[1])
+    choices = []
+    hobby = Hobby.objects.all()
+    for x in hobby:
+        choices.append((x,x.name))
+    choices.append(("","----"))
+    form.fields["find_hobby"].choices = choices
+    prof_msgs = prof_msg.objects.exclude(user=request.user)
+    params = {
+        'msg':msg,
+        'form':form,
+        "user_info":user_info,
+        'user_imgs':user_imgs,
+        'prof_msgs':prof_msgs
+    }
+    return render(request, "myapp/search.html", params)
 
 def talk_room(request, partner_name):
     myname = request.user.username
@@ -245,6 +298,50 @@ class Prof_msgChangeView(LoginRequiredMixin, FormView):
             })
         return kwargs
         
+class ProfileChangeView(LoginRequiredMixin, FormView):
+    template_name = 'myapp/change_profile.html'
+    form_class = ProfileChangeForm
+    success_url = 'success/Profile'
+    
+    def form_valid(self, form):
+        #formのupdateメソッドにログインユーザーを渡して更新
+        form.profile_update(user=self.request.user)
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        prof = Profile.objects.get(user=self.request.user)
+        if prof:
+        # 更新前のユーザー情報をkwargsとして渡す
+            kwargs.update({
+                'birthday' : prof.birthday,
+                'age' : prof.age,
+                'location' : prof.location,
+                'hobby' : prof.hobby.name,
+            })
+        return kwargs
+        
+def addhobby_view(request):
+    if request.method == "GET":
+        addhobby_form = AddHobbyForm()
+        msg = "Please enter the hobby's name you want to add"
+    elif request.method == "POST":
+        addhobby_form = AddHobbyForm()
+        name = request.POST["name"]
+        judge = Hobby.objects.filter(name__iexact=name)
+        if judge:
+            msg="This hobby exists already"
+        else:
+            hobby = Hobby(
+                name=name,
+            )
+            hobby.save()
+            msg = "Changeing is completed"
+    params = {
+        'form':addhobby_form,
+        'msg':msg,
+    }
+    return render(request, "myapp/add_hobby.html", params)
 
 def change_success(request, name):
     params = {
@@ -261,9 +358,12 @@ def profile(request, myname):
     page_owner = User.objects.get(username=myname)
     icon = UserImage.objects.get(user=page_owner)
     header = HeaderImage.objects.get(user=page_owner)
+    prof = Profile.objects.get(user=page_owner)
+    print(prof.hobby.all())
     params = {
         'myname':myname,
         'icon':icon,
         'header':header,
+        'prof':prof,
     }
     return render(request, "myapp/profile.html", params)
