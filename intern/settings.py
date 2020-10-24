@@ -25,7 +25,7 @@ SECRET_KEY = 'oaab#2kr%trbj2h-w9ycf0&f$7dgi2+p=37!cjw$*y0@26pq77'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['52.194.83.51', 'localhost', 'kinako.tk']
+ALLOWED_HOSTS = ['52.194.83.51', 'localhost', 'kinako.tk', '127.0.0.1']
 
 
 # Application definition
@@ -208,7 +208,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND":"channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("redis", 6379)],
+            "hosts": [("localhost", 6379)],
         },
     },
 }

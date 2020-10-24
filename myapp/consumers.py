@@ -1,6 +1,7 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from .models import Message, User
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -23,23 +24,32 @@ class ChatConsumer(WebsocketConsumer):
 
     #receive message from websocket
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
+        text_data_json = json.loads(text_data) #loads : デコード（エンコードされた方をもとに戻す）
         message = text_data_json['message']
+        send_from = self.scope["user"].username
+        send_to = self.room_name
 
         #send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message
+                'message': message,
+                'send_to': send_to,
+                'send_from': send_from,
             }
         )
 
     #receive message from room group
     def chat_message(self, event):
-        message = event['message']
+        message = event["message"]
+        Message.objects.create(
+            message=event["message"],
+            send_from=User.objects.get(username=event["send_from"]),
+            send_to=User.objects.get(username=event["send_to"]),
+        )
 
-        #send message
-        self.send(text_data=json.dumps({
-            'message': message
+        #send message to websocket
+        self.send(text_data=json.dumps({ #dumps関数：データをJSON形式にエンコード（変換）
+            'message': message,
         }))

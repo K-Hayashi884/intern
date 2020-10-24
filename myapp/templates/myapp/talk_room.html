@@ -30,30 +30,32 @@
             {% endif %}
             <p class="send_from">{{ friend.username}}:</p>
         {% endif %}
-        <p class="message" id="chat-log">{{ show_message.message|safe }}</p>
+        <p class="message">{{ show_message.message|safe }}</p>
         <p class="date">{{ show_message.posted_date|date:"m/d" }}</p>
         <p class="time">{{ show_message.posted_date|date:"H:i" }}</p>
     </div>
     {% endfor %}
+    <textarea class="message" id="chat-log" cols="100" rows="20"></textarea><br>
 </div>
 {% endblock %}
 
 {% block footer %}
 <!-- 送信 -->
 <footer>
-    <form action="{% url 'talk_room' friend.username %}" method="POST">
+    <!-- <form action="{% url 'talk_room' friend.username %}" method="POST"> -->
         {% csrf_token %}
-        <div class="post_message" id="chat-message-input">
+        <div class="post_message">
             {{ form }}
             <input type="submit" value="送信" id="chat-message-submit">
         </div>
         {{ room_name|json_script:"room-name"}}
-    </form>
+    <!-- </form> -->
 </footer>
 {% endblock %}
 {% block script %}
 <script>
     const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
     const chatSocket = new WebSocket(
         'ws://'
         + window.location.host
@@ -76,7 +78,8 @@
         if (e.keyCode === 13) { //enter,return
             document.querySelector('#chat-message-submit').click();
         }
-    }
+    };
+
     document.querySelector('#chat-message-submit').onclick = function(e) {
         const messageInputDom = document.querySelector('#chat-message-input');
         const message = messageInputDom.value;

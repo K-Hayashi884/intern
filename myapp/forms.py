@@ -31,6 +31,9 @@ class MessageForm(forms.ModelForm):
         model = Message
         fields = ['message']
         labels = {'message': '' }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['message'].widget.attrs.update({'id': 'chat-message-input'})
 
 class EmailChangeForm(forms.ModelForm):
     class Meta:
