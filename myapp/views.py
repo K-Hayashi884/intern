@@ -49,10 +49,10 @@ def login_view(request):
 def friends(request):
     user=request.user
     friends=User.objects.exclude(id=user.id)
-    latest_msg=Chatroom.objects.filter(Q(talkroom=OuterRef("pk"),talkto=user)|Q(talkto=OuterRef("pk"),talkroom=user)).order_by('-time')
+    latest_msg=Chatroom.objects.filter(Q(talkfrom=OuterRef("pk"),talkto=user)|Q(talkto=OuterRef("pk"),talkfrom=user)).order_by('-time')
     friends=User.objects.exclude(id=user.id).annotate(
         latest_msg_id=Subquery(latest_msg.values("pk")[:1]),
-        latest_msg_content=Subquery(latest_msg.values("talk")[:1]),
+        latest_msg_content=Subquery(latest_msg.values("chat")[:1]),
         latest_msg_pub_date=Subquery(latest_msg.values("time")[:1]),
     ).order_by("-latest_msg_id")
 
