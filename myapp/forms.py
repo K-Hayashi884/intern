@@ -21,5 +21,6 @@ class loginform(AuthenticationForm):
         self.fields['username'].widget.attrs['class']='form-control'
         self.fields['password'].widget.attrs['class']='form-control'
         
-class FriendSearch(forms.Form):
-     friendname=forms.CharField(label='friendname')
+class TalkForm(forms.Form):
+    talk=forms.CharField(label='talk')
+      

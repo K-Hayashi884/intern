@@ -1,15 +1,17 @@
 from django.shortcuts import redirect, render
-from .forms import signup,loginform,FriendSearch
+from .forms import signup,loginform,TalkForm
 from django.http import HttpResponse
 from django.shortcuts import redirect
 # from .models import member,User
-from .models import User
+from .models import User,Chatroom
 from django.contrib.auth.views import LoginView ,LogoutView,PasswordChangeView
 from django.contrib.auth import authenticate,get_user,login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import Http404,HttpResponseRedirect
-
+from django.db.models import Q,Subquery,OuterRef
+from django.core.exceptions import ObjectDoesNotExist
+import datetime
 
 def index(request):
     return render(request, "myapp/index.html")
@@ -43,15 +45,50 @@ def login_view(request):
 
     return render(request, "myapp/login.html")
 
+@login_required
 def friends(request):
-    form=FriendSearch()
-    params={
-            "form" :form,
-    }
+    user=request.user
+    friends=User.objects.exclude(id=user.id)
+    latest_msg=Chatroom.objects.filter(Q(talkroom=OuterRef("pk"),talkto=user)|Q(talkto=OuterRef("pk"),talkroom=user)).order_by('-time')
+    friends=User.objects.exclude(id=user.id).annotate(
+        latest_msg_id=Subquery(latest_msg.values("pk")[:1]),
+        latest_msg_content=Subquery(latest_msg.values("talk")[:1]),
+        latest_msg_pub_date=Subquery(latest_msg.values("time")[:1]),
+    ).order_by("-latest_msg_id")
+
+    params={"people":friends,}
     return render(request, "myapp/friends.html",params)
 
-def talk_room(request):
-    return render(request, "myapp/talk_room.html")
+@login_required
+def talk_room(request,friend_username):
+    user=request.user
+    try:
+        friend=User.objects.get(username=friend_username)
+    except ObjectDoesNotExist:
+        raise Http404
+
+    talk=Chatroom.objects.filter(Q(talkfrom=user,talkto=friend)|Q(talkto=user,talkfrom=friend))
+    talk=talk.order_by('time')
+    form=TalkForm()
+
+    params={"form": form,
+            "user": user,
+            "friend":friend,
+            "talk":talk,
+            "is_talk_toom":True,
+    }
+
+    if request.method=="POST":
+        form=TalkForm(request.POST)
+        if form.is_valid():
+            text=form.cleaned_data.get('talk')
+            now=datetime.datetime.now()
+            new_talk=Chatroom(chat=text,talkfrom=user,talkto=friend,time=now)
+            new_talk.save()
+            return render(request, "myapp/talk_room.html",params)
+
+
+    return render(request, "myapp/talk_room.html",params)
 
 def setting(request):
     return render(request, "myapp/setting.html")

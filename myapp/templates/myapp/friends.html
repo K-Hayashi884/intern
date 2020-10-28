@@ -3,14 +3,21 @@
 <html lang="ja">
 <head>
      <meta charset="utf-8">
-     <title> login </title>
+     <title> friend </title>
     <link rel="stylesheet" type="text/css" herf="{% static 'myapp/css/base.css' %}"/>
 </head>
 <body>
-<h1>your friends</h1>
-<form method="GET">
-    {{form.friendname}}
-    <button type="submit">search</button>
-</form>
+
+<h1>your friend</h1>
+{% for friend in people %}
+<li>
+ <a href="{% url 'talk_room' friend.username %}">
+       <div>{{friend.username}}</div>
+       <div>{{friend.latest_msg_content}}</div>
+       <div>{{friend.latest_msg_pub_date|date:"n/j H:i"}}</div>
+ </a>
+</li>
+{% endfor %}
+
 </body>
 </html>

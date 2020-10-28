@@ -1,6 +1,9 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
 from django.contrib.auth.models import AbstractUser,UserManager
+import datetime
+from django.db.models import Q,Subquery,OuterRef
+
 # Create your models here.
 # class member (models.Model):
 #     username=models.CharField(max_length=20)
@@ -25,3 +28,4 @@ class Chatroom(models.Model):
     talkfrom=models.ForeignKey(User,on_delete=models.CASCADE,related_name="talkfrom")
     talkto=models.ForeignKey(User,on_delete=models.CASCADE,related_name="talkto")
     time=models.DateTimeField(null=True)
+

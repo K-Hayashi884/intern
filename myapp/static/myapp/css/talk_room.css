@@ -1,0 +1,7 @@
+.talk_room{padding: 64px 0;}
+.talk_room__chatboard{margin: 0;
+padding: 0;}
+
+.talk_room__chatboard-content{list-style: none;
+border-bottom: solid 2px #eee;
+padding:8px;}
