@@ -43,13 +43,15 @@ class ChatConsumer(WebsocketConsumer):
     #receive message from room group
     def chat_message(self, event):
         message = event["message"]
+        send_from=User.objects.get(username=event["send_from"])
         Message.objects.create(
             message=event["message"],
-            send_from=User.objects.get(username=event["send_from"]),
+            send_from=send_from,
             send_to=User.objects.get(username=event["send_to"]),
         )
-
         #send message to websocket
-        self.send(text_data=json.dumps({ #dumps関数：データをJSON形式にエンコード（変換）
+        self.send(text_data=json.dumps({
             'message': message,
+            'send_from': str(send_from.username),
+            'send_from_icon': str(send_from.img),
         }))

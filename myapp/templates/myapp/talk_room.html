@@ -12,11 +12,11 @@
 
 {% block content %}
 <!-- トーク履歴 -->
-<div class="logs">
+<div class="logs" id="chat-log">
     {% for show_message in message_log %}
     <div class="log">
         {% if show_message.send_from == me %}
-            {% if friend.img %}
+            {% if me.img %}
             <img src="/media/{{ me.img }}" alt="icon" width="30vw" height="30vh">
             {% else %}
             <img src="/media/img/upload/person.png" alt="icon" width="30vw" height="30vw">
@@ -35,7 +35,6 @@
         <p class="time">{{ show_message.posted_date|date:"H:i" }}</p>
     </div>
     {% endfor %}
-    <textarea class="message" id="chat-log" cols="100" rows="20"></textarea><br>
 </div>
 {% endblock %}
 
@@ -66,7 +65,54 @@
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
+        const newLog = document.createElement('div');
+        newLog.setAttribute("class", "log");
+
+        const newMessage = document.createElement('p');
+        const message = document.createTextNode(data.message);
+        //pタグ内にnewMessageを追加
+        newMessage.appendChild(message);
+        newMessage.setAttribute("class", "message");
+
+        const img = document.createElement('img');
+        if (data.send_from_icon === "") {
+            img.setAttribute("src", "/media/img/upload/person.png");
+        } else {
+            img.setAttribute("src", "/media/" + data.send_from_icon);
+        }
+        img.setAttribute("width", "30vw");
+        img.setAttribute("height", "30vh");
+
+        const newMessageSendFrom = document.createElement('p');
+        const sendFrom = document.createTextNode(data.send_from + ':');
+        newMessageSendFrom.appendChild(sendFrom);
+        newMessageSendFrom.setAttribute("class", "send_from");
+
+        let now = new Date();
+        let month = now.getMonth() + 1;
+        let day = now.getDate();
+        let hour = now.getHours();
+        let minute = now.getMinutes();
+        const dateTag = document.createElement('p');
+        const date = document.createTextNode(month + '/' + day);
+        dateTag.appendChild(date);
+        dateTag.setAttribute("class", "date");
+
+        const timeTag = document.createElement('p');
+        const time = document.createTextNode(hour + ':' + minute);
+        timeTag.appendChild(time);
+        timeTag.setAttribute("class", "time");
+
+        //logの最後にpタグ追加
+        newLog.appendChild(img);
+        newLog.appendChild(newMessageSendFrom);
+        newLog.appendChild(newMessage);
+        newLog.appendChild(dateTag);
+        newLog.appendChild(timeTag);
+        //親要素divを取得
+        const place = document.getElementById('chat-log');
+        //logをlogsの最後に追加
+        place.appendChild(newLog);
     };
 
     chatSocket.onclose = function(e) {

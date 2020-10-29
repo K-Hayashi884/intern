@@ -51,9 +51,6 @@ def friends(request, num=1):
     no_log_friends = []
     log_exist_friends = []
     global unread_message_num
-    # unread_message_num = {}
-    # global all_unread_message
-    # all_unread_message = 0
     # 検索機能----
     if request.method == 'POST':
         form = FindForm(request.POST)
@@ -100,16 +97,17 @@ def talk_room(request, name):
     # トーク履歴を時系列に並べてリストに入れる
     message_log = Message.objects.filter(Q(send_to=me, send_from=friend)| Q(send_to=friend, send_from=me)).order_by('posted_date')
     form = MessageForm()
+    print(me.img)
 
     unread_messages = list(message_log.filter(is_read=False, send_to=me))
     for change_to_read in unread_messages:
         change_to_read.is_read = True
         change_to_read.save()
 
-    if request.method=='POST':
-        posted_msg = request.POST['message']
-        message = Message(send_to=friend, send_from=me, message=posted_msg)
-        message.save()
+    # if request.method=='POST':
+    #     posted_msg = request.POST['message']
+    #     message = Message(send_to=friend, send_from=me, message=posted_msg)
+    #     message.save()
 
     params = {
         'name': friend.username,
