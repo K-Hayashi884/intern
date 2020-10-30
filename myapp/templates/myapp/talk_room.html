@@ -26,12 +26,13 @@
 {% endif %}
 {% endfor %}
       </ul>
-     <from class="talk_room__sentbox" method="POST">
+     <form class="talk_room__sentbox" method="POST">
     {% csrf_token %}
     {{form.talk}}
     <button class="talk_room__sentbox-btn" type="submit">送信</button>
-</from>
+    </form>
 </div>
+</body>
 <script>
     document.getElementById('id_talk').setAttribute('autocomplete','off');
     function scrollToBottom(){
@@ -41,6 +42,6 @@
     }
     scrollToBottom();
 </script>
-</body>
+
 
 </html>
