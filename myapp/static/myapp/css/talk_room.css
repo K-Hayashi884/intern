@@ -5,3 +5,35 @@ padding: 0;}
 .talk_room__chatboard-content{list-style: none;
 border-bottom: solid 2px #eee;
 padding:8px;}
+
+.talk_room__chatboard-content:first-child{
+    border-top: solid 2px #eee;
+}
+
+.talk_room__chatboard-content-name{
+    margin: 0 0 4px;
+    font-size: 0.8rem;
+}
+
+.talk_room__chatboard-content-text{
+    margin: 0;
+    word-break:break-all;
+}
+
+.talk_room__chatboard-content-time{
+    font-size: 0.6rem;
+    position: absolute;
+    right: 4%;
+    z-index: -1;
+}
+
+
+
+
+
+
+
+
+
+
+

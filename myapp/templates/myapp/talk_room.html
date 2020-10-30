@@ -7,31 +7,31 @@
     <link rel="stylesheet" type="text/css" herf="{% static 'myapp/css/talk_room.css' %}"/>
 </head>
 <body>
-<div class="talk_room">
-<ul class="talk_room__chatboard" id="talk_room__chatboard">
-{% for talk in talk %}
-{% if talk.talkfrom==user %}
-<li class="talk_room__chatboard-contenttalk_room__chatboard-content-user">
-    <p class="talk_room__chatboard-content-name">>{{talk.talkfrom}}</p>
-    <p class="talk_room__chatboard-content-text">{{talk.chat}}</p>
-    <p class="talk_room__chatboard-content-time">{{talk.time|date:"m/d"}}<br>{{talk.time|date:"H:i"}}</p>
-</li>
-{% else %}
-<li class="talk_room__chatboard-contenttalk_room__chatboard-content-friend">
-    <p class="talk_room__chatboard-content-name">>{{talk.talkfrom}}</p>
-    <p class="talk_room__chatboard-content-text">{{talk.chat}}</p>
-    <p class="talk_room__chatboard-content-time">{{talk.time|date:"m/d"}}<br>{{talk.time|date:"H:i"}}</p>
-</li>
+
+      <div class="talk_room">
+       <ul class="talk_room__chatboard" id="talk_room__chatboard">
+     {% for talk in talk %}
+      {% if talk.talkfrom == user %}
+      <li class="talk_room__chatboard-contenttalk_room__chatboard-content-user">
+          <p class="talk_room__chatboard-content-name">>{{talk.talkfrom}}</p>
+          <p class="talk_room__chatboard-content-text">{{talk.chat}}</p>
+          <p class="talk_room__chatboard-content-time">{{talk.time|date:"m/d"}}<br>{{talk.time|date:"H:i"}}</p>
+      </li>
+      {% else %}
+          <li class="talk_room__chatboard-contenttalk_room__chatboard-content-friend">
+               <p class="talk_room__chatboard-content-name">>{{talk.talkfrom}}</p>
+               <p class="talk_room__chatboard-content-text">{{talk.chat}}</p>
+               <p class="talk_room__chatboard-content-time">{{talk.time|date:"m/d"}}<br>{{talk.time|date:"H:i"}}</p>
+           </li>
 {% endif %}
 {% endfor %}
-</ul>
-<from class="talk_room__sentbox" method="POST">
+      </ul>
+     <from class="talk_room__sentbox" method="POST">
     {% csrf_token %}
-    {{from.talk}}
+    {{form.talk}}
     <button class="talk_room__sentbox-btn" type="submit">送信</button>
 </from>
 </div>
-</body>
 <script>
     document.getElementById('id_talk').setAttribute('autocomplete','off');
     function scrollToBottom(){
@@ -41,4 +41,6 @@
     }
     scrollToBottom();
 </script>
+</body>
+
 </html>
