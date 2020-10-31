@@ -12,6 +12,7 @@
 {% for friend in people %}
 <li>
  <a href="{% url 'talk_room' friend.username %}">
+       <img src="/images/{{user_img.image}}">
        <div>{{friend.username}}</div>
        <div>{{friend.latest_msg_content}}</div>
        <div>{{friend.latest_msg_pub_date|date:"n/j H:i"}}</div>

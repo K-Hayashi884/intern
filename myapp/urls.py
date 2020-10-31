@@ -9,6 +9,7 @@ urlpatterns = [
     path('friends', views.friends, name='friends'),
     path('talk_room/<friend_username>', views.talk_room, name='talk_room'),
     path('setting', views.setting, name='setting'),
+    path('username_change',views.username_change,name='username_change')
 
 ]
 

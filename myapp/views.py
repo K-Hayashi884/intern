@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .forms import signup,loginform,TalkForm,Change
+from .forms import signup,loginform,TalkForm,Change,MailSettingForm
 from django.http import HttpResponse
 from django.shortcuts import redirect
 # from .models import member,User
@@ -94,4 +94,24 @@ def talk_room(request,friend_username):
 def setting(request):
     return render(request, "myapp/setting.html")
 
+@login_required
+def mail_change(request):
+    user=request.user
+    if request.method=="GET":
+        form=MailSettingForm(instance=user)
+        params={
+            "form":form,
+        }
+        return render (request,"myapp/mail_change.html",params)
+    elif request.method=="POST":
+        form=MailSettingForm(instance=user)
+        if form.is_valid():
+            form.save()
+            return mail_change_done(request)
+        params={
+            "form":form,
+        }
+        return render (request,"myapp/mail_change.html",params)
+
+    
 
