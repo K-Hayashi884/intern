@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .forms import signup,loginform,TalkForm
+from .forms import signup,loginform,TalkForm,Change
 from django.http import HttpResponse
 from django.shortcuts import redirect
 # from .models import member,User
@@ -90,6 +90,7 @@ def talk_room(request,friend_username):
 
     return render(request, "myapp/talk_room.html",params)
 
+@login_required
 def setting(request):
     return render(request, "myapp/setting.html")
 

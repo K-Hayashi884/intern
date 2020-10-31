@@ -2,7 +2,7 @@ from django import forms
 from django.core.validators import MinLengthValidator
 from django.contrib.auth.forms import(AuthenticationForm)
 from .models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,PasswordChangeForm,AuthenticationForm
 from django.core.exceptions import ValidationError
 
 
@@ -23,4 +23,10 @@ class loginform(AuthenticationForm):
         
 class TalkForm(forms.Form):
     talk=forms.CharField(label='talk')
-      
+
+
+class Change(PasswordChangeForm):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        for field in self.fields.valuse():
+            field.widget.attrs['class']='form-control'

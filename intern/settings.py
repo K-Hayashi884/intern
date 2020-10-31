@@ -79,6 +79,7 @@ WSGI_APPLICATION = 'intern.wsgi.application'
 
 AUTH_USER_MODEL = "myapp.User"
 
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -128,6 +129,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
+LOGIN_URL='login_view'
 
 LOGIN_REDIRECT_URL='friends'
+
+LOGOUT_REDIRECT_URL='/'
+
+STATIC_ROOT=os.path.join(BASE_DIR,"staticfiles")
+
