@@ -2,9 +2,12 @@
 .talk_room__chatboard{margin: 0;
 padding: 0;}
 
-.talk_room__chatboard-content{list-style: none;
-border-bottom: solid 2px #eee;
-padding:8px;}
+.talk_room__chatboard-content{
+    list-style: none;
+    border-bottom:solid 2px #eee;
+    padding: 8px;
+
+}
 
 .talk_room__chatboard-content:first-child{
     border-top: solid 2px #eee;
@@ -29,6 +32,21 @@ padding:8px;}
 
 
 
+
+.talk_room__sentbox{
+    width: 100%;
+    min-height: 3rem;
+    position:fixed;
+    left: 0;
+    bottom: 0;
+    background-color: #eee;
+    font-size: 2rem;
+    display: -webkit-flex;
+    display: flex;
+    
+    justify-content: space-around;
+
+}
 
 
 

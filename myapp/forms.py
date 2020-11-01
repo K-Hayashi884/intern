@@ -24,6 +24,18 @@ class loginform(AuthenticationForm):
 class TalkForm(forms.Form):
     talk=forms.CharField(label='talk')
 
+class MailSettingForm(forms.Form):
+    changingmail=forms.EmailField(label='changingmail')
+
+class UserNameSettingForm(forms.Form):
+    usernamechange=forms.CharField(label='usernamechange')
+
+class ImageSettingForm(forms.Form):
+    imagechange
+
+
+
+
 
 class Change(PasswordChangeForm):
     def __init__(self,*args,**kwargs):

@@ -13,7 +13,7 @@ from django.db.models import Q,Subquery,OuterRef
 from django.core.exceptions import ObjectDoesNotExist
 import datetime
 from .forms import (
-    SignUpForm,LoginForm,MailSettingForm,ImageSettingForm,PasswordChangeForm,UserNameSettingForm
+    MailSettingForm,ImageSettingForm,UserNameSettingForm
 )
 
 

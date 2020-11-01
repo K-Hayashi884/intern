@@ -9,16 +9,19 @@
 <body>
 
 <h1>your friend</h1>
+<div class='friends'>
 {% for friend in people %}
-<li>
- <a href="{% url 'talk_room' friend.username %}">
-       <img src="/images/{{user_img.image}}">
-       <div>{{friend.username}}</div>
-       <div>{{friend.latest_msg_content}}</div>
-       <div>{{friend.latest_msg_pub_date|date:"n/j H:i"}}</div>
+<li class="friends__list">
+ <a class="friends__list-link"  href="{% url 'talk_room' friend.username %}">
+       <img class="friends__list-usericon" src="/images/{{user_img.image}}">
+       <div class="friends__list-username">{{friend.username}}</div>
+       <div class="friends__list-talk">
+             <p class="friends__list-talk-content">{{friend.latest_msg_content}}</p>
+              <p class="friends__list-talk-time">{{friend.latest_msg_pub_date|date:"n/j H:i"}}</p>
+      </div>
  </a>
 </li>
 {% endfor %}
-
+</div>
 </body>
 </html>
