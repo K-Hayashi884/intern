@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .forms import signup,loginform,TalkForm,Change,MailSettingForm
+from .forms import signup,loginform,TalkForm,Change
 from django.http import HttpResponse
 from django.shortcuts import redirect
 # from .models import member,User
@@ -12,6 +12,10 @@ from django.http import Http404,HttpResponseRedirect
 from django.db.models import Q,Subquery,OuterRef
 from django.core.exceptions import ObjectDoesNotExist
 import datetime
+from .forms import (
+    SignUpForm,LoginForm,MailSettingForm,ImageSettingForm,PasswordChangeForm,UserNameSettingForm
+)
+
 
 def index(request):
     return render(request, "myapp/index.html")

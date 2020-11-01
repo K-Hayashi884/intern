@@ -1,0 +1,16 @@
+.login_form{
+    width: 90vw;
+    height: calc(84vh - 64px);
+    margin-top: 4vh;
+    padding: 0 4vh;
+}
+
+.login_username{
+    text-align: center;
+
+}
+
+.login_password{
+    text-align: center;
+
+}
