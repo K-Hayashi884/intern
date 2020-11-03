@@ -24,14 +24,23 @@ class loginform(AuthenticationForm):
 class TalkForm(forms.Form):
     talk=forms.CharField(label='talk')
 
-class MailSettingForm(forms.Form):
-    changingmail=forms.EmailField(label='changingmail')
+class MailSettingForm(forms.ModelForm):
+    class Meta():
+        model=User
+        fields=('mail',)
 
-class UserNameSettingForm(forms.Form):
-    usernamechange=forms.CharField(label='usernamechange')
+   
 
-class ImageSettingForm(forms.Form):
-    imagechange
+class UserNameSettingForm(forms.ModelForm):
+    class Meta():
+        model=User
+        fields=('username',)
+
+class ImageSettingForm(forms.ModelForm):
+    class Meta():
+        model=User
+        fields=('image',)
+   
 
 
 

@@ -1,10 +1,10 @@
 from django.shortcuts import redirect, render
-from .forms import signup,loginform,TalkForm,Change
+from .forms import signup,loginform,TalkForm,Change, MailSettingForm,ImageSettingForm,UserNameSettingForm
 from django.http import HttpResponse
 from django.shortcuts import redirect
 # from .models import member,User
 from .models import User,Chatroom
-from django.contrib.auth.views import LoginView ,LogoutView,PasswordChangeView
+from django.contrib.auth.views import LoginView ,LogoutView,PasswordChangeView,PasswordChangeDoneView
 from django.contrib.auth import authenticate,get_user,login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -12,9 +12,8 @@ from django.http import Http404,HttpResponseRedirect
 from django.db.models import Q,Subquery,OuterRef
 from django.core.exceptions import ObjectDoesNotExist
 import datetime
-from .forms import (
-    MailSettingForm,ImageSettingForm,UserNameSettingForm
-)
+from django.urls import reverse_lazy
+
 
 
 def index(request):
@@ -111,11 +110,66 @@ def mail_change(request):
         form=MailSettingForm(instance=user)
         if form.is_valid():
             form.save()
-            return mail_change_done(request)
+            return change_done(request)
         params={
             "form":form,
         }
         return render (request,"myapp/mail_change.html",params)
 
+def username_change(request):
+    user=request.user
+    form=UserNameSettingForm(instance=user)
+   
+    if request.method=="GET":
+        
+        params={
+            "form":form,
+        }
+        return render(request,"myapp/username_change.html",params)
+    elif request.method=="POST":
+       
+        if form.is_valid():
+            form.save()
+            return change_done(request)
+        params={
+                "form":form,
+            }
+        return render(request,"myapp/change_done.html",params)
     
+def user_img_change(request):
+    user=request.user
+    form=ImageSettingForm(instance=user)
+    if request.method=="GET":
+        
+        params={
+            "form":form,
+        }
+        return render(request,"myapp/user_img_change.html",params)
+    elif request.method=="POST":
+       
+        if form.is_valid():
+            form.save()
+            return change_done(request)
+        params={
+                "form":form,
+            }
+        return render(request,"myapp/user_img_change.html",params)
+
+
+class PasswordChange(PasswordChangeView):
+    form_class=Change
+    success_url=reverse_lazy('password_change_done')
+    template_name='myapp/password_change.html'
+
+class PasswordChangeDone(PasswordChangeDoneView):
+    template_name='myapp/change_done.html'
+
+
+
+def change_done(request):
+    return render(request,"myapp/change_done.html")
+
+
+            
+
 

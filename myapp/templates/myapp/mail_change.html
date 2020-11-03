@@ -3,14 +3,18 @@
 <html lang="ja">
 <head>
      <meta charset="utf-8">
-     <title> username_change </title>
+     <title> mail_change </title>
     <link rel="stylesheet" type="text/css" herf="{% static 'myapp/css/base.css' %}"/>
 </head>
 <body>
-    <form method="POST" action="{% url 'username_change' %}">
-        
+    <form action="{% url 'mail_change' %}"  method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="click" >
 
     </form>
+   
+    
 
 </body>
 </html>

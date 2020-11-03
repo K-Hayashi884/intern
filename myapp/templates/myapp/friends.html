@@ -4,7 +4,7 @@
 <head>
      <meta charset="utf-8">
      <title> friend </title>
-    <link rel="stylesheet" type="text/css" herf="{% static 'myapp/css/base.css' %}"/>
+    <link rel="stylesheet" type="text/css" herf="{% static 'myapp/css/friend.css' %}"/>
 </head>
 <body>
 
@@ -22,6 +22,8 @@
  </a>
 </li>
 {% endfor %}
+
 </div>
+<p><a href="{% url 'setting' %}"><span class='index-button'>設定</span></a></p>
 </body>
 </html>
