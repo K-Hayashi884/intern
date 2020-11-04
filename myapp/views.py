@@ -127,6 +127,8 @@ def username_change(request):
         }
         return render(request,"myapp/username_change.html",params)
     elif request.method=="POST":
+        form=UserNameSettingForm(request.POST,instance=user)
+
        
         if form.is_valid():
             form.save()
@@ -134,7 +136,7 @@ def username_change(request):
         params={
                 "form":form,
             }
-        return render(request,"myapp/change_done.html",params)
+        return render(request,"myapp/username_change.html",params)
     
 def user_img_change(request):
     user=request.user
