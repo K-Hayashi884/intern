@@ -12,7 +12,9 @@ urlpatterns = [
     path('username_change',views.username_change,name='username_change'),
     path('mail_change',views.mail_change,name='mail_change'),
     path('user_img_change',views.user_img_change,name='user_img_change'),
-    
+    path('password_change',views.PasswordChange.as_view(),name='password_change'),
+    path('password_change_done',views.PasswordChangeDone.as_view(),name='password_change_done'),
+    path('logout',views.Logout.as_view(),name='logout'),
 
 
 ]

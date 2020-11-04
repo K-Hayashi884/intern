@@ -44,9 +44,11 @@ class Login(LoginView):
     authentication_form=loginform
     template_name='myapp/login.html'
 
-def login_view(request):
+class Logout(LoginRequiredMixin,LogoutView):
+     "hhghghg"
 
-    return render(request, "myapp/login.html")
+
+
 
 @login_required
 def friends(request):
@@ -107,7 +109,7 @@ def mail_change(request):
         }
         return render (request,"myapp/mail_change.html",params)
     elif request.method=="POST":
-        form=MailSettingForm(instance=user)
+        form=MailSettingForm(request.POST,instance=user)
         if form.is_valid():
             form.save()
             return change_done(request)
@@ -148,7 +150,8 @@ def user_img_change(request):
         }
         return render(request,"myapp/user_img_change.html",params)
     elif request.method=="POST":
-       
+
+        form=ImageSettingForm(request.POST,instance=user)
         if form.is_valid():
             form.save()
             return change_done(request)
