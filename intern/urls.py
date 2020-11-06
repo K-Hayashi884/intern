@@ -18,6 +18,8 @@ from django.urls import path, include
 from django.conf.urls import url
 import myapp.views as myapp
 from django.views.generic import TemplateView
+from django.conf import settings
+import debug_toolbar
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,3 +28,5 @@ urlpatterns = [
     path('', include('myapp.urls')),
     path('', include('pwa.urls')),
 ]
+if settings.DEBUG:
+    urlpatterns += path('__debug__/', include(debug_toolbar.urls)),

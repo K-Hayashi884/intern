@@ -5,7 +5,7 @@ from .forms import SignUpForm, LoginForm, FindForm, MessageForm, EmailChangeForm
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth.forms import PasswordChangeForm
-from django.db.models import Q
+from django.db.models import Q, Subquery, OuterRef, Count
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -41,52 +41,78 @@ def confirm_email(request):
         return redirect(to='/accounts/confirm-email')
     return render(request, "myapp/confirm-email.html", params)
 
-unread_message_num = {}
+# unread_message_num = {}
 @login_required(login_url='/')
 def friends(request, num=1):
     me = request.user
 
-    sorted_msgs = []
-    latest_msgs = []
-    no_log_friends = []
-    log_exist_friends = []
-    global unread_message_num
+    # global unread_message_num
     # 検索機能----
     if request.method == 'POST':
         form = FindForm(request.POST)
         find = request.POST.get('find')
-        users = User.objects.filter(username__icontains=find, is_superuser=False).exclude(username=me).order_by('date_joined')
+        users = User.objects.filter(username__icontains=find, is_superuser=False).exclude(username=me).order_by('date_joined').prefetch_related('send_to', 'send_from')
     else:
         form = FindForm()
-        users = User.objects.filter(is_superuser=False).exclude(username=me).order_by('date_joined')
+        users = User.objects.filter(is_superuser=False).exclude(username=me).order_by('date_joined').prefetch_related('send_to', 'send_from')
         # ----
         # トーク履歴を表示
     num = 0
-    for friend in users:
-        # 相手と自分のトーク履歴を時系列に並べたものをリストに追加(sorted_msgs：相手ごとに時系列に並べた全履歴のリスト)
-        sorted_msgs.append(Message.objects.all().filter(Q(send_to=me, send_from=friend)| Q(send_to=friend, send_from=me)).reverse())
-        # 相手と自分のトーク履歴だけを取り出す
-        sorted_msg = sorted_msgs[num]
-        num += 1
+    # for friend in users:
+        # # 相手と自分のトーク履歴を時系列に並べたものをリストに追加(sorted_msgs：相手ごとに時系列に並べた全履歴のリスト)
+        # sorted_msgs.append(Message.objects.filter(Q(send_to=me, send_from=friend)| Q(send_to=friend, send_from=me)).reverse())
+        # # 相手と自分のトーク履歴だけを取り出す
+        # sorted_msg = sorted_msgs[num]
+        # num += 1
 
-        if len(sorted_msg) != 0:
-        # 相手と自分のトーク履歴を最新のトーク履歴リストに入れる(latest_msgs:それぞれの友達との最新のトーク履歴だけを集めたリスト)
-            latest_msgs.append(sorted_msg[0])
-            log_exist_friends.append(friend)
-            unread_message_num[friend.username] = sorted_msg.filter(is_read=False, send_from=friend).count()
-            # all_unread_message += int(unread_message_num[friend.username])
-        else:
-            no_log_friends.append(friend)
+        # if sorted_msg:
+        # # 相手と自分のトーク履歴を最新のトーク履歴リストに入れる(latest_msgs:それぞれの友達との最新のトーク履歴だけを集めたリスト)
+        #     latest_msgs.append(sorted_msg[0])
+        #     log_exist_friends.append(friend)
+        #     unread_message_num[friend.username] = sorted_msg.filter(is_read=False, send_from=friend).count()
+        #     # all_unread_message += int(unread_message_num[friend.username])
+        # else:
+        #     no_log_friends.append(friend)
 
-    all_friends = log_exist_friends + no_log_friends
-    page_obj = paginate_query(request, all_friends, 10)
+
+    msg_data = User.objects.annotate(
+        latest_msg = Subquery(
+            Message.objects.filter(
+                Q(send_to=me, send_from=OuterRef("pk"))| Q(send_to=OuterRef("pk"),send_from=me)
+            ).order_by('-posted_date').values("message")[:1]
+        ),
+        latest_msg_posted_date = Subquery(
+            Message.objects.filter(
+                Q(send_to=me, send_from=OuterRef("pk"))|Q(send_from=me, send_to=OuterRef("pk"))
+            ).order_by('-posted_date').values("posted_date")[:1]
+        ),
+        unread_msg_num = Subquery(
+            Message.objects.filter(
+                send_to=me,
+                send_from=OuterRef("pk"),
+                is_read=False
+            )
+            .values('is_read')
+            .annotate(count=Count('id'))
+            .values('count')
+        ),
+    ).exclude(username=me.username)
+
+    # all_unread_message = 0
+    # for data in msg_data:
+    #     print(data.unread_msg_num)
+    #     all_unread_message += int(data.unread_msg_num)
+    # print(all_unread_msg)
+
+    # all_friends = []
+    # all_friends = User.objects.exclude(username=me.username)
+    page_obj = paginate_query(request, msg_data, 10)
 
     params = {
         'me': me,
         'form': form,
-        'latest_msgs': latest_msgs,
+        'msg_data': msg_data,
         'page_obj': page_obj,
-        'unread_message_num': unread_message_num,
     }
     return render(request, "myapp/friends.html", params)
 
@@ -97,7 +123,6 @@ def talk_room(request, name):
     # トーク履歴を時系列に並べてリストに入れる
     message_log = Message.objects.filter(Q(send_to=me, send_from=friend)| Q(send_to=friend, send_from=me)).order_by('posted_date')
     form = MessageForm()
-    print(me.img)
 
     unread_messages = list(message_log.filter(is_read=False, send_to=me))
     for change_to_read in unread_messages:
@@ -212,8 +237,8 @@ def paginate_query(request, queryset, count):
         page_obj = paginator.page(paginator.num_pages)
     return page_obj
 
-def my_context_processor(request: HttpRequest):
-    all_unread_message = 0
-    for item in unread_message_num.values():
-        all_unread_message += int(item)
-    return {'all_unread_message': all_unread_message }
+# def my_context_processor(request: HttpRequest):
+#     all_unread_message = 0
+#     for item in unread_message_num.values():
+#         all_unread_message += int(item)
+#     return {'all_unread_message': all_unread_message }

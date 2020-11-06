@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'pwa',
     'myapp',
     'channels',
+    'debug_toolbar',
 ]
 
 SITE_ID = 1
@@ -70,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'intern.urls'
@@ -89,7 +91,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
-                'myapp.views.my_context_processor',
+                # 'myapp.views.my_context_processor',
             ],
         },
     },
@@ -160,7 +162,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    # os.path.join(BASE_DIR, 'static')
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -212,3 +214,5 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+INTERNAL_IPS = ["127.0.0.1"]

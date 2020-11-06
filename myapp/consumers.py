@@ -48,6 +48,7 @@ class ChatConsumer(WebsocketConsumer):
             message=event["message"],
             send_from=send_from,
             send_to=User.objects.get(username=event["send_to"]),
+            is_read=False
         )
         #send message to websocket
         self.send(text_data=json.dumps({

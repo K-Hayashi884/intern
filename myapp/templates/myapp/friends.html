@@ -38,17 +38,11 @@
             <img src="/media/img/upload/person.png" alt="icon" width="30vw" height="30vw">
             {% endif %}
             <span class="username">{{ friend|truncatechars:12 }}</span>
-            {% for key, value in unread_message_num.items %}
-                {% if key == friend.username and value != 0 %}
-                <span class="unread_message">{{ value }}</span>
-                {% endif %}
-            {% endfor %}
-            {% for latest_msg in latest_msgs %}
-            {% if latest_msg.send_to == friend or latest_msg.send_from == friend %}
-            <span class="message">{{ latest_msg.message|safe|truncatechars:15 }}</span>
-            <span class="date">{{ latest_msg.posted_date|date:"n/j, G:i" }}</span>
+            {% if friend.unread_msg_num %}
+                <span class="unread_message">{{ friend.unread_msg_num }}</span>
             {% endif %}
-            {% endfor %}
+            <span class="message">{{ friend.latest_msg|safe|truncatechars:15 }}</span>
+            <span class="date">{{ friend.latest_msg_posted_date|date:"n/j, G:i" }}</span>
         </a>
     </div>
     {% endfor %}
