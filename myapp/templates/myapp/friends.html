@@ -1,0 +1,39 @@
+
+{% load static %}
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>friends</title>
+        <link rel="stylesheet" type="text/css"
+            href="{% static 'myapp/css/friends.css' %}" />
+        <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+
+    </head>
+    <body>
+        <header>
+            <p class='header-text'>友達</p>
+        </header>
+        <p>
+            フレンド
+        </p>
+        <footer>
+            <div class="button-wrapper">
+                <a href="{% url gotoFriends %}" class="button">
+                    <div class="a-contents">
+                        <i class="fas fa-user-friends"></i>
+                        友達
+                    </a>
+                </a>
+            </div>
+            <div class="button-wrapper">
+                <a href="{% url gotoSetting %}" class="button">
+                    <div class="a-contents">
+                        <i class="fas fa-cog"></i>
+                        設定
+                    </a>
+                </a>
+            </div>
+        </footer>
+    </body>
+</html>

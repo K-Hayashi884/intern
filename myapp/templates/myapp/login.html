@@ -1,1 +1,39 @@
-LI
+<!--LI-->
+{% load static %}
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>login</title>
+        <link rel="stylesheet" type="text/css"
+            href="{% static 'myapp/css/login.css' %}" />
+    </head>
+    <body>
+        <header>
+            <p class="header-text">ログイン</p>
+        </header>
+        <form action="{% url 'login_view' %}" method="post">
+            {% csrf_token %}
+            <table>
+                {% if form.errors  %}
+                    <p>ユーザーID, パスワードが一致しません．</p>
+                {% endif %}
+                <form method="POST" action="{% url 'login_view' %}">
+                {% csrf_token %}
+                <tr>
+                    <td>{{ form.username.label_tag }}</td>
+                    <td>{{ form.username }}</td>
+                    <td>{{ form.username.errors }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.password.label_tag }}</td>
+                    <td>{{ form.password }}</td>
+                    <td>{{ form.password.errors }}</td>
+                </tr>
+                <tr><td></td><td>
+                <input class="input-button" type="submit" value="ログイン">
+                </td></tr>
+            </table>
+        </form>
+    </body>
+</html>
