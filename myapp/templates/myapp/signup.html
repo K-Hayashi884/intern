@@ -12,7 +12,7 @@
         <header>
             <p class="header-text">会員登録</p>
         </header>
-        <form method="post" action="{% url 'signup_view' %}">
+        <form method="post" action="{% url 'signup_view' %}" enctype="multipart/form-data">
             {% csrf_token %}
             <table>
             <tr>

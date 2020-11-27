@@ -1,6 +1,8 @@
 from django.contrib import admin
-from .models import Users
+from .models import User, UserImage, Talk
 
-admin.site.register(Users)
+admin.site.register(User)
+admin.site.register(UserImage)
+admin.site.register(Talk)
 
 # Register your models here.

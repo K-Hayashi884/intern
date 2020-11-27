@@ -1,37 +1,60 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.models import User
-#from .models import Users
+from django.contrib.auth.forms import (
+    UserCreationForm, AuthenticationForm, PasswordChangeForm
+)
+from .models import User, UserImage
 
-#と思ったけど、やっぱモデルつかう
+from django.core.exceptions import ValidationError
+from django.core.validators import (
+  FileExtensionValidator
+)
+
 class SignupForm(UserCreationForm):
-    img = forms.ImageField(label="Img", required=False)
+    img = forms.ImageField(required=False,validators=[FileExtensionValidator(["jpg", "jpeg", "png"])],)
+
 
     class Meta:
         model = User
         fields = ("username", "email", "password1", "password2")
 
 
-"""
-class SignupForm(forms.Form):
-    # Djangoの標準フォームがよう分からんからそのままつくる
-    username = forms.CharField(label='Username',required=True)
-    email = forms.EmailField(label='Email',required=True,)
-    password = forms.CharField(label='Password',required=True,min_length=8)
-    corfirmation = forms.CharField(label='Password confirmation',\
-        required=True,min_length=8)
-    img = forms.ImageField(label='Img', required=False)
-"""
-
-"""
-#ModelFormもちょっと疑問点多いから保留
-class SignupForm(forms.ModelForm):
-    class Meta:
-        model = Users
-        fields = []
-"""
-
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label='ユーザーネーム', required=True)
     password = forms.CharField(label='パスワード', required=True, min_length=8)
 
+class TalkroomForm(forms.Form):
+    talk = forms.CharField(label='talk', \
+        widget=forms.TextInput(attrs={'class': 'form-talk'}))
+
+class MyPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+class EmailChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email', )
+    def __init__(self, *args, **kwargs):
+       super().__init__(*args, **kwargs)
+       for field in self.fields.values():
+           default_label = str(field.label)
+           new_label = "new" + default_label
+           field.label = new_label
+
+class UserImageChangeForm(forms.ModelForm):
+    class Meta:
+        model = UserImage
+        fields = ("image", )
+
+class UsernameChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', )
+    def __init__(self, *args, **kwargs):
+       super().__init__(*args, **kwargs)
+       for field in self.fields.values():
+           default_label = str(field.label)
+           new_label = "new" + default_label
+           field.label = new_label
