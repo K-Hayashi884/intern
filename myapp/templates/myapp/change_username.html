@@ -1,0 +1,19 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'myapp/css/change.css' %}">
+{% endblock %}
+{% block header-title %}
+ユーザー名
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <p>
+        newusername:{{form.username}}
+    </p>
+    <input type="submit" value="送信">
+    
+</form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'myapp/css/change.css' %}">
+{% endblock %}
+{% block header-title %}
+アイコン
+{% endblock %}
+
+{% block content %}
+<p>アイコンを変更しました。</p>
+{% endblock %}

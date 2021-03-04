@@ -1,0 +1,50 @@
+.image{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: solid 1px black;
+    margin: 25% 25%;
+}
+
+.friend-image{
+    height: 100px;
+    width: 100px;
+    margin: 0 auto;
+}
+
+.friend-contents{
+    display: grid;
+    grid-template-columns: 30% 70%;
+    height: 100px;
+    border-bottom: solid 1px rgb(194, 190, 190);
+    
+}
+
+.friend-content{
+    display: grid;
+    grid-template-rows: 50% 50%;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+
+}
+.friend-message{
+    font-size: 12px;
+    color: cadetblue;
+}
+.message{
+    float: left;
+    width: 80%;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+.time{
+    float: right;
+    width: 20%;
+}

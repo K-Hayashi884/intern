@@ -1,1 +1,30 @@
-LI
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'myapp/css/login.css' %}">
+{% endblock %}
+{% block header-title %}
+ログイン
+{% endblock %}
+
+{% block content %}
+
+<form class="form" action="{% url 'login_view' %}" method="POST">
+    {% csrf_token %}
+    <div class="error">
+        {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+    
+    <table class="table">
+    <tr><th>ユーザーネーム:</th><td>{{ form.username }}</td></tr>
+    <tr><th>パスワード:</th><td>{{ form.password }}</td></tr>
+    </table>
+    <div class="btn">
+        <input type="submit" value="ログイン" >
+    </div>
+</form>
+{% endblock %}
+{% block footer %}
+{% endblock %}

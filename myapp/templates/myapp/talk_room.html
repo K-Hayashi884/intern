@@ -1,1 +1,42 @@
-TR
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'myapp/css/talk_room.css' %}">
+{% endblock %}
+
+{% block header-title %}
+{{ friend }}
+<a onclick="window.location.reload(true);">
+	<i class="fa fa-refresh" aria-hidden="true"></i><span>更新</span>
+</a>
+{% endblock %}
+{% block content %}
+<div class="talk_room">
+    {% for item in talk %}
+    <div class="talk">
+        <h5>>{{item.msg_from}}</h3>
+        <p>{{item.msg}}</p>
+        <div class="talk-time">
+            <p>{{item.time| date:"n/j H:i"}}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+{% block footer %}
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-container__item">
+            <form action="{% url 'talk_room' friend.username %}" method="POST">
+                {% csrf_token %}
+                {{form.talk_msg}}
+                <div class="footer-container__item">
+                    <input type="submit" value="送信">
+                </div>
+            </form>
+        </div>
+    </div>
+</footer>
+
+{% endblock %}

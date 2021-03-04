@@ -1,0 +1,44 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'myapp/css/friends.css' %}">
+{% endblock %}
+{% block header-title %}
+友達
+{% endblock %}
+
+{% block content %}
+<div class="friends">
+{% for data in talk_done_data %}
+<a href="{% url 'talk_room' data.0 %}">
+    <div class="friend-contents">
+
+        <div class="friend-image">
+            <img class="image" src="../../../media/{{data.1}}" alt="">
+        </div>
+        <div class="friend-content">
+            <!-- <p><a href="{% url 'talk_room' data.0 %}">{{ data.0 }}</a></p> -->
+            <p>{{ data.0 }}</p>
+            <div class="friend-message">
+                <p>
+                <div class="message">{{data.2}}</div>
+                <div class="time">{{data.3| date:"n/j"}}</div>
+                </p>
+            </div>
+        </div>
+    </div>
+</a>
+{% endfor %}
+{% for data in talk_not_data %}
+<a href="{% url 'talk_room' data.0 %}">
+    <div class="friend-contents">
+        <div class="friend-image">
+            <img class="image" src="../../../media/{{data.1}}" alt="">
+        </div>
+        <p>{{ data.0 }}</p>
+    </div>
+</a>
+
+{% endfor %}
+</div>
+{% endblock %}

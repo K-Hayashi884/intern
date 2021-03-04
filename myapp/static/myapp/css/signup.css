@@ -1,0 +1,49 @@
+.form{
+  width: 100%;
+  margin:0 auto;
+  padding: 50px;
+  box-sizing: border-box;
+  }
+
+.table{
+  margin:0 auto;
+  font-size: 1.5vw;
+}
+input[type="file" i] {
+  width: 100%;
+}
+
+
+.btn{
+    display: flex; 
+    justify-content: center; 
+}
+
+input[type="submit"] {
+  -webkit-appearance: none;
+  border-radius: 10px;
+  font-size:12px;
+  margin: 4% 0%;
+  padding:1% 4%;
+  color: black;
+  border: solid 1px rgb(194, 190, 190);
+  background-color: white;
+}
+
+ul{
+    list-style: none;
+
+}
+
+.error{
+  width: 100vw;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.errors{
+  width: 250px;
+  display: inline-block;
+  text-align: left;
+}
+

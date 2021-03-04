@@ -1,1 +1,48 @@
-SU
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'myapp/css/signup.css' %}">
+{% endblock %}
+{% block header-title %}
+会員登録
+{% endblock %}
+
+{% block content %}
+
+
+<form class="form" action="{% url 'signup_view' %}" method="POST" enctype="multipart/form-data">
+    <table class="table">
+    {% csrf_token %}
+    <tr><th>Username:</th><td>{{ form.username }}</td></tr>
+    <tr><th>Email<br>address:</th><td>{{ form.email }}</td></tr>
+    <tr><th>Password:</th><td>{{ form.password1 }}</td></tr>
+    <tr><th>Password<br>confirmation:</th><td>{{ form.password2 }}</td></tr>
+    <tr><th>Img:</th><td>{{ form.img }}</td></tr>
+    
+
+    </table>
+    <div class="btn">
+        <input type="submit" value="Submit" >
+    </div>
+    <div class="error">
+        {% if form.errors %}
+            {% for item in form %}
+                {% for error in item.errors %}
+                    <p class="errors">{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+    </div>
+
+</form>
+
+
+
+
+
+
+
+
+{% endblock %}
+{% block footer %}
+{% endblock %}
