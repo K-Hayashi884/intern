@@ -10,7 +10,7 @@
 }
 
 /* ここから簡易版のトーク画面 */
-.talk_room__chatboard-content{
+/* .talk_room__chatboard-content{
     list-style: none;
     border-bottom: solid 2px #eee;
     padding: 8px;
@@ -38,11 +38,11 @@
     right: 4%;
     bottom: 0;
     z-index: -1;
-}
+} */
 /* ここまでが簡易版 */
 
 /* ここからLINEに寄せたトーク画面 */
-/* .talk_room__chatboard-content{
+.talk_room__chatboard-content{
     list-style: none;
     display: -webkit-flex;
     display: flex;
@@ -92,7 +92,7 @@
 
 .talk_room__chatboard-content-friend .talk_room__chatboard-content-time{
     margin: auto auto 8px 0;
-} */
+}
 /* ここまでがLINEに寄せたトーク画面 */
 
 /* トーク送信部分 */
