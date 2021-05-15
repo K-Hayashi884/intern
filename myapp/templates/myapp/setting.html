@@ -1,1 +1,28 @@
-S
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block content %}
+<center>
+      <a href="{% url 'changepass' %}">パスワード変更</a><br><br>
+      <a href="{% url 'changemail' %}">メアド変更</a><br><br>
+      <a href="{% url 'changename' %}">名前変更</a><br><br>
+      <a href="{% url 'logout_view' %}">ログアウト</a><br><br>
+      <a href="{% url 'deleteUser' username %}">アカウント削除</a>
+</center>
+{% endblock %}
+
+{% block footer %}
+	<div class="footer-container">
+            <div class="footer-container__item">
+                <a href="{% url 'friends' %}" class="footer-item__link">
+                    <span class="footer-item__icon"><img src="{% static 'myapp/img/people-24px.svg' %}"></span>
+                    <span class="footer-item__text">友達</span>
+                </a>
+            </div>
+            <div class="footer-container__item">
+                <a href="{% url 'setting' %}" class="footer-item__link">
+                    <span class="footer-item__icon"><img src="{% static 'myapp/img/settings-black-18dp.svg' %}"></span>
+                    <span class="footer-item__text">設定</span>
+                </a>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'myapp/base.html' %}
+
+{% block header %}
+	<center>
+	[ {{ message }} ]を編集します。<br><br>
+	<a href="{% url 'friends' %}">戻る</a><br><br>
+	<form action = "{% url 'editMessage' id %}" method = "post">
+		{% csrf_token %}
+		{{ form.as_table }}
+		<input type="submit" value="編集">
+	</form>
+</center>
+{% endblock %}

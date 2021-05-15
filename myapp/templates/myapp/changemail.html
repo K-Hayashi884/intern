@@ -1,0 +1,10 @@
+{% extends 'myapp/base.html' %}
+{% block content %}
+<h3>ユーザー情報mailの変更</h3></div>
+                <form class="ui form" action="" method="POST">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <button class="ui orange button" type="submit">確認</button>
+                </form>
+        <a href="{% url 'index' %}">Home</a>
+{% endblock %}

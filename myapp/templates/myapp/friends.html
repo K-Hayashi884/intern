@@ -1,0 +1,53 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+ {% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}">
+{% endblock %}
+
+{% block header %}
+<div class="head" style="text-align: center;">
+		<h2>友達</h2>
+	</div>
+{% endblock %}
+
+{% block content %}
+<div class="content" style="padding-top: 100px;">
+{% for friend in  friends  %}
+<center>
+<div class="DivLink">
+	{% for image in images %}
+	{% if image.username == friend %}
+	<img src="{{image.image.url}}" align="middle" width="45" height="48">
+	{% endif %}
+	{% endfor %}
+	<font size="6">{{ friend.username }}</font><br>
+	{% for message in messages %}
+	{% if message.from_talk == friend %}
+	{{ friend.username }} : {{ message.message }}
+	{% elif message.to_talk == friend %}
+	あなた : {{ message.message }}
+	{% endif %}
+	{% endfor %}
+	<a class ="Link" href="{% url 'talk_room' user.username friend.username %}"></a>
+  </div>
+</center>
+{% endfor %}
+{% endblock %}
+
+{% block footer %}
+<div class="footer-container">
+            <div class="footer-container__item">
+                <a href="{% url 'friends' %}" class="footer-item__link">
+                    <span class="footer-item__icon"><img src="{% static 'myapp/img/people-24px.svg' %}"></span>
+                    <span class="footer-item__text">友達</span>
+                </a>
+            </div>
+            <div class="footer-container__item">
+                <a href="{% url 'setting' %}" class="footer-item__link">
+                    <span class="footer-item__icon"><img src="{% static 'myapp/img/settings-black-18dp.svg' %}"></span>
+                    <span class="footer-item__text">設定</span>
+                </a>
+            </div>
+        </div>
+    </div>
+  {% endblock %}

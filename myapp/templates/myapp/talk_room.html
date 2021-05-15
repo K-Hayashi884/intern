@@ -1,1 +1,66 @@
-TR
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block header %}
+<div class="head">
+		<h2>{{ friend.username }}</h2>
+
+	</div>
+{% endblock %}
+
+{% block extra_style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}" />
+    <script  type="text/javascript">
+    window.onload=function(){
+    	var elm = document.documentElement;
+    	var bottom = elm.scrollHeight - elm.clientHeight;
+    	window.scroll(0, bottom);
+    };
+    </script>
+{% endblock %}
+
+{% block content %}
+<div class="content" style ="padding-top: 80px;">
+{% for message in messages %}
+		<div style="padding: 30px; margin-bottom: 1px; border: 1px solid #333333; background-color:#dcdcdc;">
+		{% if message.from_talk == friend %}
+		<img src="{{imagef.image.url}}" width="50" height="50" align="middle">
+		{{ message.message }}<br>
+		{{ friend.username }}  {{ message.date }}
+		{% elif message.from_talk == user %}
+		<div style="text-align:right">
+		{{ message.message }}
+		<img src="{{imageu.image.url}}" width="50" height="50" align="middle"><br>
+		{{ user.username }}  {{ message.date }} <a href="{% url 'deleteMessage' message.id %}">削除</a> <a href="{% url 'editMessage' message.id %}">編集</a>
+	</div>
+		{% endif %}
+		</div>
+{% endfor %}
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="Message" style="height: 90px;">
+	<center>
+	<form action="" method="post">
+		{% csrf_token %}
+		{{ form }}
+		<button type="submit" name="messagebutton">送信</button>
+	</form>
+</center>
+</div>
+	<div class="footer-container">
+            <div class="footer-container__item">
+                <a href="{% url 'friends' %}" class="footer-item__link">
+                    <span class="footer-item__icon"><img src="{% static 'myapp/img/people-24px.svg' %}"></span>
+                    <span class="footer-item__text">友達</span>
+                </a>
+            </div>
+            <div class="footer-container__item">
+                <a href="{% url 'setting' %}" class="footer-item__link">
+                    <span class="footer-item__icon"><img src="{% static 'myapp/img/settings-black-18dp.svg' %}"></span>
+                    <span class="footer-item__text">設定</span>
+                </a>
+            </div>
+        </div>
+{% endblock %}

@@ -1,1 +1,18 @@
-LI
+{% extends 'myapp/base.html' %}
+
+{% block content %}
+{% if form.errors  %}
+        <p>ユーザー名, パスワードが違います！</p>
+{% endif %}
+<center>
+      <form method="POST" action="{% url 'login_view' %}">
+        {% csrf_token %}
+          <p>ユーザー名</p>
+          {{ form.username }}
+        <p>パスワード</p>
+        {{ form.password }}
+        <br>
+        <button type="submit" onclick="location.href='friends'">ログイン</button>
+      </form>
+</center>
+{% endblock %}

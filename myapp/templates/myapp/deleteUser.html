@@ -1,0 +1,12 @@
+{% extends 'myapp/base.html' %}
+
+{% block header %}
+	<center>
+	ユーザー : [ {{ name }} ] を削除します。<br><br>
+	<a href="{% url 'friends' %}">戻る</a><br><br>
+	<form action = "{% url 'deleteUser' name %}" method = "post">
+		{% csrf_token %}
+		<input type="submit" value="削除">
+	</form>
+</center>
+{% endblock %}
