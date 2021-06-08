@@ -1,1 +1,6 @@
-I
+{% extends 'myapp/entire.html' %}
+
+{% block main %}
+<a href="{% url 'login_view' %}">ログイン</a>
+<a href="{% url 'signup_view' %}">会員登録</a>
+{% endblock %}
