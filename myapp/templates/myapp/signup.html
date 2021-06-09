@@ -3,17 +3,30 @@
 {% block header-title %}会員登録{% endblock %}
 
 {% block menu %}
-<form method="POST" action="{% url 'create_account' %}">
+<form method="POST" action="{% url 'signup_view' %}">
     {% csrf_token %}
-    <label>ユーザーID</label>
-    {{ form.username }}
-    {{ form.username.errors }}
-    <label>パスワード</label>
-    {{ form.password1 }}
-    {{ form.password1.errors }}
-    <label>パスワード(確認)</label>
-    {{ form.password2 }}
-    {{ form.password2.errors }}
+    <table>
+        <tr>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.email.label_tag }}</td>
+            <td>{{ form.email }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password1.label_tag }}</td>
+            <td>{{ form.password1 }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password2.label_tag }}</td>
+            <td>{{ form.password2 }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.image.label_tag }}</td>
+            <td>{{ form.image }}</td>
+        </tr>
+    </table>
     <button type = "submit">登録</button>
 </form>
 {% endblock %}
