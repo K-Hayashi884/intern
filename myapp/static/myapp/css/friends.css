@@ -1,0 +1,32 @@
+.friends_user{
+    width: 100%;
+    color:#000;
+}
+.friends_icon{
+    width:20vw;
+    height:20vw;
+    float:left;
+}
+.friends_icon_space{
+    background-color: #000;
+    width:15vw;
+    height:15vw;
+    margin-top:2.5vw;
+    margin-left:2.5vw;
+    border-radius: 7.5vw;
+}
+.friends_cont{
+    width:80vw;
+    height:20vw;
+    float:right;
+}
+.friends_name{
+    padding-left:2vw;
+    padding-top:2vw;
+    font-weight: bold;
+    font-size:1.25rem;
+}
+.friends_talk{
+    padding-left:2vw;
+    padding-top:3.5vw;
+}

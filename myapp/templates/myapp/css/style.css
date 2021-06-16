@@ -1,0 +1,15 @@
+.friends_user{
+    width: 100%;
+}
+.friends_icon{
+    width:17.5vw;
+    height:17.5vw;
+    float:left;
+    background-color:#000;
+}
+.friends_cont{
+    width:72.5vw;
+    height:17.5vw;
+    float:right;
+    background-color: #444;
+}

@@ -5,6 +5,7 @@ from django.views.generic import View
 from . forms import UserCreateForm
 from . forms import LoginForm
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     return render(request, "myapp/index.html")
@@ -15,14 +16,34 @@ def signup_view(request):
 def login_view(request):
     return render(request, "myapp/login.html")
 
+@login_required
 def friends(request):
-    return render(request, "myapp/friends.html")
+    friends = User.objects.all()
+    params = {
+        "friends": friends,
+    }
+    return render(request, "myapp/friends.html", params)
 
 def talk_room(request):
     return render(request, "myapp/talk_room.html")
 
 def setting(request):
     return render(request, "myapp/setting.html")
+
+def change_user(request):
+    return render(request, "myapp/change_user.html")
+
+def change_email(request):
+    return render(request, "myapp/change_email.html")
+
+def change_icon(request):
+    return render(request, "myapp/change_icon.html")
+
+def change_pass(request):
+    return render(request, "myapp/change_pass.html")
+
+def logout(request):
+    return render(request, "myapp/logout.html")        
 
 #アカウント作成
 class Create_account(CreateView):

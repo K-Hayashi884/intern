@@ -2,6 +2,23 @@
 
 {% block header-title %}友達{% endblock %}
 
-{% block main %}
+{% load static %}
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}">
+{% endblock %}
 
+{% block main %}
+{% for item in friends %}
+<div>
+    <a class="friends_user" href="{% url 'talk_room' %}">
+        <div class="friends_icon">
+            <img class="friends_icon_space">
+        </div>
+        <div class="friends_cont">
+            <div class="friends_name">{{item.username}}</div>
+            <div class="friends_talk">let's talk together.</div>
+        </div>
+    </a>
+</div>
+{% endfor %}
 {% endblock %}
