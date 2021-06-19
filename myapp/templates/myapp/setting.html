@@ -1,1 +1,21 @@
-S
+{% extends 'myapp/base.html' %}
+{% block header %}
+設定
+{% endblock %}
+{% block content %}
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+</head>
+<body>
+    <p><a href="{% url 'usernamechange' data.username %}">{{'ユーザー名変更'}}</a></p>
+    <p><a href="{% url 'emailchange' data.username %}">{{'メールアドレス変更'}}</a></p>
+    <p><a href="{% url 'iconchange' data.username %}">{{'アイコン変更'}}</a></p>
+    <p><a href="{% url 'passwordchange' data.username %}">{{'パスワード変更'}}</a></p>
+    <p><a href="logout">ログアウト</a></p>
+
+
+</body>
+{% endblock %}

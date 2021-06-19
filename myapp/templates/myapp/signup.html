@@ -1,1 +1,27 @@
-SU
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<body>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            {{ form1.as_table }}
+            {{ form2.as_table }}
+            <tr><td></td><td>
+                <input type="submit" value="click">
+            </td></tr>
+        </table>
+    </form>
+</body>
+{% if form1.non_field_errors %}
+<ul class="alert alert-danger list-unstyled">
+    <li style="list-style-type: none;">
+<ul class="alert alert-danger list-unstyled">{% for error in form1.non_field_errors %}
+    <li>{{ error }}</li>
+</ul>
+</li>
+</ul>
+{% endfor %}
+
+{% endif %}
+</html>

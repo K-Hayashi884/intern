@@ -1,1 +1,23 @@
-LI
+
+{% load static %}
+
+      {% if form.errors  %}
+      <div>
+        <p>ユーザーネームとパスワードが一致しません．<p>
+      </div>
+      {% endif %}
+      <form method="POST" action="{% url 'login_view' %}">
+        {% csrf_token %}
+        <div>
+          <label>ユーザーネーム:</label>
+          {{ form.username }}
+          {{ form.username.errors }}
+        </div>
+        <div>
+        <label>パスワード:</label>
+        {{ form.password }}
+        {{ form.password.errors }}
+        </div>
+        <button type="submit">ログイン</button>
+      </form>
+  

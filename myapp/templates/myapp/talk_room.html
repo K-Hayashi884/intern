@@ -1,1 +1,42 @@
-TR
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block header %}
+<header>
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}">
+</header>
+{{data5}}
+    
+{% endblock %}
+{% block content %}
+<p>
+    {% if data6.username == data8.username %}
+
+
+        {% for item in data6 %}
+            <tr>
+                <p><td>{{ abc }}</td><td>{{item.fromusername}}</td>
+                <td>{{ def }}</td><td>{{item.tousername}}</td>
+                <td>{{item.content}}</td>
+                <td>{{item.pub_date}}</td></p>
+            </tr>
+        {% endfor %}
+    {% endif %}
+</p>
+{% endblock %}
+
+{% block footer %}
+
+<footer>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        {{ messageform.as_p }}
+        <button type="submit">送信</button>
+    </form>
+
+</footer>
+{% endblock %}
+
+
+
+
+
