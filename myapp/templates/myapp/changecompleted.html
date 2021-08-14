@@ -11,22 +11,21 @@
 <body class="container">
     <h1 class="display-4 text-primary">
         {{title}}</h1>
-        #メッセージ送信フォームにしたい
-        #-------------------------------
-    <div class="mt-5"></div>
     <table class="table">
         <tr>
             <th class="py-1">name</th>
-            <th class="py-1">datetime</th>
-            <th class="py-1">talk</th>
+            <th class="py-1">ID</th>
+            <th class="py-1">email</th>
         </tr>
     {% for item in data %}
         <tr>    
-            <td class="py-2">{{item.talk_from}}</td>
-            <td class="py-2">{{item.pub_date}}</td>
-            <td class="py-2">{{item.talk}}</td>
+            <td class="py-2">{{item.username}}</td>
+            <td class="py-2">{{item.id}}</td>
+            <td class="py-2">{{item.email}}</td>
         </tr>
     {% endfor %}
     </table>
+    <p><a href="{% url 'friends'  %}">トーク一覧へ戻る</a></p>
+    <p><a href="{% url 'setting'  %}">設定へ戻る</a></p>  
 </body>
 </html>

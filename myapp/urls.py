@@ -13,8 +13,11 @@ urlpatterns = [
     path('friends', views.friends, name='friends'),
     path('talk_room/<int:num>', views.talk_room, name='talk_room'),
     path('setting', views.setting, name='setting'),
-    path('usernamechange', views.user_name_change, name='user_name_change'),
-    path('changecompleted', views.user_change_done, name='user_change_done'),
+    path('user_name_change', views.user_name_change, name='user_name_change'),
+    path('user_email_change', views.user_email_change, name='user_email_change'),
+    path('user_password_change', views.user_password_change, name='user_password_change'),
+    path('user_image_change', views.user_image_change, name='user_image_change'),
+    path('changecompleted', views.changecompleted, name='changecompleted'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

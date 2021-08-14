@@ -2,7 +2,6 @@
 from django.shortcuts import redirect, render
 from .models import Talk, User
 #from myapp.models import User
-from .forms import TalkForm, SignUpForm
 #↑LogInForm
 #ログイン機能
 from django.contrib.auth import authenticate, login
@@ -15,6 +14,14 @@ from django.contrib.auth.views import(LoginView, LogoutView)
 from django.contrib.auth.forms import AuthenticationForm 
 #from django.contrib.auth import get_user_model
 #User = get_user_model()
+from .forms import (
+    SignUpForm,
+    TalkForm,
+    UserNameSettingForm,
+    UserEmailSettingForm,
+    UserPasswordSettingForm,
+    UserImageSettingForm,
+)
 
 def index(request):
     params = {
@@ -74,7 +81,7 @@ def friends(request, num=1):
         ).distinct()
     #ここでlogin_user.idをはじきたいのと、HTMLの修正が必要
     params = {
-        'title': 'Friends',
+        'title': 'トーク一覧',
         #'form': TalkForm(),
         'data': data,
         'num': num,
@@ -116,25 +123,109 @@ def setting(request):
 
 @login_required
 def user_name_change(request): #ここにnum入れるのは止めてる
-    login_user = request.user #★
-    obj = login_user
-    if (request.method == 'POST'):
-        user = SignUpForm(request.POST, instance=obj)
-        user.save()
-        return redirect(to='/user_change_done')
-    params = {
-        'title': 'ユーザー名変更',
-        'form': SignUpForm(instance=obj),
+    user = request.user
+    if request.method == "GET":
+        form = UserNameSettingForm(instance=user)
+        params = {
+            "form":form,
+            "title": 'ユーザー名変更',
         }
-    print(obj)
-    return render(request, "myapp/user_name_change.html", params)
+        return render(request, "myapp/user_name_change.html", params)
 
-    return render(request, "myapp/user_name_change.html")
+    elif request.method == "POST":
+        form = UserNameSettingForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+            return changecompleted(request)
+        params = {
+            "form":form,
+            "title": 'ユーザー名変更',
+        }
+        #ここなんでわざわざemailなのかわからない
+        return render(request, "myapp/changecompleted.html", params)
+    
 
 @login_required
-def user_change_done(request):
+def user_email_change(request): #ここにnum入れるのは止めてる
+    user = request.user
+    if request.method == "GET":
+        form = UserEmailSettingForm(instance=user)
+        params = {
+            "form":form,
+            "title": 'メールアドレス変更',
+        }
+        return render(request, "myapp/user_email_change.html", params)
+
+    elif request.method == "POST":
+        form = UserEmailSettingForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+            return changecompleted(request)
+        params = {
+            "form":form,
+            "title": 'メールアドレス変更',
+        }
+        #nameの変更と同様にここにどのhtmlを繋ぐのがいいのかわからない
+        return render(request, "myapp/changecompleted.html", params)
+
+
+@login_required
+def user_password_change(request): 
+    user = request.user
+    if request.method == "GET":
+        form = UserPasswordSettingForm(instance=user)
+        params = {
+            "form":form,
+            "title": 'パスワード変更',
+        }
+        return render(request, "myapp/user_password_change.html", params)
+
+    elif request.method == "POST":
+        form = UserPasswordSettingForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+            return changecompleted(request)
+        params = {
+            "form":form,
+            "title": 'パスワード変更',
+        }
+        #nameの変更と同様にここにどのhtmlを繋ぐのがいいのかわからない
+        return render(request, "myapp/changecompleted.html", params)
+
+@login_required
+def user_image_change(request): 
+    user = request.user
+    if request.method == "GET":
+        form = UserImageSettingForm(instance=user)
+        params = {
+            "form":form,
+            "title": 'アイコン変更',
+        }
+        return render(request, "myapp/user_image_change.html", params)
+
+    elif request.method == "POST":
+        form = UserImageSettingForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+            return changecompleted(request)
+        params = {
+            "form":form,
+            "title": 'アイコン変更',
+        }
+        #nameの変更と同様にここにどのhtmlを繋ぐのがいいのかわからない
+        return render(request, "myapp/changecompleted.html", params)
+
+
+@login_required
+def changecompleted(request):
     #ここで一括でプロフィール情報を表示して、変更後のプロフィールは以下の通りです。ってやりたい。
-    return render(request, "myapp/user_name_change_done.html")
+    login_user = request.user #★
+    data = User.objects.filter(id=login_user.id)
+    params = {
+        'title': '変更が完了しました',
+        'data':data,
+        }
+    return render(request, "myapp/changecompleted.html", params)
 
 #ログインの設定
 

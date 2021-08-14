@@ -37,3 +37,51 @@ class SignUpForm(UserCreationForm):
     
 class TalkForm(forms.Form):
     talk = forms.CharField(label='talk')
+
+class UserNameSettingForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', )
+
+    def __init__(self, *args, **kwargs):
+       super().__init__(*args, **kwargs)
+       for field in self.fields.values():
+           default_label = str(field.label)
+           new_label = "new" + default_label
+           field.label = new_label
+
+class UserEmailSettingForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email', )
+
+    def __init__(self, *args, **kwargs):
+       super().__init__(*args, **kwargs)
+       for field in self.fields.values():
+           default_label = str(field.label)
+           new_label = "new" + default_label
+           field.label = new_label
+
+class UserPasswordSettingForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('password', )
+
+    def __init__(self, *args, **kwargs):
+       super().__init__(*args, **kwargs)
+       for field in self.fields.values():
+           default_label = str(field.label)
+           new_label = "new" + default_label
+           field.label = new_label
+
+class UserImageSettingForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('image', )
+
+    def __init__(self, *args, **kwargs):
+       super().__init__(*args, **kwargs)
+       for field in self.fields.values():
+           default_label = str(field.label)
+           new_label = "new" + default_label
+           field.label = new_label
