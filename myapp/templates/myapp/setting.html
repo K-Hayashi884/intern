@@ -1,1 +1,21 @@
-S
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" 
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        crossorigin="anonymous">
+</head>
+<body class="container">
+    <h1 class="display-4 text-primary">
+        {{title}}</h1>
+    <p><a href="{% url 'user_name_change' %}">ユーザー名変更</a></p>
+    <p><a href="{% url 'login_view' %}">メールアドレス変更</a></p> 
+    <p><a href="{% url 'login_view' %}">アイコン変更</a></p> 
+    <p><a href="{% url 'login_view' %}">パスワード変更</a></p> 
+    <p><a href="{% url 'login_view' %}">ログアウト</a></p> 
+    
+</body>
+</html>

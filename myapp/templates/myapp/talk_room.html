@@ -12,7 +12,7 @@
     <h1 class="display-4 text-primary">
         {{title}}</h1>
         #メッセージ送信フォームにしたい
-        <form action="{% url 'talk_room' num %}" method="post"> 
+        <form action="{% url 'talk_room' item.id %}" method="post"> 
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="send"

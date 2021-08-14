@@ -114,6 +114,28 @@ def talk_room(request, num=1):
 def setting(request):
     return render(request, "myapp/setting.html")
 
+@login_required
+def user_name_change(request): #ここにnum入れるのは止めてる
+    login_user = request.user #★
+    obj = login_user
+    if (request.method == 'POST'):
+        user = SignUpForm(request.POST, instance=obj)
+        user.save()
+        return redirect(to='/user_change_done')
+    params = {
+        'title': 'ユーザー名変更',
+        'form': SignUpForm(instance=obj),
+        }
+    print(obj)
+    return render(request, "myapp/user_name_change.html", params)
+
+    return render(request, "myapp/user_name_change.html")
+
+@login_required
+def user_change_done(request):
+    #ここで一括でプロフィール情報を表示して、変更後のプロフィールは以下の通りです。ってやりたい。
+    return render(request, "myapp/user_name_change_done.html")
+
 #ログインの設定
 
 def login_view(request):

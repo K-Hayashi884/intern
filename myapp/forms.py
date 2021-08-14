@@ -9,7 +9,7 @@ class SignUpForm(UserCreationForm):
     class Meta:
         image = forms.ImageField(required=True)
         model = User
-        fields = ('username', 'password1', 'password2', 'image')
+        fields = ('username','email', 'password1', 'password2', 'image')
         #widgets = {
             #'username': forms.TextInput(attrs={'class':'form-control'}),
             #'mail': forms.EmailInput(attrs={'class':'form-control'}),
