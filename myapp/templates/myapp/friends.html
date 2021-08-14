@@ -1,0 +1,41 @@
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" 
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        crossorigin="anonymous">
+</head>
+<body class="container">
+    <h1 class="display-4 text-primary">
+        {{title}}</h1>
+        #ここ死んでるけど、トーク履歴(厳密には友達のデータを検索する)の機能をつけたい
+        <form action="{% url 'talk_room' num %}" method="post"> 
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="send"
+            class="btn btn-primary">
+        </form>
+        #---------------------------
+    <div class="mt-5"></div>
+    <table class="table">
+        <tr>
+            <th class="py-1">name</th>
+            <th class="py-1">datetime</th>
+            <th class="py-1">talk</th>
+            <th class="py-1"></th> #ここはトークに遷移させるリンク用
+        </tr>
+    {% for item in data %}
+        <tr>    
+            <td class="py-2">{{item.username}}</td>
+            <td class="py-2">{{item.pub_date}}</td>
+            <td class="py-2">{{item.talk}}</td>
+            <td><a href="{% url 'login_view'  %}">トークへ</a></td>
+        </tr>
+    {% endfor %}mk
+    #上手い具合にトークルームへのリンク飛ばしたい
+    </table>
+</body>
+</html>

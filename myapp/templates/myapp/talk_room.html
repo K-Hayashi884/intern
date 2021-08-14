@@ -1,1 +1,38 @@
-TR
+{% load static %}
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" 
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        crossorigin="anonymous">
+</head>
+<body class="container">
+    <h1 class="display-4 text-primary">
+        {{title}}</h1>
+        #メッセージ送信フォームにしたい
+        <form action="{% url 'talk_room' num %}" method="post"> 
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="send"
+            class="btn btn-primary">
+        </form>
+        #-------------------------------
+    <div class="mt-5"></div>
+    <table class="table">
+        <tr>
+            <th class="py-1">name</th>
+            <th class="py-1">datetime</th>
+            <th class="py-1">talk</th>
+        </tr>
+    {% for item in data %}
+        <tr>    
+            <td class="py-2">{{item.talk_from}}</td>
+            <td class="py-2">{{item.pub_date}}</td>
+            <td class="py-2">{{item.talk}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+</body>
+</html>
