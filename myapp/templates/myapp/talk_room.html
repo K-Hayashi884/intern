@@ -1,14 +1,25 @@
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="utf-8">
-    <title>{{title}}</title>
-    <link rel="stylesheet" 
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/base.css' %}" />
+    {% block extra_style %}{% endblock %}
+    <title>DeMiAインターン</title>
 </head>
-<body class="container">
+<body>
+    {% block header %}
+    <header class="header">
+        <div class="header-container">
+            <span class="header-container__title">
+                {% block header-title %}{% endblock %}
+            </span>
+        </div>
+    </header>
+    {% endblock %}
+
+    {% block content %}
     <h1 class="display-4 text-primary">
         {{title}}</h1>
         #メッセージ送信フォームにしたい
@@ -27,6 +38,38 @@
             <td class="py-2">{{item.talk}}</td>
         </tr>
     {% endfor %}
+    <form action={% url 'talk_room' item.id %}
+        method="post">
+    {% csrf_token %}
+        <div class="mt-5"></div>
+        <table class="table">
+        {{ form.as_table }}
+            <tr><th><td>
+                <input type="submit" value="click"
+                class="btn btn-primary mt-2">
+            </td></th></tr>
+        </table>
+    </form>
     </table>
+    {% endblock %}
+
+    {% block footer %}
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-container__item">
+                <a href="{% url 'friends' %}" class="footer-item__link">
+                    <span class="footer-item__icon"><img src="{% static 'myapp/img/people-24px.svg' %}"></span>
+                    <span class="footer-item__text">友達</span>
+                </a>
+            </div>
+            <div class="footer-container__item">
+                <a href="{% url 'setting' %}" class="footer-item__link">
+                    <span class="footer-item__icon"><img src="{% static 'myapp/img/settings-black-18dp.svg' %}"></span>
+                    <span class="footer-item__text">設定</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
 </body>
 </html>

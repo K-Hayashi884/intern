@@ -104,13 +104,15 @@ def talk_room(request, num=1):
         ).distinct().reverse()
     print(data)
     params = {
-        'title': 'とーくるーむ',
+        'title': friend.username,
         'form': TalkForm(),
         'data': data,
         'num': num,
     }
     if(request.method == 'POST'):
         obj = Talk()
+        talk_from = login_user
+        talk_to = friend
         form = TalkForm(request.POST, instance=obj)
         form.save()
     return render(request, "myapp/talk_room.html", params)
@@ -248,6 +250,9 @@ def login_view(request):
        else:
            # 認証失敗時
            print('認証失敗時')
+           params = {
+            "error": "※名前かパスワードが間違っています",
+            }
            return redirect('login_view')
     return render(request, 'myapp/login.html')
 
