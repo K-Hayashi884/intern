@@ -2,23 +2,22 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
-from django.db.models import fields
 
 from .models import User
 
 
 class SignUpForm(UserCreationForm):
-    img = forms.ImageField(
-        required=False, validators=[FileExtensionValidator(["jpg", "jpeg", "png"])],
-    )
+    # img = forms.ImageField(
+    #     required=False, validators=[FileExtensionValidator(["jpg", "jpeg", "png"])],
+    # )
 
     class Meta:
         model = User
-        """
-        Django標準のUserに存在するfieldです。
-        上のimgは元々のものには無いので、自分で作ります。
-        """
-        fields = ('username', 'email', 'password1', 'password2')
+        # """
+        # Django標準のUserに存在するfieldです。
+        # 上のimgは元々のものには無いので、自分で作ります。
+        # """
+        fields = ('username', 'email', 'password1', 'password2', 'icon')
 
 
 class LoginForm(AuthenticationForm):        

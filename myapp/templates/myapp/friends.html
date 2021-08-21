@@ -38,7 +38,7 @@
         <li class="friends__list">
             <!-- それぞれが別のトーク画面に飛ぶようにリンクをはる -->
             <a class="friends__list-link" href="{% url 'talk_room' friend.username %}">
-                <img class="friends__list-usericon" src="/images/{{ user_img.image }}">
+                <img class="friends__list-usericon" src="/media/{{ friend.icon }}">
                 <div class="friends__list-username">{{ friend.username }}</div>
                 <!-- ここから最新のトークを表示する部分 -->
                 <div class="friends__list-talk">
