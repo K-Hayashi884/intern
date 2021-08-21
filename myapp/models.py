@@ -1,17 +1,9 @@
-from django.contrib.auth.models import AbstractUser, UserManager
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
 class User(AbstractUser):
-    pass
-
-
-class UserImage(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_img")
-    image = models.ImageField(verbose_name="画像", upload_to="images")
-
-    def __str__(self):
-        return "{}の写真".format(self.user)
+    icon = models.ImageField(verbose_name="画像", upload_to="uploads", default="images/noimage.png")
 
 
 # トーク内容を全てdatbaseに保存する形をとる

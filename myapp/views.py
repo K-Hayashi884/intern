@@ -21,7 +21,7 @@ from .forms import (
     PasswordChangeForm,
     UserNameSettingForm,
 )
-from .models import User, UserImage, Talk
+from .models import User, Talk
 
 
 def index(request):
@@ -31,8 +31,8 @@ def index(request):
 def signup_view(request):
     if request.method == "GET":
         form = SignUpForm()
-        params = {"form": form, }
-        return render(request, "myapp/signup.html", params)
+        context = {"form": form, }
+        return render(request, "myapp/signup.html", context)
     elif request.method == "POST":
         """
         画像ファイルをformに入れた状態で使いたい時はformに'request.FILES'を加える。
@@ -73,15 +73,15 @@ def signup_view(request):
                 user_img.imageには入らない。ここにはインスタンスが入る。
                 インスタンスとは?→'https://djangobrothers.com/blogs/basic_knowledge_of_python/'
                 """
-                user = User.objects.get(username=username)
-                user_img = UserImage(
-                    user=user,
-                    image=image,
-                )
-                user_img.save()
+                # user = User.objects.get(username=username)
+                # user_img = User(
+                #     user=user,
+                #     image=image,
+                # )
+                # user_img.save()
             return redirect("/")
-        params = {"form": form, }
-        return render(request, "myapp/signup.html", params)
+        context = {"form": form, }
+        return render(request, "myapp/signup.html", context)
 
 
 class Login(LoginView):
@@ -144,7 +144,7 @@ def friends(request):
                 request.session['keyword'] = request.GET
 
                 # friendsに何らか情報があったとき
-                params = {
+                context = {
                     "user": user,
                     "friends": friends,
                     "form": form,
@@ -155,21 +155,21 @@ def friends(request):
                 # friendsに情報がなかったとき
                 # ＞検索結果がなかった
                 if not friends:
-                    params["no_result"] = True
-                return render(request, "myapp/friends.html", params)
+                    context["no_result"] = True
+                return render(request, "myapp/friends.html", context)
 
     # ここまで　検索機能あり　上級
 
     # POSTでない（リダイレクトorただの更新）& 検索欄に入力がない場合
-    params = {
+    context = {
         "user": user,
         "friends": friends,
-        # 検索機能（上級）機能がなければparamsに入れない
+        # 検索機能（上級）機能がなければcontextに入れない
         "form": form,
-        # 最新トーク表示（上級）機能がなければparamsに入れない
+        # 最新トーク表示（上級）機能がなければcontextに入れない
         "friends": friends,
     }
-    return render(request, "myapp/friends.html", params)
+    return render(request, "myapp/friends.html", context)
 
 
 @login_required
@@ -187,7 +187,7 @@ def talk_room(request, friend_username):
     # 送信form
     form = TalkForm()
     # メッセージ送信だろうが更新だろが、表示に必要なパラメーターは変わらないので、この時点でまとめて指定
-    params = {
+    context = {
         "form": form,
         "user": user,
         "friend": friend, 
@@ -211,10 +211,10 @@ def talk_room(request, friend_username):
             new_talk = Talk(talk=text, talk_from=user, talk_to=friend, time=now)
             new_talk.save()
             # 更新
-            return render(request, "myapp/talk_room.html", params)
+            return render(request, "myapp/talk_room.html", context)
             
     # POSTでない（リダイレクトorただの更新）&POSTでも入力がない場合
-    return render(request, "myapp/talk_room.html", params)
+    return render(request, "myapp/talk_room.html", context)
 
 
 @login_required
@@ -228,22 +228,19 @@ def setting(request):
 @login_required
 def user_img_change(request):
     user = request.user
-    try:
-        user_img = UserImage.objects.get(user=user)
-    except ObjectDoesNotExist:
-        user_img = UserImage.objects.none()
+    user_img = user.icon
     if request.method == "GET":
         # モデルフォームには(instance=user)をつけることで
         # userの情報が入った状態のFormを参照できます。
-        # 今回はユーザ情報の変更の関数が多いのでこれをよく使います。        
+        # 今回はユーザ情報の変更の関数が多いのでこれをよく使います。
         form = ImageSettingForm(instance=user)
-        params = {
+        context = {
             "form":form,
             "user_img":user_img,
         }
         # 画像に関しては、formに入った状態では表示できないので
         # 保存されたものを直接参照する必要があります。
-        return render(request, "myapp/user_img_change.html", params)
+        return render(request, "myapp/user_img_change.html", context)
     
     elif request.method == "POST":
         form = ImageSettingForm(request.POST,request.FILES)
@@ -251,11 +248,11 @@ def user_img_change(request):
             user_img.image = form.cleaned_data.get('image')
             user_img.save()
             return user_img_change_done(request)
-        params = {
+        context = {
             "form":form,
             "user_img":user_img,
         }
-        return render(request, "myapp/user_img_change.html", params)
+        return render(request, "myapp/user_img_change.html", context)
 
 
 @login_required
@@ -268,20 +265,20 @@ def mail_change(request):
     user = request.user
     if request.method == "GET":
         form = MailSettingForm(instance=user)
-        params = {
+        context = {
             "form":form,
         }
-        return render (request, "myapp/mail_change.html", params)
+        return render (request, "myapp/mail_change.html", context)
 
     elif request.method == "POST":
         form = MailSettingForm(request.POST,instance=user)
         if form.is_valid():
             form.save()
             return mail_change_done(request)
-        params = {
+        context = {
             "form":form,
         }
-        return render(request,"myapp/mail_change.html",params)
+        return render(request,"myapp/mail_change.html",context)
 
 
 @login_required
@@ -294,20 +291,20 @@ def username_change(request):
     user = request.user
     if request.method == "GET":
         form = UserNameSettingForm(instance=user)
-        params = {
+        context = {
             "form":form,
         }
-        return render (request, "myapp/username_change.html", params)
+        return render (request, "myapp/username_change.html", context)
 
     elif request.method == "POST":
         form = UserNameSettingForm(request.POST,instance=user)
         if form.is_valid():
             form.save()
             return username_change_done(request)
-        params = {
+        context = {
             "form":form,
         }
-        return render(request, "myapp/mail_change.html", params)
+        return render(request, "myapp/mail_change.html", context)
 
 
 @login_required

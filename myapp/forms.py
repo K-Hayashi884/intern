@@ -2,8 +2,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
+from django.db.models import fields
 
-from .models import User, UserImage
+from .models import User
 
 
 class SignUpForm(UserCreationForm):
@@ -63,8 +64,8 @@ class UserNameSettingForm(forms.ModelForm):
 
 class ImageSettingForm(forms.ModelForm):
     class Meta:
-        model = UserImage
-        exclude = ("user", )
+        model = User
+        fields = ("icon", )
 
 
 class PasswordChangeForm(PasswordChangeForm):

@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import User, UserImage, Talk
+from .models import User, Talk
 
 admin.site.register(User)
-admin.site.register(UserImage)
 admin.site.register(Talk)
