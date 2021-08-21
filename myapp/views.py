@@ -170,8 +170,6 @@ def talk_room(request, user_id):
     # メッセージ送信だろうが更新だろが、表示に必要なパラメーターは変わらないので、この時点でまとめて指定
     context = {
         "form": form,
-        "user": user,
-        "friend": friend, 
         "talk": talk,
         # talkroomのときのみheaderの表示を変えたい
         # ＞そのページがtalkroomであることを伝えるための変数
@@ -187,9 +185,8 @@ def talk_room(request, user_id):
         if form.is_valid():
             # 送信内容からメッセージを取得
             text = form.cleaned_data.get('talk')
-            now = datetime.datetime.now()
             # 送信者、受信者、メッセージ、タイムスタンプを割り当てて保存
-            new_talk = Talk(talk=text, talk_from=user, talk_to=friend, time=now)
+            new_talk = Talk(talk=text, talk_from=user, talk_to=friend)
             new_talk.save()
             # 更新
             return render(request, "myapp/talk_room.html", context)
@@ -220,7 +217,7 @@ def user_img_change(request):
         form = ImageSettingForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-            return user_img_change_done(request)
+            return  redirect("user_img_change_done")
     context = {
         "form":form,
     }
@@ -239,20 +236,16 @@ def mail_change(request):
     user = request.user
     if request.method == "GET":
         form = MailSettingForm(instance=user)
-        context = {
-            "form":form,
-        }
-        return render (request, "myapp/mail_change.html", context)
 
     elif request.method == "POST":
         form = MailSettingForm(request.POST,instance=user)
         if form.is_valid():
             form.save()
-            return mail_change_done(request)
-        context = {
-            "form":form,
-        }
-        return render(request,"myapp/mail_change.html",context)
+            return  redirect("mail_change_done")
+    context = {
+        "form":form,
+    }
+    return render(request,"myapp/mail_change.html",context)
 
 
 @login_required
@@ -265,27 +258,20 @@ def username_change(request):
     user = request.user
     if request.method == "GET":
         form = UserNameSettingForm(instance=user)
-        context = {
-            "form":form,
-        }
-        return render (request, "myapp/username_change.html", context)
 
     elif request.method == "POST":
         form = UserNameSettingForm(request.POST,instance=user)
         if form.is_valid():
             form.save()
-            return username_change_done(request)
-        context = {
-            "form":form,
-        }
-        return render(request, "myapp/username_change.html", context)
+            return  redirect("username_change_done")
+    context = {
+        "form":form,
+    }
+    return render(request, "myapp/username_change.html", context)
 
 
 @login_required
 def username_change_done(request):
-    """
-    ユーザ名変更後の関数
-    """
     return render(request, "myapp/username_change_done.html")
 
 
