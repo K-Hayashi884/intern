@@ -18,12 +18,7 @@
             <span class="header-container__title">
                 {% block header-title %}{% endblock %}
             </span>
-            {% if is_talk_room %}
-            <a href="{% url 'friends' %}" class="talk_room__back-btn">
-                <i class="fas fa-angle-left"></i>
-            </a>
-            <a href="" class="talk_room__reload">更新</a>
-            {% endif %}
+            {% block talk_room %}{% endblock %}
         </div>
     </header>
     {% endblock %}

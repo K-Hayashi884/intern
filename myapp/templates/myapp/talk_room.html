@@ -5,7 +5,12 @@
 {% endblock %}
 
 {% block header-title %}{{ friend.username }}{% endblock %}
-
+{% block talk_room %}
+<a href="{% url 'friends' %}" class="talk_room__back-btn">
+    <i class="fas fa-angle-left"></i>
+</a>
+<a href="" class="talk_room__reload">更新</a>
+{% endblock %}
 {% block content %}
 <div class="talk_room">
 
@@ -25,17 +30,13 @@
             <li class="talk_room__chatboard-content talk_room__chatboard-content-user">
                 <p class="talk_room__chatboard-content-name">＞{{ talk.talk_from }}</p>
                 <p class="talk_room__chatboard-content-text">{{ talk.talk }}</p>
-                <!-- LINEっぽく -->
                 <p class="talk_room__chatboard-content-time">{{ talk.time|date:"m/d" }}<br>{{ talk.time|date:"H:i" }}</p>
-                <!-- LINEここまで -->
             </li>
             {% else %}
             <li class="talk_room__chatboard-content talk_room__chatboard-content-friend">
                 <p class="talk_room__chatboard-content-name">＞{{ talk.talk_from }}</p>
                 <p class="talk_room__chatboard-content-text">{{ talk.talk }}</p>
-                <!-- LINEっぽく -->
                 <p class="talk_room__chatboard-content-time">{{ talk.time|date:"m/d" }}<br>{{ talk.time|date:"H:i" }}</p>
-                <!-- LINEここまで -->
             </li>
             {% endif %}
         {% endfor %}

@@ -1,13 +1,10 @@
-import datetime
-
-from django.db.models import Q, OuterRef, Subquery
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth import get_user
-from django.http import HttpResponseRedirect, Http404
+from django.db.models import Q, OuterRef, Subquery
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
@@ -33,8 +30,8 @@ def signup_view(request):
         form = SignUpForm()
     elif request.method == "POST":
         """
-        画像ファイルをformに入れた状態で使いたい時はformに'request.FILES'を加える。
-        'request.POST'だけではNoneが入る。
+        画像ファイルをformに入れた状態で使いたい時はformに"request.FILES"を加える。
+        "request.POST"だけではNoneが入る。
         """
         form = SignUpForm(request.POST, request.FILES)
         if form.is_valid():
@@ -42,10 +39,10 @@ def signup_view(request):
             モデルフォームはformの値をmodelsにそのまま格納できるsave()methodがあるので便利。
             """
             form.save()
-            #フォームから'username'を読み取る
-            username = form.cleaned_data.get('username')
-            #フォームから'password1'を読み取る
-            password = form.cleaned_data.get('password1')
+            #フォームから"username"を読み取る
+            username = form.cleaned_data.get("username")
+            #フォームから"password1"を読み取る
+            password = form.cleaned_data.get("password1")
             """
             認証情報のセットを検証するには authenticate() を利用してください。
             このメソッドは認証情報をキーワード引数として受け取ります。
@@ -53,8 +50,8 @@ def signup_view(request):
             その組み合わせを個々の 認証バックエンド に対して問い合わせ、認証バックエンドで認証情報が有効とされれば 
             User オブジェクトを返します。もしいずれの認証バックエンドでも認証情報が有効と判定されなければ PermissionDenied が送出され、None が返されます。
             (公式ドキュメントより)
-            つまり、autenticateメソッドは'username'と'password'を受け取り、その組み合わせが存在すれば
-            そのUserを返し、不正であれば'None'を返します。
+            つまり、autenticateメソッドは"username"と"password"を受け取り、その組み合わせが存在すれば
+            そのUserを返し、不正であれば"None"を返します。
             """
             user = authenticate(username=username, password=password)
             if user is not None:
@@ -76,7 +73,7 @@ class Login(LoginView):
     POSTの時はloginを試みる。→成功すればdettingのLOGIN_REDIRECT_URLで指定されたURLに飛ぶ
     """
     authentication_form = LoginForm
-    template_name = 'myapp/login.html'
+    template_name = "myapp/login.html"
 
 
 class Logout(LoginRequiredMixin, LogoutView):
@@ -87,14 +84,12 @@ class Logout(LoginRequiredMixin, LogoutView):
 @login_required
 def friends(request):
     user = request.user
-    # # usernameの重複は許されていないので、usernameだけで一意に定まる
-    # friends = User.objects.exclude(id=user.id)
 
     # 最新のトークも表示するVer 上級
     # ユーザーひとりずつの最新のトークを特定する
     latest_msg = Talk.objects.filter(
         Q(talk_from=OuterRef("pk"), talk_to=user) | Q(talk_from=user, talk_to=OuterRef("pk"))
-    ).order_by('-time')
+    ).order_by("-time")
 
     friends = User.objects.exclude(id=user.id).annotate(
         latest_msg_pk=Subquery(
@@ -107,7 +102,6 @@ def friends(request):
             latest_msg.values("time")[:1]
         ),
     ).order_by("-latest_msg_pk")
-    # talk_list.append([friend, last_message, time_flag, datetime.datetime(1,1,1)])
 
     # 検索機能あり　上級
     form = FriendsSearchForm()
@@ -117,7 +111,7 @@ def friends(request):
         
         # 送信内容があった場合
         if form.is_valid():
-            keyword = form.cleaned_data.get('keyword')
+            keyword = form.cleaned_data.get("keyword")
             # 何も入力せずに検索した時に全件を表示するようにするため、分岐しておく
             if keyword:
                 # 入力に対して部分一致する友達を絞り込む
@@ -125,7 +119,7 @@ def friends(request):
 
                 # 入力情報を保持してテキストボックスに残すようにする
                 # （ユーザーが検索したキーワードを見られるように）
-                request.session['keyword'] = request.GET
+                request.session["keyword"] = request.GET
 
                 # friendsに何らか情報があったとき
                 context = {
@@ -164,16 +158,13 @@ def talk_room(request, user_id):
     # 自分→友達、友達→自分のトークを全て取得
     talk = Talk.objects.filter(Q(talk_from=user, talk_to=friend) | Q(talk_to=user, talk_from=friend))
     # 時系列で並べ直す
-    talk = talk.order_by('time')
+    talk = talk.order_by("time")
     # 送信form
     form = TalkForm()
     # メッセージ送信だろうが更新だろが、表示に必要なパラメーターは変わらないので、この時点でまとめて指定
     context = {
         "form": form,
         "talk": talk,
-        # talkroomのときのみheaderの表示を変えたい
-        # ＞そのページがtalkroomであることを伝えるための変数
-        "is_talk_room": True,
     }
     
     # POST（メッセージ送信あり）
@@ -184,7 +175,7 @@ def talk_room(request, user_id):
         # 送信内容があった場合
         if form.is_valid():
             # 送信内容からメッセージを取得
-            text = form.cleaned_data.get('talk')
+            text = form.cleaned_data.get("talk")
             # 送信者、受信者、メッセージ、タイムスタンプを割り当てて保存
             new_talk = Talk(talk=text, talk_from=user, talk_to=friend)
             new_talk.save()
@@ -201,12 +192,11 @@ def setting(request):
 
 
 # setting以下のchange系の関数は
-# request.methodが'GET'か'POST'かで明示的に分けています。
+# request.methodが"GET"か"POST"かで明示的に分けています。
 # これはformの送信があった時とそうで無いときを区別しています。
 @login_required
 def user_img_change(request):
     user = request.user
-    user_img = user.icon
     if request.method == "GET":
         # モデルフォームには(instance=user)をつけることで
         # userの情報が入った状態のFormを参照できます。
@@ -221,8 +211,6 @@ def user_img_change(request):
     context = {
         "form":form,
     }
-    # 画像に関しては、formに入った状態では表示できないので
-    # 保存されたものを直接参照する必要があります。
     return render(request, "myapp/user_img_change.html", context)
 
 
@@ -287,10 +275,10 @@ class PasswordChange(PasswordChangeView):
     パスワード変更フォーム
     """
     form_class = PasswordChangeForm
-    success_url = reverse_lazy('password_change_done')
-    template_name = 'myapp/password_change.html'
+    success_url = reverse_lazy("password_change_done")
+    template_name = "myapp/password_change.html"
 
 
 class PasswordChangeDone(PasswordChangeDoneView):
     """Django標準パスワード変更後ビュー"""
-    template_name = 'myapp/password_change_done.html'
+    template_name = "myapp/password_change_done.html"
