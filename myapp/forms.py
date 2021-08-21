@@ -1,33 +1,18 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm
 from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
+from django.utils.translation import gettext_lazy as _
 
 from .models import User
 
 
 class SignUpForm(UserCreationForm):
-    # img = forms.ImageField(
-    #     required=False, validators=[FileExtensionValidator(["jpg", "jpeg", "png"])],
-    # )
-
     class Meta:
         model = User
-        # """
-        # Django標準のUserに存在するfieldです。
-        # 上のimgは元々のものには無いので、自分で作ります。
-        # """
         fields = ('username', 'email', 'password1', 'password2', 'icon')
 
 
 class LoginForm(AuthenticationForm):        
-    def confirm_login_allowed(self, user):
-        if not user.is_active:
-            raise ValidationError(
-                _("This account is inactive."),
-                code='inactive',
-            )
-
     def __init__(self, *args, **kwargs):
        super().__init__(*args, **kwargs)
        #htmlの表示を変更可能にします
@@ -41,11 +26,8 @@ class MailSettingForm(forms.ModelForm):
         fields = ('email', )
 
     def __init__(self, *args, **kwargs):
-       super().__init__(*args, **kwargs)
-       for field in self.fields.values():
-           default_label = str(field.label)
-           new_label = "new" + default_label
-           field.label = new_label
+        super().__init__(*args, **kwargs)
+        self.fields['email'].label = "新しいメールアドレス"
 
 
 class UserNameSettingForm(forms.ModelForm):
@@ -54,12 +36,9 @@ class UserNameSettingForm(forms.ModelForm):
         fields = ('username', )
 
     def __init__(self, *args, **kwargs):
-       super().__init__(*args, **kwargs)
-       for field in self.fields.values():
-           default_label = str(field.label)
-           new_label = "new" + default_label
-           field.label = new_label
-
+        super().__init__(*args, **kwargs)
+        self.fields['username'].label = "新しいユーザー名"
+        
 
 class ImageSettingForm(forms.ModelForm):
     class Meta:
