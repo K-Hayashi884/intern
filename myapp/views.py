@@ -31,8 +31,6 @@ def index(request):
 def signup_view(request):
     if request.method == "GET":
         form = SignUpForm()
-        context = {"form": form, }
-        return render(request, "myapp/signup.html", context)
     elif request.method == "POST":
         """
         画像ファイルをformに入れた状態で使いたい時はformに'request.FILES'を加える。
@@ -48,8 +46,6 @@ def signup_view(request):
             username = form.cleaned_data.get('username')
             #フォームから'password1'を読み取る
             password = form.cleaned_data.get('password1')
-            #フォームから'img'を読み取る
-            image = form.cleaned_data.get('img')
             """
             認証情報のセットを検証するには authenticate() を利用してください。
             このメソッドは認証情報をキーワード引数として受け取ります。
@@ -68,17 +64,6 @@ def signup_view(request):
                 authenticate()が返すUserはuser.backendを持つので連携可能。
                 """
                 login(request, user)
-                """
-                ここで先ほどのUserを使いたいところだがauteticate()が返すUserは<class 'django.contrib.auth.models.User'>で
-                user_img.imageには入らない。ここにはインスタンスが入る。
-                インスタンスとは?→'https://djangobrothers.com/blogs/basic_knowledge_of_python/'
-                """
-                # user = User.objects.get(username=username)
-                # user_img = User(
-                #     user=user,
-                #     image=image,
-                # )
-                # user_img.save()
             return redirect("/")
         context = {"form": form, }
         return render(request, "myapp/signup.html", context)
@@ -102,8 +87,8 @@ class Logout(LoginRequiredMixin, LogoutView):
 @login_required
 def friends(request):
     user = request.user
-    # usernameの重複は許されていないので、usernameだけで一意に定まる
-    friends = User.objects.exclude(id=user.id)
+    # # usernameの重複は許されていないので、usernameだけで一意に定まる
+    # friends = User.objects.exclude(id=user.id)
 
     # 最新のトークも表示するVer 上級
     # ユーザーひとりずつの最新のトークを特定する
@@ -112,22 +97,21 @@ def friends(request):
     ).order_by('-time')
 
     friends = User.objects.exclude(id=user.id).annotate(
-        latest_msg_id=Subquery(
+        latest_msg_pk=Subquery(
             latest_msg.values("pk")[:1]
         ),
-        latest_msg_content=Subquery(
+        latest_msg_talk=Subquery(
             latest_msg.values("talk")[:1]
         ),
-        latest_msg_pub_date=Subquery(
+        latest_msg_time=Subquery(
             latest_msg.values("time")[:1]
         ),
-    ).order_by("-latest_msg_id")
+    ).order_by("-latest_msg_pk")
     # talk_list.append([friend, last_message, time_flag, datetime.datetime(1,1,1)])
 
     # 検索機能あり　上級
     form = FriendsSearchForm()
     
-    # GET（メッセージ送信あり）
     if request.method == "GET" and "friends_search" in request.GET:
         form = FriendsSearchForm(request.GET)
         
@@ -135,7 +119,7 @@ def friends(request):
         if form.is_valid():
             keyword = form.cleaned_data.get('keyword')
             # 何も入力せずに検索した時に全件を表示するようにするため、分岐しておく
-            if keyword != "":
+            if keyword:
                 # 入力に対して部分一致する友達を絞り込む
                 friends = friends.filter(username__icontains=keyword)
 
@@ -145,10 +129,8 @@ def friends(request):
 
                 # friendsに何らか情報があったとき
                 context = {
-                    "user": user,
                     "friends": friends,
                     "form": form,
-                    "friends": friends,
                     # 検索結果を表示する画面にするために、そうであることを明示する変数を作る
                     "is_searched": True,
                 }
@@ -162,7 +144,6 @@ def friends(request):
 
     # POSTでない（リダイレクトorただの更新）& 検索欄に入力がない場合
     context = {
-        "user": user,
         "friends": friends,
         # 検索機能（上級）機能がなければcontextに入れない
         "form": form,
@@ -173,11 +154,11 @@ def friends(request):
 
 
 @login_required
-def talk_room(request, friend_username):
+def talk_room(request, user_id):
     # ユーザ・友達をともにオブジェクトで取得
     user = request.user
     try:
-        friend = User.objects.get(username=friend_username)
+        friend = User.objects.get(id=user_id)
     except ObjectDoesNotExist:
         raise Http404
     # 自分→友達、友達→自分のトークを全て取得
@@ -234,25 +215,18 @@ def user_img_change(request):
         # userの情報が入った状態のFormを参照できます。
         # 今回はユーザ情報の変更の関数が多いのでこれをよく使います。
         form = ImageSettingForm(instance=user)
-        context = {
-            "form":form,
-            "user_img":user_img,
-        }
-        # 画像に関しては、formに入った状態では表示できないので
-        # 保存されたものを直接参照する必要があります。
-        return render(request, "myapp/user_img_change.html", context)
-    
+
     elif request.method == "POST":
-        form = ImageSettingForm(request.POST,request.FILES)
+        form = ImageSettingForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
-            user_img.image = form.cleaned_data.get('image')
-            user_img.save()
+            form.save()
             return user_img_change_done(request)
-        context = {
-            "form":form,
-            "user_img":user_img,
-        }
-        return render(request, "myapp/user_img_change.html", context)
+    context = {
+        "form":form,
+    }
+    # 画像に関しては、formに入った状態では表示できないので
+    # 保存されたものを直接参照する必要があります。
+    return render(request, "myapp/user_img_change.html", context)
 
 
 @login_required
@@ -304,7 +278,7 @@ def username_change(request):
         context = {
             "form":form,
         }
-        return render(request, "myapp/mail_change.html", context)
+        return render(request, "myapp/username_change.html", context)
 
 
 @login_required

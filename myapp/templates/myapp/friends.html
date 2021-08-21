@@ -37,13 +37,13 @@
         {% for friend in friends %}
         <li class="friends__list">
             <!-- それぞれが別のトーク画面に飛ぶようにリンクをはる -->
-            <a class="friends__list-link" href="{% url 'talk_room' friend.username %}">
+            <a class="friends__list-link" href="{% url 'talk_room' friend.id %}">
                 <img class="friends__list-usericon" src="/media/{{ friend.icon }}">
                 <div class="friends__list-username">{{ friend.username }}</div>
                 <!-- ここから最新のトークを表示する部分 -->
                 <div class="friends__list-talk">
-                    <p class="friends__list-talk-content">{{ friend.latest_msg_content }}</p>
-                    <p class="friends__list-talk-time">{{ friend.latest_msg_pub_date|date:"n/j H:i" }}</p>
+                    <p class="friends__list-talk-content">{{ friend.latest_msg_talk }}</p>
+                    <p class="friends__list-talk-time">{{ friend.latest_msg_time|date:"n/j H:i" }}</p>
                 </div>
             </a>
         </li>

@@ -14,7 +14,7 @@
     <button type="submit">変更</button>
     {# エラーメッセージを表示 #}
     {% if form.errors %}
-        {% for field in setting_form %}
+        {% for field in form %}
             {% for error in field.errors %}
                 <p>{{ error }}</p>
             {% endfor %}
