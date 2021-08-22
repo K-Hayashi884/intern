@@ -1,6 +1,6 @@
 from .models import User, Talk
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth import get_user_model
 User = get_user_model()
 #from django.contrib.auth.forms import AuthentificationForm 
@@ -35,8 +35,15 @@ class SignUpForm(UserCreationForm):
             #ここのuserをログイン中のuserを自動指定するようにしたい。
         #}
     
-class TalkForm(forms.Form):
+class TalkForm(forms.ModelForm):
+    class Meta:
+        model = Talk
+        fields= ('talk',)
     talk = forms.CharField(label='talk')
+    #talk_from = forms.CharField()
+    #pub_date = forms.DateTimeField()
+    #talk toに何らかUserのリストから入れることを表現したい
+    #talk_to = forms.ChoiceField(label="送信先", widget=forms.Select,  required=True) 
 
 class UserNameSettingForm(forms.ModelForm):
     class Meta:
@@ -62,17 +69,13 @@ class UserEmailSettingForm(forms.ModelForm):
            new_label = "new" + default_label
            field.label = new_label
 
-class UserPasswordSettingForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('password', )
-
-    def __init__(self, *args, **kwargs):
-       super().__init__(*args, **kwargs)
-       for field in self.fields.values():
-           default_label = str(field.label)
-           new_label = "new" + default_label
-           field.label = new_label
+#class UserPasswordSettingForm(PasswordChangeForm):
+#    """パスワード変更フォーム"""
+#
+#   def __init__(self, *args, **kwargs):
+#       super().__init__(*args, **kwargs)
+#        for field in self.fields.values():
+#            field.widget.attrs['class'] = 'form-control'
 
 class UserImageSettingForm(forms.ModelForm):
     class Meta:

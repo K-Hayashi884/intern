@@ -19,9 +19,13 @@ from .forms import (
     TalkForm,
     UserNameSettingForm,
     UserEmailSettingForm,
-    UserPasswordSettingForm,
+    #UserPasswordSettingForm,
     UserImageSettingForm,
 )
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+
 
 def index(request):
     params = {
@@ -91,9 +95,7 @@ def friends(request, num=1):
 
 @login_required
 def talk_room(request, num=1):
-    login_user = request.user #★
-    #ここでviewsのnumとURLのnumをつなぐ式を加えたい。いらない？
-    #→繋がってるぽい
+    login_user = request.user 
     user = User.objects.get(id=login_user.id)
     friend = User.objects.get(id=num) #なんとかここでページ分けしたユーザーを指定したい。
     print(user)
@@ -105,16 +107,16 @@ def talk_room(request, num=1):
     print(data)
     params = {
         'title': friend.username,
-        'form': TalkForm(),
         'data': data,
         'num': num,
+        'form': TalkForm(),
     }
-    if(request.method == 'POST'):
-        obj = Talk()
-        talk_from = login_user
-        talk_to = friend
-        form = TalkForm(request.POST, instance=obj)
-        form.save()
+    form = TalkForm(request.POST)
+    if form.is_valid():
+        talk = form.save(commit=False)
+        talk.talk_from = login_user
+        talk.talk_to = friend
+        talk.save()
     return render(request, "myapp/talk_room.html", params)
 
     #送信者を設定できるようにしたい。
@@ -173,27 +175,20 @@ def user_email_change(request): #ここにnum入れるのは止めてる
 
 @login_required
 def user_password_change(request): 
-    user = request.user
-    if request.method == "GET":
-        form = UserPasswordSettingForm(instance=user)
-        params = {
-            "form":form,
-            "title": 'パスワード変更',
-        }
-        return render(request, "myapp/user_password_change.html", params)
-
-    elif request.method == "POST":
-        form = UserPasswordSettingForm(request.POST,instance=user)
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
-            form.save()
-            return changecompleted(request)
-        params = {
-            "form":form,
-            "title": 'パスワード変更',
-        }
-        #nameの変更と同様にここにどのhtmlを繋ぐのがいいのかわからない
-        return render(request, "myapp/changecompleted.html", params)
-
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('changecompleted')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'myapp/user_password_change.html', {
+        'form': form
+    })
 @login_required
 def user_image_change(request): 
     user = request.user
@@ -253,7 +248,7 @@ def login_view(request):
            params = {
             "error": "※名前かパスワードが間違っています",
             }
-           return redirect('login_view')
+           return render(request, 'myapp/login.html', params)
     return render(request, 'myapp/login.html')
 
 #class login_view(LoginView):
