@@ -1,6 +1,6 @@
 {% extends 'myapp/base.html' %}
 
-{% block header-title %}設定{% endblock %}
+{% block header-title %}ユーザ名変更{% endblock %}
 
 {% load static %}
 {% block extra_style %}
@@ -8,5 +8,18 @@
 {% endblock %}
 
 {% block main %}
-
+<form class="my-form" action="" method="POST">
+    <div class="form-group">
+      <label for="id_username">ユーザネーム</label>
+      {{ form.username }}
+      {{ form.username.errors }}
+      
+    </div>
+    <div class="form-group">
+        <div>
+          <input type="submit" class="btn btn-default" value="登録">
+        </div>
+      </div>
+      {% csrf_token %}
+</form>
 {% endblock %}
