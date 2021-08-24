@@ -1,84 +1,70 @@
-from django.contrib.auth.models import User
 from django import forms
-from django.core.validators import FileExtensionValidator
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import User
-from django.core.exceptions import ValidationError
-from django.core.validators import validate_email
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm
+from django.utils.translation import gettext_lazy as _
 
-class UserCreateForm(UserCreationForm):
-    image = forms.ImageField(
-        required=False
-    )
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        #htmlの表示を変更可能にします
-        self.fields['username'].widget.attrs['class'] = 'form-control'
-        self.fields['email'].widget.attrs['class'] = 'form-control'
-        self.fields['password1'].widget.attrs['class'] = 'form-control'
-        self.fields['password2'].widget.attrs['class'] = 'form-control'
+from .models import User
 
+
+class SignUpForm(UserCreationForm):
     class Meta:
-       model = User
-       fields = ("username", "email", "password1", "password2", "image")
+        model = User
+        fields = ("username", "email", "password1", "password2", "icon")
 
-class LoginForm(AuthenticationForm):
+
+class LoginForm(AuthenticationForm):        
     def __init__(self, *args, **kwargs):
        super().__init__(*args, **kwargs)
        #htmlの表示を変更可能にします
-       self.fields['username'].widget.attrs['class'] = 'form-control'
-       self.fields['password'].widget.attrs['class'] = 'form-control'
+       self.fields["username"].widget.attrs["class"] = "form-control"
+       self.fields["password"].widget.attrs["class"] = "form-control"
 
-class UserChangeForm(forms.ModelForm):
-  
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.user = kwargs.get('instance', None)
-        self.fields['username'].widget.attrs['class'] = 'form-control'
- 
+
+class MailSettingForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = (
-            "username",
-        )
-
-class EmailChangeForm(forms.ModelForm):
- 
-    # 入力を必須にするために、required=Trueで上書き
-    email = forms.EmailField(required=True)
- 
+        fields = ("email", )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user = kwargs.get('instance', None)
-        self.fields['email'].widget.attrs['class'] = 'form-control'
- 
+        self.fields["email"].label = "新しいメールアドレス"
+
+
+class UserNameSettingForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = (
-            "email",
-        )
- 
-    def clean_email(self):
-        email = self.cleaned_data["email"]
- 
-        try:
-            validate_email(email)
-        except ValidationError:
-            raise ValidationError("正しいメールアドレスを指定してください。")
- 
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return email
-        else:
-            if self.user.email == email:
-                return email
- 
-            raise ValidationError("このメールアドレスは既に使用されています。別のメールアドレスを指定してください")
- 
-class UserPasswordChangeForm(PasswordChangeForm):
-    pass
+        fields = ("username", )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["username"].label = "新しいユーザー名"
+
+
+class ImageSettingForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("icon", )
+
+
+class PasswordChangeForm(PasswordChangeForm):
+    """
+    Django標準パスワード変更フォーム
+    Djangoはユーザモデルに未加工の (単なるテキストの) パスワードは保存せず
+    ハッシュ値でのみ保存します。
+    したがって、ユーザのパスワード属性を直接操作できない。
+    よってパスワード編集のために標準で用意されているformを使います。
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+
+
+# 友達の中から任意のユーザーを検索
+class FriendsSearchForm(forms.Form):
+    keyword = forms.CharField(label="検索", required=False, widget=forms.TextInput(attrs={"placeholder": "ユーザー名で検索"}))
+    
+
+# トークの送信のためのform
+# メッセージを送信するだけで、誰から誰か、時間は全て自動で対応できるのでこれだけで十分
+class TalkForm(forms.Form):
+    talk = forms.CharField(label="talk")

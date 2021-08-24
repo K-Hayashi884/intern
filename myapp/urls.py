@@ -1,18 +1,24 @@
 from django.urls import path
 from . import views
-from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('signup', views.signup_view, name='signup_view'),
-    path('login', views.login_view, name='login_view'),
+    path('login', views.Login.as_view(), name='login_view'),
     path('friends', views.friends, name='friends'),
-    path('talk_room', views.talk_room, name='talk_room'),
+    
+    # トーク画面
+    # 誰とのトークかを、URLにて判別
+    # ユーザー名に重複が許されていないので、ユーザー名で判別
+    path('talk_room/<int:user_id>/', views.talk_room, name='talk_room'),
     path('setting', views.setting, name='setting'),
-    path('change_icon', views.change_icon, name='change_icon'),
-    path('change_pass', views.change_pass, name='change_pass'),
-    path('change_email', views.change_email, name='change_email'),
-    path('change_user', views.change_user, name='change_user'),
     path('logout',views.Logout.as_view(), name='logout_view'),
-    path('change_pass_done',views.change_pass_done, name='change_pass_done'),
+    path('password_change/', views.PasswordChange.as_view(), name='password_change'),
+    path('password_change_done/', views.PasswordChangeDone.as_view(), name='password_change_done'),
+    path('user_img_change/', views.user_img_change, name='user_img_change'),
+    path('user_img_change_done/', views.user_img_change_done, name='user_img_change_done'),
+    path('mail_change/', views.mail_change, name='mail_change'),
+    path('mail_change_done/', views.mail_change_done, name='mail_change_done'),
+    path('username_change/', views.username_change, name='username_change'),
+    path('username_change_done/', views.username_change_done, name='username_change_done'),
 ]

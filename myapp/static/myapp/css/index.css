@@ -1,24 +1,21 @@
-.toLogin{
-    margin-left: auto;
-    margin-right: auto;
-    width:40vw;
+/* ボタン */
+.index-button__wrapper{
+    position: absolute;
+    top: 40%;
+    width: 100%;
     text-align: center;
-    margin-top:40vh;
 }
-.toLogin a, .toSignup a{
+.index-button__wrapper a {
     text-decoration: none;
-    color:#000;
-    padding:2.5vw;
-    padding-left: 7.5vw;
-    padding-right:7.5vw;
-    border: 1px solid #999;
-    border-radius: 3vw;
-    font-size: 1rem;
 }
-.toSignup{
-    margin-left: auto;
-    margin-right: auto;
-    width:40vw;
+.index-button{
+    display: block;
+    width: 30%;
     text-align: center;
-    margin-top:7.5vw;
+    margin: 1rem auto;
+    padding: 2% 0%;
+    border-radius: 10px;
+    border: solid 1px #9b9b9b;
+    font-size: 1rem;
+    color: #000;
 }
