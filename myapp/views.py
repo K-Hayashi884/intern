@@ -28,6 +28,8 @@ def index(request):
 def signup_view(request):
     if request.method == "GET":
         form = SignUpForm()
+        params = {"form":form,}
+        return render(request,"myapp/signup.html",params)
     elif request.method == "POST":
         """
         画像ファイルをformに入れた状態で使いたい時はformに"request.FILES"を加える。
