@@ -7,8 +7,8 @@ class CustomUser(AbstractUser):
 
 # トークメッセージのクラス
 class Talk(models.Model):
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE,\
-            related_name='talk_owner')
-    friend = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    talk_from = models.ForeignKey(CustomUser, on_delete=models.CASCADE,\
+            related_name='talk_from')
+    talk_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField(max_length=1000)
-    pub_data = models.DateTimeField(auto_now_add=True)
+    pub_date = models.DateTimeField(auto_now_add=True)

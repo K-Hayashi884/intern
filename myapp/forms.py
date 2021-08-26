@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
-from .models import CustomUser
+from .models import CustomUser, Talk
 
 # アカウント作成フォーム
 class SignupForm(UserCreationForm):
@@ -15,7 +15,6 @@ class LoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
-            field.widget.attrs['placeholder'] = field.label
 
 # パスワード変更用フォーム
 class PasswordChange_Form(PasswordChangeForm):
@@ -23,7 +22,6 @@ class PasswordChange_Form(PasswordChangeForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
-            field.widget.attrs['placeholder'] = field.label
 
 # ユーザー名変更用フォーム
 class UsernameChangeForm(forms.ModelForm):
@@ -42,3 +40,11 @@ class IconChangeForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('account_image', )
+
+# トーク内容送信フォーム
+class TalkContentForm(forms.Form):
+    content = forms.CharField(max_length=1000, \
+        widget=forms.Textarea(attrs={'class':'form-control', 'rows':1}))
+    
+    def __init__(self, *args, **kwargs):
+        super(TalkContentForm, self).__init__(*args, **kwargs)

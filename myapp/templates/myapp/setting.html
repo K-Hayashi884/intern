@@ -11,12 +11,11 @@
 
 {% block content %}
     <section>
-        <a href="{% url 'edit_username' %}" class="btn btn_01"><span>ユーザー名変更</span></a>
-        <a href="{% url 'edit_email' %}" class="btn btn_02"><span>メールアドレス変更</span></a>
-        <a href="{% url 'edit_icon' %}" class="btn btn_03"><span>アイコン変更</span></a>
-        <a href="{% url 'pass_change' %}" class="btn btn_04"><span>パスワード変更</span></a>            
-        <a href="{% url 'logout' %}" class="btn btn_05"><span>ログアウト</span></a>
+        <a href="{% url 'edit_username' %}" class="btn"><span>ユーザー名変更</span></a>
+        <a href="{% url 'edit_email' %}" class="btn"><span>メールアドレス変更</span></a>
+        <a href="{% url 'edit_icon' %}" class="btn"><span>アイコン変更</span></a>
+        <a href="{% url 'pass_change' %}" class="btn"><span>パスワード変更</span></a>            
+        <a href="{% url 'logout' %}" class="btn"><span>ログアウト</span></a>
     </section>
-
 {% endblock %}
 

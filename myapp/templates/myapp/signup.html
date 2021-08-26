@@ -13,6 +13,7 @@
 {% block content %}
     <form action="{% url 'signup_view' %}" enctype='multipart/form-data' method='post'>
         <table class='signup_form'>
+            {{ signup_form.non_foeld_errors }}
             {% csrf_token %}
             <tr><th>Username:</th><td>{{ signup_form.username }}</td></tr>
             <tr><th>Email<br>address:</th><td>{{ signup_form.email }}</td></tr>

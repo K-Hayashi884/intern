@@ -10,14 +10,23 @@
 {% endblock %}
 
 {% block content %}
+<div class='container'>
 <form action='' method='POST'>
+    {{ form.non_foeld_errors }}
     {% csrf_token %}
-    {{ form.as_p }}
-    
+    <div>
+        <label for='username'>ユーザー名：</label>
+        {{ form.username }}
+    </div>
+    <div>
+        <label for='password'>パスワード：</label>
+        {{ form.password }}
+    </div>
     <div class='login-btn'>
         <button type='submit' class='btn'>ログイン</button>
     </div>
 </form>
+</div>
 
 {% for item in form %}
     <ul>

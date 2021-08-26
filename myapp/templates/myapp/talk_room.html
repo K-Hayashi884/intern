@@ -1,1 +1,43 @@
-TR
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}" />
+{% endblock %}
+
+{% block header %}
+    <header class="header wrapper">
+        <a href='{% url "friends" %}' class='back'>＜</a>
+        <div class="title">
+            {{ partner }}
+        </div>
+        <nav><a href='{% url "talk_room" id %}' class='update'><span>更新</span></a></nav>
+    </header>
+{% endblock %}
+    
+
+
+{% block content %}
+    {% for message in messages %}
+    <p>>> {{ message.talk_from }}{{ message.pub_date }}</p>
+    <p> {{ message.content }}</p>
+    {% endfor %}
+{% endblock %}
+
+{% block footer %}
+<footer class="footer-container">
+    <div class="footer-container__textarea">
+        <form action='{% url "talk_room" id %}' method='POST'>
+                {% csrf_token %}
+                {{ form.non_foeld_errors }}
+                {% for field in form %}
+                        {{ field }}
+                {% endfor %}
+    </div>
+        <div class="footer-container__button">
+            <button type='submit' class='btn'>送信</button>
+        </div>
+        </form>
+    </div>
+</footer>
+{% endblock %}

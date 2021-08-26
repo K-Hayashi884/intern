@@ -1,21 +1,31 @@
-html, body {
-    height: 100%;
-}
-
-.container {
+.container{
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
-.item {
-    border-width: thin;
-    border-style: solid;
+.item{
+    display: flex;
+    height: 66px;
+    border-bottom: 1px solid #858585;
+    margin: 5px;
+}
+
+.talk_partner {
+    padding-left: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
 }
 
 .user-icon{
-    height: 20px;
-    width: 20px;
+    height: 60px;
+    width: 60px;
     border-radius: 50%;
-    border: 1.5px solid #eee;
+    border: 1px solid #000;
     object-fit: cover;
 }

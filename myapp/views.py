@@ -8,7 +8,7 @@ from django.contrib.auth.views import \
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser, Talk
-from .forms import UsernameChangeForm, EmailChangeForm, IconChangeForm
+from .forms import UsernameChangeForm, EmailChangeForm, IconChangeForm, TalkContentForm
 
 # 復習がしたいと思いクラスと関数が入り乱れています。ご了承ください。
 
@@ -80,21 +80,20 @@ def talk_room(request, id):
 
     if request.method == 'POST':
         talk = Talk(talk_from=user, talk_to=friend, \
-            content=request.POST)
+            content=request.POST['content'])
         talk.save()
 
-    messages = Talk.objects.filter(Q(talk_from__in=member)| \
-        Q(talk_to__in=member)).order_by('pub_date')
+    messages = Talk.objects.filter(Q(talk_from=user, talk_to=friend)| \
+        Q(talk_from=friend, talk_to=user)).order_by('pub_date')
     
     params = {
+        'partner': friend.username,
         'messages': messages,
+        'id': id,
+        'form': TalkContentForm()
     }
         
-
-
-    
-
-    return render(request, "myapp/talk_room.html")
+    return render(request, "myapp/talk_room.html", params)
 
 @login_required(login_url='/login')
 def setting(request):
