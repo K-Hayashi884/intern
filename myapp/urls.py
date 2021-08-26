@@ -19,5 +19,3 @@ urlpatterns = [
     path('user_image_change', views.user_image_change, name='user_image_change'),
     path('changecompleted', views.changecompleted, name='changecompleted'),
 ]
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -22,22 +22,19 @@
     {% block content %}
     <h1 class="display-4 text-primary">
         {{title}}</h1>
-        #ここ死んでるけど、トーク履歴(厳密には友達のデータを検索する)の機能をつけたい
-        #---------------------------
-    <div class="mt-5"></div>
-    <table class="table">
-        <tr>
-            <th class="py-1">name</th>
-            <th class="py-1">datetime</th>
-            <th class="py-1">talk</th>
-        </tr>
     {% for item in data %}
-        <tr>    
-            <td class="py-2">{{item.username}}</td>
-            <td class="py-2">{{item.pub_date}}</td>
-            <td class="py-2">{{item.talk}}</td>
-            <td><a href="{% url 'talk_room' item.id  %}">トークへ</a></td>
+        <tr>
+        <li class="friends__list">
+            <a class="friends__list-link" href="{% url 'talk_room' item.id %}" >
+                <img src="{{ item.image.url }}" class="user-icon" width="50" height="50"/>
+                <div class="py-2">{{item.username}}</div>
+            <div class="friends__list-talk">
+                    <p class="py-2">{{item.latest_msg_time}}</p>
+                    <p class="py-2">{{item.latest_msg_talk}}</p>
+            </div>
+        </li>
         </tr>
+
     {% endfor %}
     </table>
     {% endblock %}

@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 #from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, OuterRef, Subquery
 from django.contrib.auth.views import(LoginView, LogoutView)
 #from .forms import LoginForm
 from django.contrib.auth.forms import AuthenticationForm 
@@ -25,6 +25,8 @@ from .forms import (
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
+from django.contrib.auth import logout
+
 
 
 def index(request):
@@ -63,35 +65,37 @@ def signup_view(request):
 
 @login_required
 def friends(request, num=1):
-    ##user = request.user #★
-    #login_user = request.user #★
-    #user = User.objects.get(id=login_user.id)
-    #data = Talk.objects.filter(Q(talk_to = user) | Q(talk_from = user))
-    ##これ後でトークじゃなくて、Userを参照する形にする。orそのユーザーとのトークの一番上だけを参照する設定にする。
-    #params = {
-    #    'title': 'Friends',
-    #    'form': TalkForm(),
-    #    'data': data,
-    #    'num': num,
-    #}
-    #return render(request, "myapp/friends.html", params)
-
-    #ユーザーをdataにあてがうパターン
     login_user = request.user #★
     user = User.objects.get(id=login_user.id)
-    data = User.objects.exclude(
-            Q(id=login_user.id) |
-            Q(id=1)
-        ).distinct()
-    #ここでlogin_user.idをはじきたいのと、HTMLの修正が必要
+    latest_msg = Talk.objects.filter(
+            Q(talk_to = user, talk_from =OuterRef("pk")) | 
+            Q(talk_to =OuterRef("pk"), talk_from = user)
+        ).distinct().order_by("-pub_date")
+
+    friends = User.objects.exclude(Q(id=user.id)|Q(id=1)).annotate(
+        latest_msg_pk=Subquery(
+            latest_msg.values("pk")[:1]
+        ),
+        latest_msg_talk=Subquery(
+            latest_msg.values("talk")[:1]
+        ),
+        latest_msg_time=Subquery(
+            latest_msg.values("pub_date")[:1]
+        ),
+    ).order_by("-latest_msg_pk")
+    #data = User.objects.exclude(
+    #        Q(id=login_user.id) |
+    #        Q(id=1)
+    #    ).distinct()
     params = {
         'title': 'トーク一覧',
-        #'form': TalkForm(),
-        'data': data,
+        'form': TalkForm(),
+        'data': friends,
         'num': num,
     }
-    print(data)
     return render(request, "myapp/friends.html", params)
+
+
 
 @login_required
 def talk_room(request, num=1):
@@ -123,7 +127,13 @@ def talk_room(request, num=1):
     
 @login_required
 def setting(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('index')
+
     return render(request, "myapp/setting.html")
+
+
 
 @login_required
 def user_name_change(request): #ここにnum入れるのは止めてる
@@ -145,7 +155,6 @@ def user_name_change(request): #ここにnum入れるのは止めてる
             "form":form,
             "title": 'ユーザー名変更',
         }
-        #ここなんでわざわざemailなのかわからない
         return render(request, "myapp/changecompleted.html", params)
     
 
@@ -169,7 +178,6 @@ def user_email_change(request): #ここにnum入れるのは止めてる
             "form":form,
             "title": 'メールアドレス変更',
         }
-        #nameの変更と同様にここにどのhtmlを繋ぐのがいいのかわからない
         return render(request, "myapp/changecompleted.html", params)
 
 
@@ -179,11 +187,8 @@ def user_password_change(request):
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
+            update_session_auth_hash(request, user) 
             return redirect('changecompleted')
-        else:
-            messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'myapp/user_password_change.html', {
@@ -209,7 +214,6 @@ def user_image_change(request):
             "form":form,
             "title": 'アイコン変更',
         }
-        #nameの変更と同様にここにどのhtmlを繋ぐのがいいのかわからない
         return render(request, "myapp/changecompleted.html", params)
 
 
