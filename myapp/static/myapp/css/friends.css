@@ -1,0 +1,21 @@
+html, body {
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.item {
+    border-width: thin;
+    border-style: solid;
+}
+
+.user-icon{
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border: 1.5px solid #eee;
+    object-fit: cover;
+}

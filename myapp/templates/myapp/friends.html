@@ -1,0 +1,25 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}" />
+{% endblock %}
+
+{% block header-title %}
+    友達
+{% endblock %}
+
+{% block content %}
+    <div class='container'>
+    {% for friend in friends %}
+        <div class='item'>
+            {% if friend.account_image %}
+            <img src='{{ friend.account_image.url }}' class='user-icon'>
+            {% else %}
+            <img src='{% static "myapp/img/icon.png" %}' class='user-icon'>
+            {% endif %}
+            <p>{{ friend.username }}</p>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}
