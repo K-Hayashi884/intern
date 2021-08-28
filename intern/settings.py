@@ -126,3 +126,7 @@ AUTH_USER_MODEL = 'myapp.user'
 # 画像（ユーザーアイコン）にアクセスするための指定
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
+
+LOGIN_URL = 'login_view'
+LOGIN_REDIRECT_URL = '/friends'
+LOGOUT_REDIRECT_URL = '/'

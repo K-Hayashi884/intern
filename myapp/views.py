@@ -1,7 +1,12 @@
+from django.contrib.auth.views import LoginView
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
 
-from .forms import SignUpForm
+from .forms import (
+    SignUpForm,
+    LoginForm,
+)
+from .models import User
 
 
 def index(request):
@@ -49,5 +54,14 @@ def signup_view(request):
     return render(request, "myapp/signup.html", context)
 
 
-def login_view(request):
-    return render(request, "myapp/login.html")
+class Login(LoginView):
+    """
+    ログインページ
+    GETの時は指定されたformを指定したテンプレートに表示
+    POSTの時はloginを試みる。→成功すればdettingのLOGIN_REDIRECT_URLで指定されたURLに飛ぶ
+    """
+    authentication_form = LoginForm
+    template_name = "myapp/login.html"
+
+def friends(request):
+    return render(request, "myapp/friends.html")
