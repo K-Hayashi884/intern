@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 
 
 def index(request):
@@ -9,12 +9,3 @@ def signup_view(request):
 
 def login_view(request):
     return render(request, "myapp/login.html")
-
-def friends(request):
-    return render(request, "myapp/friends.html")
-
-def talk_room(request):
-    return render(request, "myapp/talk_room.html")
-
-def setting(request):
-    return render(request, "myapp/setting.html")
