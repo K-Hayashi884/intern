@@ -62,8 +62,8 @@ def signup_view(request):
                 """
                 login(request, user)
             return redirect("/")
-        context = {"form": form, }
-        return render(request, "myapp/signup.html", context)
+    context = {"form": form, }
+    return render(request, "myapp/signup.html", context)
 
 
 class Login(LoginView):
