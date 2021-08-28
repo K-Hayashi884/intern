@@ -20,3 +20,9 @@ class LoginForm(AuthenticationForm):
 # 友達の中から任意のユーザーを検索
 class FriendsSearchForm(forms.Form):
     keyword = forms.CharField(label="検索", required=False, widget=forms.TextInput(attrs={"placeholder": "ユーザー名で検索"}))
+
+
+# トークの送信のためのform
+# メッセージを送信するだけで、誰から誰か、時間は全て自動で対応できるのでこれだけで十分
+class TalkForm(forms.Form):
+    talk = forms.CharField(label="talk")

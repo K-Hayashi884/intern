@@ -1,16 +1,18 @@
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, OuterRef, Subquery
+from django.http import Http404
 from django.shortcuts import redirect, render
 
 from .forms import (
     SignUpForm,
     LoginForm,
+    TalkForm,
     FriendsSearchForm,
 )
 from .models import User, Talk
-
 
 def index(request):
     return render(request, "myapp/index.html")
@@ -133,9 +135,43 @@ def friends(request):
     return render(request, "myapp/friends.html", context)
 
 
+@login_required
 def talk_room(request, user_id):
-    return render(request, "myapp/talk_room.html")
+    # ユーザ・友達をともにオブジェクトで取得
+    user = request.user
+    try:
+        friend = User.objects.get(id=user_id)
+    except ObjectDoesNotExist:
+        raise Http404
+    # 自分→友達、友達→自分のトークを全て取得
+    talk = Talk.objects.filter(Q(talk_from=user, talk_to=friend) | Q(talk_to=user, talk_from=friend))
+    # 時系列で並べ直す
+    talk = talk.order_by("time")
+    # 送信form
+    form = TalkForm()
+    # メッセージ送信だろうが更新だろが、表示に必要なパラメーターは変わらないので、この時点でまとめて指定
+    context = {
+        "form": form,
+        "talk": talk,
+    }
+    
+    # POST（メッセージ送信あり）
+    if request.method == "POST":
+        # 送信内容を取得
+        form = TalkForm(request.POST)
 
+        # 送信内容があった場合
+        if form.is_valid():
+            # 送信内容からメッセージを取得
+            text = form.cleaned_data.get("talk")
+            # 送信者、受信者、メッセージ、タイムスタンプを割り当てて保存
+            new_talk = Talk(talk=text, talk_from=user, talk_to=friend)
+            new_talk.save()
+            # 更新
+            return render(request, "myapp/talk_room.html", context)
+            
+    # POSTでない（リダイレクトorただの更新）&POSTでも入力がない場合
+    return render(request, "myapp/talk_room.html", context)
 
 @login_required
 def setting(request):
