@@ -1,18 +1,25 @@
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, OuterRef, Subquery
 from django.http import Http404
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
 
 from .forms import (
     SignUpForm,
     LoginForm,
     TalkForm,
     FriendsSearchForm,
+    MailSettingForm,
+    ImageSettingForm,
+    PasswordChangeForm,
+    UserNameSettingForm,
 )
 from .models import User, Talk
+
 
 def index(request):
     return render(request, "myapp/index.html")
@@ -67,6 +74,11 @@ class Login(LoginView):
     """
     authentication_form = LoginForm
     template_name = "myapp/login.html"
+
+
+class Logout(LoginRequiredMixin, LogoutView):
+    """ログアウトページ"""
+    pass
 
 
 @login_required
@@ -173,6 +185,100 @@ def talk_room(request, user_id):
     # POSTでない（リダイレクトorただの更新）&POSTでも入力がない場合
     return render(request, "myapp/talk_room.html", context)
 
+
 @login_required
 def setting(request):
     return render(request, "myapp/setting.html")
+
+
+# setting以下のchange系の関数は
+# request.methodが"GET"か"POST"かで明示的に分けています。
+# これはformの送信があった時とそうで無いときを区別しています。
+@login_required
+def user_img_change(request):
+    user = request.user
+    if request.method == "GET":
+        # モデルフォームには(instance=user)をつけることで
+        # userの情報が入った状態のFormを参照できます。
+        # 今回はユーザ情報の変更の関数が多いのでこれをよく使います。
+        form = ImageSettingForm(instance=user)
+
+    elif request.method == "POST":
+        form = ImageSettingForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return  redirect("user_img_change_done")
+    context = {
+        "form":form,
+    }
+    return render(request, "myapp/user_img_change.html", context)
+
+
+@login_required
+def user_img_change_done(request):
+    return render(request, "myapp/user_img_change_done.html")
+
+
+@login_required
+def mail_change(request):
+    user = request.user
+    if request.method == "GET":
+        form = MailSettingForm(instance=user)
+
+    elif request.method == "POST":
+        form = MailSettingForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+            return  redirect("mail_change_done")
+    context = {
+        "form":form,
+    }
+    return render(request,"myapp/mail_change.html",context)
+
+
+@login_required
+def mail_change_done(request):
+    return render(request, "myapp/mail_change_done.html")
+
+
+@login_required
+def username_change(request):
+    user = request.user
+    if request.method == "GET":
+        form = UserNameSettingForm(instance=user)
+
+    elif request.method == "POST":
+        form = UserNameSettingForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+            return  redirect("username_change_done")
+    context = {
+        "form":form,
+    }
+    return render(request, "myapp/username_change.html", context)
+
+
+@login_required
+def username_change_done(request):
+    return render(request, "myapp/username_change_done.html")
+
+
+class PasswordChange(PasswordChangeView):
+    """
+    Django標準パスワード変更ビュー
+    Attributes:
+    ・template_name
+    表示するテンプレート
+    ・success_url
+    処理が成功した時のリダイレクト先
+    ・form_class
+    パスワード変更フォーム
+    """
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy("password_change_done")
+    template_name = "myapp/password_change.html"
+
+
+class PasswordChangeDone(PasswordChangeDoneView):
+    """Django標準パスワード変更後ビュー"""
+    template_name = "myapp/password_change_done.html"
