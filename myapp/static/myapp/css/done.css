@@ -1,0 +1,11 @@
+/* 表示文 */
+.display {
+    text-align: center;
+    margin:20px;
+}
+
+/* フッターの固定 */
+.footer {
+    position: absolute;
+    bottom: 0;
+}

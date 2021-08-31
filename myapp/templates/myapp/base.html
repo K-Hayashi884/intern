@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/base.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
     {% block extra_style %}{% endblock %}
     <title>DeMiAインターン</title>
 </head>
 <body>
+<div class='body-container'>
     {% block header %}
     <header class="header">
         <div class="header-container">
@@ -41,5 +43,6 @@
         </div>
     </footer>
     {% endblock %}
+</div>
 </body>
 </html>

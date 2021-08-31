@@ -10,16 +10,29 @@
 {% endblock %}
 
 {% block content %}
+<div>
 <form action='{% url "pass_change" %}' method='POST'>
     {% csrf_token %}
     {{ form.non_foeld_errors }}
-    {% for field in form %}
-    <div>
-        <label for='{{ field.id_for_label }}'>{{ field.label_tag }}</label>
-        {{ field }}
-        {{ field.errors }}
+    <div class='form'>
+        {{ form.old_password }}
     </div>
-    {% endfor %}
-    <button type='submit' class='btn'>変更</button>
+    <div class='form'>
+        {{ form.new_password1 }}
+    </div>
+    <div class='form'>
+        {{ form.new_password2 }}
+    </div>
+    {% if form.errors %}
+        {% for item in form %}
+            <div>
+                {{ item.errors }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <button type='submit' class='submit-button'>変更</button>
+</form>
+</div>
+
 {% endblock %}
 

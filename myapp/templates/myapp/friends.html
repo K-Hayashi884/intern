@@ -11,7 +11,7 @@
 
 {% block content %}
     <div class='container'> 
-    {% for friend in friends %}
+    {% for friend, message, time in info %}
     <a href="{% url 'talk_room' friend.id %}">
         <div class='item wrap'>
             {% if friend.account_image %}
@@ -19,8 +19,17 @@
             {% else %}
                 <img src='{% static "myapp/img/icon.png" %}' class='user-icon'>
             {% endif %}
-            <div class='talk_partner'>
+            <div class='name-talk-container'>
+                <div class='talk_partner'>
                 {{ friend.username }}
+                </div>
+
+                {% if message %}
+                <div class='talk-container'>
+                    <div>{{ message.content }}</div>
+                    <div>{{ time }}</div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </a>

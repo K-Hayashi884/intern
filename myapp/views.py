@@ -10,7 +10,9 @@ from django.contrib.auth.decorators import login_required
 from .models import CustomUser, Talk
 from .forms import UsernameChangeForm, EmailChangeForm, IconChangeForm, TalkContentForm
 
-# 復習がしたいと思いクラスと関数が入り乱れています。ご了承ください。
+from django.utils.timezone import localtime
+from django.utils import timezone
+
 
 def index(request):
     return render(request, "myapp/index.html")
@@ -22,14 +24,12 @@ class Signup_View(TemplateView):
         post() : POST送信時の関数、フォームのチェック、保存をする　"""
 
     def __init__(self):
-        self.params = {
-            'error_display': False, 
+        self.params = { 
             'signup_form': SignupForm(),
         }
 
     def get(self, request):
         self.params['signup_form'] = SignupForm()
-        self.params['error_display'] = False
         return render(request, 'myapp/signup.html', self.params)
 
     def post(self, request):
@@ -39,10 +39,6 @@ class Signup_View(TemplateView):
             self.params['signup_form'].save()
             # indexにリダイレクト
             return redirect(to='index')
-        else:
-            # エラー表示
-            self.params['error_display'] = True
-            print(self.params['signup_form'].errors)
             
 
         return render(request, 'myapp/signup.html', self.params)
@@ -55,29 +51,54 @@ class Login_View(LoginView):
 
 @login_required(login_url='/login')
 def friends(request):
+    # ログインユーザーを取得し、検索から自分の友達を取得
     user = request.user
     friends = CustomUser.objects.exclude(id=user.id)
+
+    # それぞれの友達について最新メッセージと表示時間を取得し、リストに記録
+    info = []
+    for friend in friends:
+        # 最新のメッセージの取得
+        latest_message = Talk.objects.filter(Q(talk_from=user, talk_to=friend)| \
+                    Q(talk_from=friend, talk_to=user)).order_by('pub_date').last()
+        # 表示情報の処理
+        if latest_message:
+            # 長すぎる文章のカット
+            if len(latest_message.content) > 35:
+                latest_message.content = latest_message.content[:35] + '...'
+            # 表示したい時刻情報の決定    
+            jst_recorded_time = localtime(latest_message.pub_date)
+            now = localtime(timezone.now())
+            if jst_recorded_time.date() == now.date():
+                display_time = f'{jst_recorded_time:%H:%M}'
+            elif jst_recorded_time.year == now.year:
+                display_time = f'{jst_recorded_time:%m/%d}'
+            else:
+                display_time = f'{jst_recorded_time:%m/%d/%Y}'
+        else:
+            display_time = None
+
+
+        # 最新のメッセージと対応する相手をタプルとしてリストに格納
+        info.append((friend, latest_message, display_time))
+
+    
+    
     carams = {
-        'friends':friends
+        'info': info
     }
 
     return render(request, "myapp/friends.html", carams)
 
 @login_required(login_url='/login')
 def talk_room(request, id):
+    """ talkroomの関数
+        共通でメッセージを表示
+        post時メッセージをデータベースに保存 """
     user = request.user
     friend = CustomUser.objects.get(id=id)
-    member = [user, friend]
-    # talkroomの取得
-    talkroom_A = Talk.objects.filter(talk_from=user)\
-        .filter(talk_to=friend)
-    talkroom_B = Talk.objects.filter(talk_from=friend)\
-        .filter(talk_to=user)
-    if talkroom_A == None:
-        create_talkroom(user, friend)
-    if talkroom_B ==None:
-        create_talkroom(friend, user)
 
+    # postで送られてくるメッセージはデータベースに保存
     if request.method == 'POST':
         talk = Talk(talk_from=user, talk_to=friend, \
             content=request.POST['content'])
@@ -86,9 +107,16 @@ def talk_room(request, id):
     messages = Talk.objects.filter(Q(talk_from=user, talk_to=friend)| \
         Q(talk_from=friend, talk_to=user)).order_by('pub_date')
     
+    # messageと表示時間が一体となったタプルを持つリストを制作
+    message_list = []
+    for message in messages:
+        jst_recorded_time = localtime(message.pub_date)
+        display_time = f'{jst_recorded_time:%m/%d<br>%H:%M}'
+        message_list.append((message, display_time))
+
     params = {
         'partner': friend.username,
-        'messages': messages,
+        'message_list': message_list,
         'id': id,
         'form': TalkContentForm()
     }
@@ -185,10 +213,6 @@ def edit_icon_done(request):
     }
     return render(request, 'myapp/done.html', carams)
 
-
-def create_talkroom(talk_from, talk_to):
-    talk = Talk(talk_from=talk_from, talk_to=talk_to)
-    talk.save()
 
 
 

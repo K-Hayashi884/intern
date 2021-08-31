@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/login.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/edit.css' %}" />
 {% endblock %}
 
 {% block header-title %}
@@ -11,28 +11,27 @@
 
 {% block content %}
 <div class='container'>
-<form action='' method='POST'>
+<form action='login' method='POST'>
     {{ form.non_foeld_errors }}
     {% csrf_token %}
-    <div>
-        <label for='username'>ユーザー名：</label>
+
+    <div class='form'>
         {{ form.username }}
     </div>
-    <div>
-        <label for='password'>パスワード：</label>
+
+    <div class='form'>
         {{ form.password }}
     </div>
-    <div class='login-btn'>
-        <button type='submit' class='btn'>ログイン</button>
-    </div>
+
+    {% if form.errors %}
+        <div>
+            ユーザー名、またはパスワードが正しくありません。
+        </div>
+    {% endif %}
+
+    <div><button type='submit' class='submit-button'>ログイン</button></div>
 </form>
 </div>
-
-{% for item in form %}
-    <ul>
-        <li>{{ item.errors }}</li>
-    </ul>
-{% endfor %}
 
 {% endblock %}
 

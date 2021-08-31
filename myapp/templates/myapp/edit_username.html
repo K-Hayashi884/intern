@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/pass_change.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/edit.css' %}" />
 {% endblock %}
 
 {% block header-title %}
@@ -11,14 +11,22 @@
 
 {% block content %}
 <form action='{% url "edit_username"  %}' method='POST'>
+<div class='container'>
     {% csrf_token %}
     {{ form.non_foeld_errors }}
-    {% for field in form %}
-    <div>
-        <label for='{{ field.id_for_label }}'>{{ field.label_tag }}</label>
-        {{ field }}
-        {{ field.errors }}
+    <div class='form'>
+        <label>ユーザー名：</label>
+        {{ form.username }}
     </div>
-    {% endfor %}
-    <button type='submit' class='btn'>変更</button>
+    {% if form.errors %}
+        {% for item in form %}
+            <div>
+                {{ item.errors }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div><button type='submit' class='submit-button'>変更</button></div>
+</div>
+</form>
+
 {% endblock %}

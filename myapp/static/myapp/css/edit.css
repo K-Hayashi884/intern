@@ -1,0 +1,71 @@
+/* content */
+main {
+    flex: 1;
+}
+
+.container {
+    height: 100%;
+    width: 100%;
+}
+
+div {
+    text-align: center;
+    font-size: 14px;
+}
+
+/* フォーム */
+.form {
+    margin: 20px;
+}
+
+.form-control {
+    height: 2.4em;
+    width: 40%;
+    padding: 0 16px;
+    border-radius: 4px;
+    border: none;
+    box-shadow: 0 0 0 1px #ccc inset;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.form-control:focus {
+    outline: 0;
+    box-shadow: 0 0 0 2px rgb(33, 150, 243) inset;
+}
+
+/* 送信ボタン */
+
+.submit-button {
+    display: inline-block;
+    width: 20%;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+    font-weight: bold;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    border: 2px solid transparent;
+    margin: 20px;
+}
+
+.submit-button:hover {
+    background-color: #000;
+}
+
+.submit-button:focus {
+    outline: 0;
+    background-color: #000;
+    border: 2px solid rgb(33, 150, 243);
+}
+
+/* フッターの固定 */
+.footer {
+    position: absolute;
+    bottom: 0;
+}

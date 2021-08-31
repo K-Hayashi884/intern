@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/pass_change_done.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/done.css' %}" />
 {% endblock %}
 
 {% block header-title %}
@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-    <p>
+    <div class='display'>
         {{ edit_obj }}を変更しました。
-    </p>
+    </div>
 {% endblock %}
