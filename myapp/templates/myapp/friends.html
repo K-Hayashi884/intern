@@ -28,8 +28,8 @@
             <a class="friends__list-link" href="{% url 'talk_room' item.id %}" >
                 <img src="{{ item.image.url }}" class="user-icon" width="50" height="50"/>
                 <div class="py-2">{{item.username}}</div>
-            <div class="friends__list-talk">
-                    <p class="py-2">{{item.latest_msg_time}}</p>
+                <div class="friends__list-talk"></div>
+                    <p class="py-2">{{item.latest_msg_time|date:"n/j H:i"}}</p>
                     <p class="py-2">{{item.latest_msg_talk}}</p>
             </div>
         </li>

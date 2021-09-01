@@ -32,7 +32,7 @@
     {% for item in data %}
         <tr>    
             <td class="py-2">{{item.talk_from}}</td>
-            <td class="py-2">{{item.pub_date}}</td>
+            <td class="py-2">{{item.pub_date|date:"n/j H:i"}}</td>
             <td class="py-2">{{item.talk}}</td>
         </tr>
     {% endfor %}
