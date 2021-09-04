@@ -1,70 +1,73 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, AuthenticationForm
-from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import (
+    AuthenticationForm,
+    PasswordChangeForm,
+    UserCreationForm,
+)
 
-from .models import User
+from .models import Talk
+
+User = get_user_model()
 
 
 class SignUpForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ("username", "email", "password1", "password2", "icon")
+        fields = ("username", "email", "icon")
 
 
-class LoginForm(AuthenticationForm):        
-    def __init__(self, *args, **kwargs):
-       super().__init__(*args, **kwargs)
-       #htmlの表示を変更可能にします
-       self.fields["username"].widget.attrs["class"] = "form-control"
-       self.fields["password"].widget.attrs["class"] = "form-control"
+class LoginForm(AuthenticationForm):
+    pass
 
 
 class MailSettingForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ("email", )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["email"].label = "新しいメールアドレス"
+        fields = ("email",)
+        labels = {"email": "新しいユーザー名"}
 
 
 class UserNameSettingForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ("username", )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["username"].label = "新しいユーザー名"
+        fields = ("username",)
+        labels = {"username": "新しいメールアドレス"}
 
 
 class ImageSettingForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ("icon", )
+        fields = ("icon",)
 
 
 class PasswordChangeForm(PasswordChangeForm):
+    """Django 標準パスワード変更フォーム
+
+    Djangoはユーザモデルに未加工の (単なるテキストの) パスワードは保存せずハッシュ値でのみ保存する。
+    したがって、正しく理解しないとユーザのパスワード属性を直接操作できない。
+    よってパスワード編集のために標準で用意されているformを使う。
     """
-    Django標準パスワード変更フォーム
-    Djangoはユーザモデルに未加工の (単なるテキストの) パスワードは保存せず
-    ハッシュ値でのみ保存します。
-    したがって、ユーザのパスワード属性を直接操作できない。
-    よってパスワード編集のために標準で用意されているformを使います。
-    """
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs["class"] = "form-control"
 
 
-# 友達の中から任意のユーザーを検索
 class FriendsSearchForm(forms.Form):
-    keyword = forms.CharField(label="検索", required=False, widget=forms.TextInput(attrs={"placeholder": "ユーザー名で検索"}))
-    
+    """友達の中から任意のユーザーを検索"""
 
-# トークの送信のためのform
-# メッセージを送信するだけで、誰から誰か、時間は全て自動で対応できるのでこれだけで十分
-class TalkForm(forms.Form):
-    talk = forms.CharField(label="talk")
+    keyword = forms.CharField(
+        label="検索",
+        required=False,
+        widget=forms.TextInput(attrs={"placeholder": "ユーザー名で検索"}),
+    )
+
+
+class TalkForm(forms.ModelForm):
+    """トークの送信のためのform
+
+    メッセージを送信するだけで、誰から誰か、時間は全て自動で対応できるのでこれだけで十分
+    """
+
+    class Meta:
+        model = Talk
+        fields = ("talk",)
+        # 入力予測の表示をさせない（めっちゃ邪魔）
+        widgets = {"talk": forms.TextInput(attrs={"autocomplete": "off"})}

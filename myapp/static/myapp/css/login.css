@@ -1,22 +1,26 @@
-.login-error-message{
+.login-error-message {
     width: 100vw;
     height: 1rem;
     margin-top: 4vh;
     text-align: center;
 }
-.login-form{
+
+.login-form {
     width: 92vw;
     height: calc(84vh - 64px);
     margin-top: 4vh;
     padding: 0 4vw;
 }
-.login__username{
+
+.login-form__username {
     text-align: center;
 }
-.login__password{
+
+.login-form__password {
     text-align: center;
 }
-.login__button{
+
+.login-form__submit {
     display: block;
     width: 30%;
     text-align: center;
@@ -26,5 +30,5 @@
     border: solid 1px #9b9b9b;
     font-size: 1rem;
     color: #000;
-    background-color: #FFF;
+    background-color: #fff;
 }

@@ -1,26 +1,26 @@
 /* headerを避ける */
-.friends{
+.friends {
     padding: 64px 0;
 }
 
 /* バックエンド追加機能・友人の検索機能 */
-.friends__search{
+.search-form {
     display: flex;
     justify-content: space-between;
     padding: 0 8px;
-    position: fixed;
+    /* position: fixed; */
     width: calc(100% - 16px);
     background-color: #ccc;
     height: calc(2rem + 12px);
 }
 
-.friends__search i{
+.search-form i {
     font-size: 2rem;
     padding: 6px;
     color: #888;
 }
 
-#id_keyword{
+#id_keyword {
     border: none;
     border-bottom: solid 1px #888;
     margin: 8px 0;
@@ -29,7 +29,7 @@
     padding: 0 4px;
 }
 
-.friends__search button{
+.search-form__submit {
     margin: 8px 0;
     border: solid 2px #888;
     background: none;
@@ -37,41 +37,51 @@
     color: #888;
 }
 
-.friends__list-wrap-search_text{
+.search-text {
     text-align: center;
     color: #888;
 }
 
-/* margin:autoと横幅の指定でcalcを上手く利用することで、 */
-/* 単位が違う横幅指定をしつつ                            */
-/* 全体のバランスを取れるように設計する                  */
-.friends__list{
+.friend-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: calc(100vh - 128px - 2rem - 12px);
+    overflow: auto;
+}
+
+/*
+ * margin:autoと横幅の指定でcalcを上手く利用することで、単位が違う横幅指定をしつつ
+ * 全体のバランスを取れるように設計する
+ */
+.friend-list__item {
     width: calc(100% - 32px);
     height: 4rem;
     padding: 8px 16px;
-    list-style: none;
     border-bottom: solid 1px #888;
+    position: relative;
 }
 
 /* 下にしか枠線を引いていないので、初めの要素にだけ上にも枠線を引くように設定 */
-.friends__list:first-child{
+.friend-list__item:first-child {
     border-top: solid 1px #888;
 }
 
-.friends__list-link{
+.friend-list__link {
+    display: block;
     text-decoration: none;
     color: #000;
 }
 
-.friends__list-wrap{
+.friends__list-wrap {
     width: 100%;
     margin: 0;
-    margin-top:calc(2rem + 12px);
+    margin-top: calc(2rem + 12px);
     padding: 0;
 }
 
 /* ユーザーアイコンの表示 */
-.friends__list-usericon{
+.friend-list__usericon {
     position: absolute;
     /* 縦横の長さを合わせる */
     height: calc(4rem - 16px);
@@ -84,14 +94,14 @@
     z-index: -1;
 }
 
-.friends__list-username{
+.friend-list__username {
     font-size: 1.2rem;
     width: calc(100% - 4rem - 8px);
     margin: 0 0 0 auto;
 }
 
 /* LINEのようにユーザーの最後のやりとりを表示できるようにしてみる */
-.friends__list-talk{
+.friend-list__talk {
     width: calc(100% - 4rem - 8px);
     margin: 1rem 0 1rem auto;
     display: -webkit-flex;
@@ -102,7 +112,7 @@
     color: #888;
 }
 
-.friends__list-talk-content{
+.friend-list__content {
     max-width: calc(100% - 2.4rem - 16px);
     margin: auto 0;
     overflow: hidden;
@@ -110,18 +120,18 @@
     white-space: nowrap;
 }
 
-.friends__list-talk-time{
+.friend-list__time {
     width: 2.4rem;
     margin: auto 0;
 }
 /* ここまで　LINEのようにユーザーの最後のやりとりを表示できるようにしてみる */
 
 /* ここはbaseに入れたいな */
-header{
+header {
     position: fixed;
     background-color: #eee;
 }
 
-.footer-container{
+.footer-container {
     background-color: #eee;
 }

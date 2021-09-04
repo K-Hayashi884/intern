@@ -1,13 +1,15 @@
-{% extends 'myapp/base.html' %}
-{% block header-title %}メール{% endblock %}
+{% extends "myapp/base.html" %}
+
+{% block header_title %}メール{% endblock %}
+
 {% block content %}
 <form method="post" action="{% url 'mail_change' %}">
     <table>
         {% for field in form %}
-          <tr>
+        <tr>
             <td>{{ field.label_tag }}</td>
             <td>{{ field }}</td>
-          </tr>
+        </tr>
         {% endfor %}
     </table>
     {% csrf_token %}
@@ -20,5 +22,5 @@
             {% endfor %}
          {% endfor %}
     {% endif %}
-</form>    
-{% endblock content %}
+</form>
+{% endblock %}
