@@ -1,0 +1,19 @@
+@charset "UTF-8";
+.index{
+    position: absolute;
+    top: 50%;
+    transform: translate(0,-50%);
+    width: 100%;
+}
+.index__btn{
+    margin: 10%;
+    width: 80%;
+    text-align: center;
+    padding: 2rem;
+    font-size:10rem;
+    border: 1px solid black;
+    border-radius: 5rem;
+}
+.index__btn:hover{
+    opacity:0.5;
+}

@@ -1,0 +1,67 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}" />
+{% endblock %}
+
+{% block header-title %}友達{% endblock %}
+
+{% block content %}
+<main>
+    <ol>
+        {% for content in message %}
+        {% if content.user_to == login_user %}
+        <li>
+            <a class="friends-list" href="{% url 'talk_room' content.user_from.username %}">
+                <span class="friends-list__icon">
+                    <img src="/media/{{content.user_from.img.img}}">
+                </span>
+                <div class="friends-list-content">
+                    <p>{{content.user_from.username}}</p>
+                    <div class="friends-list-message-wrapper">
+                        <p class="friends-list-message">
+                            {{content.message | truncatechars:10}}
+                        </p>
+                        <p class="friends-list-message-date">{{content.date}}</p>
+                    </div>
+                </div>
+            </a>
+        </li>
+        {% elif content.user_from == login_user %}
+        <li>
+            <a class="friends-list" href="{% url 'talk_room' content.user_to.username %}">
+                <span class="friends-list__icon">
+                    <img src="/media/{{content.user_to.img.img}}">
+                </span>
+                <div class="friends-list-content">
+                    <p>{{content.user_to.username}}</p>
+                    <div class="friends-list-message-wrapper">
+                        <p class="friends-list-message">
+                            {{content.message | truncatechars:10}}
+                        </p>
+                        <p class="friends-list-message-date">{{content.date}}</p>
+                    </div>
+                </div>
+            </a>
+        </li>
+        {% else %}
+        <li>
+            <a class="friends-list" href="{% url 'talk_room' content.image.user.username %}">
+                <span class="friends-list__icon">
+                    <img src="/media/{{content.image.img}}">
+                </span>
+                <div class="friends-list-content">
+                    <p>{{content.image.user.username}}</p>
+                    <div class="friends-list-message-wrapper">
+                        <p class="friends-list-message"> 　
+                        </p>
+                        <p class="friends-list-message-date">{{content.date}}</p>
+                    </div>
+                </div>
+            </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ol>
+</main>
+{% endblock %}

@@ -5,12 +5,17 @@ html{
 body{
     margin: 0;
 }
+main{
+    overflow:auto;
+    max-height: 80vh; 
+}
 
 /* ヘッダー */
 .header{
     width: 100vw;
-    height: 64px;
+    height: 10vh;
     border-bottom: solid 1px #9b9b9b;
+    font-weight: bold;
 }
 .header-container{
     position: relative;
@@ -36,14 +41,14 @@ body{
 /* フッター */
 .footer{
     width: 100vw;
-    height: 64px;
+    height: 10vh;
 }
 .footer-container{
     display: flex;
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 64px;
+    height: 10vh;
     text-align: center;
     border-top: solid 1px #9b9b9b;
 }

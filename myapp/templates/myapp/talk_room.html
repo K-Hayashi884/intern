@@ -1,1 +1,42 @@
-TR
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% block extra_style %}
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}" />
+{% endblock %}
+{% block header %}
+<header class="header">
+    <div class="header-container">
+        <a href="{% url 'friends' %}" class="header-container__back"><i class="fas fa-chevron-circle-left"></i></a>
+        <span class="header-container__title">
+            {% block header-title %}{{name}}{% endblock %}
+        </span>
+    </div>
+</header>
+{% endblock %}
+{% block content %}
+<main>
+    {% for item in data %}
+    <div class="message">
+        <div class="icon-wrapper">
+            <div class="icon"><img src="/media/{{item.user_from.img.img}}"></div>
+            <p class="icon-name">{{item.user_from}}</p>
+        </div>
+        <p>{{item.message | linebreaksbr}}</p>
+        <p>{{item.date}}</p>
+    </div>
+    {% endfor %}
+</main>
+{% endblock %}
+{% block footer %}
+<footer class="footer">
+    <div class="footer-container">
+        <form class="footer-container-item" action="{%url 'talk_room' name %}" method="post"
+            enctype="multipart/form-data">
+            {% csrf_token %}
+            <span class="footer-item-message">{{messageform.message}}</span>
+            <div class="footer-item-btn-wrapper"><input type="submit" value="送信" class="footer-item-btn"></div>
+        </form>
+    </div>
+</footer>
+{% endblock %}

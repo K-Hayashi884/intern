@@ -1,1 +1,19 @@
-I
+{%load static%}
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>index</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/reset.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/index.css' %}" />
+</head>
+
+<body>
+    <div class="index">
+        <button class="index__btn" onclick="location.href='{%url 'login_view' %}'">ログイン</button>
+        <button class="index__btn" onclick="location.href='{%url 'signup_view' %}'">会員登録</button>
+    </div>
+</body>
+
+</html>
