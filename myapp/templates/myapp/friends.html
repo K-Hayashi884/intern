@@ -1,0 +1,33 @@
+{% extends "myapp/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'myapp/css/friends.css' %}">
+{% endblock %}
+
+{% block header %}
+    <header class="header">
+        <div class="header-container">
+            <span class="header-container__title">
+                {% block header-title %}友達{% endblock %}
+            </span>
+        </div>
+    </header>
+    {% endblock %}
+
+{% block content %}
+<div class="friends">
+    <ul class="friend-list">
+        {% for friend in friends %}
+        <li class="friend-list__item">
+            <!-- それぞれが別のトーク画面に飛ぶようにリンクをはる -->
+            <a class="friend-list__link" href="{% url 'talk_room' friend.id %}">
+                <img class="friend-list__usericon" src="{{ friend.icon.url }}">
+                <div class="friend-list__username">{{ friend.username }}</div>
+            </a>
+        </li>
+        {% empty %}
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
