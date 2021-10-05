@@ -118,14 +118,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 STATIC_URL = '/static/'
 
 
 AUTH_USER_MODEL = 'myapp.user'
 
 # 画像（ユーザーアイコン）にアクセスするための指定
-MEDIA_ROOT = BASE_DIR / 'media'
+import os
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 

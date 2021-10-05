@@ -5,15 +5,21 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
     LoginView,
     LogoutView,
-    
+    PasswordChangeView,
 )
 from django.db.models import Q
 from django.shortcuts import get_object_or_404,redirect, render
+from django.urls import reverse_lazy
 
 from .forms import (
+    
     SignUpForm,
     LoginForm,
     TalkForm,
+    UserNameChangeForm,
+    MailChangeForm,
+    ImageChangeForm,
+    PasswordChangeForm,
 )
 from .models import Talk
 
@@ -98,6 +104,88 @@ def talk_room(request, user_id):
     return render(request, "myapp/talk_room.html", context)
 
 
+
+
 @login_required
 def setting(request):
     return render(request, "myapp/setting.html")
+
+
+@login_required
+def username_change(request):
+    user = request.user
+    if request.method == "GET":
+        form = UserNameChangeForm(instance=user)
+
+    if request.method =="POST":
+        form = UserNameChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect("username_change_done")
+    context = {
+        "form": form,
+    }
+    return render(request, "myapp/username_change.html", context)
+
+@login_required
+def username_change_done(request):
+    return render(request, "myapp/username_change_done.html")
+
+@login_required
+def mail_change(request):
+    user = request.user
+    if request.method == "GET":
+        form = MailChangeForm(instance=user)
+
+    if request.method =="POST":
+        form = MailChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect("mail_change_done")
+    context = {
+        "form": form,
+    }
+    return render(request, "myapp/mail_change.html", context)
+
+@login_required
+def mail_change_done(request):
+    return render(request, "myapp/mail_change_done.html")
+
+
+@login_required
+def image_change(request):
+    user = request.user
+    if request.method == "GET":
+        form = ImageChangeForm(instance=user)
+    
+    elif request.method == "POST":
+        form = ImageChangeForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect("image_change_done")
+
+    context = {
+        "form": form,
+    }
+    return render(request, "myapp/image_change.html", context)
+
+@login_required
+def image_change_done(request):
+    return render(request, "myapp/image_change_done.html")
+
+
+class PasswordChange(PasswordChangeView):
+    """Django標準パスワード変更ビュー
+    Attributes:
+        template_name: 表示するテンプレート
+        success_url: 処理が成功した時のリダイレクト先
+        form_class: パスワード変更フォーム
+    """
+
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy("password_change_done")
+    template_name = "myapp/password_change.html"
+
+
+def password_change_done(request):
+    return render(request, "myapp/password_change_done.html")

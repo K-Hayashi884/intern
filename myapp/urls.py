@@ -12,5 +12,13 @@ urlpatterns = [
     # ユーザー名に重複が許されていないので、ユーザー名で判別
     path("talk_room/<int:user_id>/", views.talk_room, name="talk_room"),
     path('setting', views.setting, name='setting'),
+    path("username_change/", views.username_change, name="username_change"),
+    path("username_change_done/", views.username_change_done, name="username_change_done"),
+    path("mail_change/", views.mail_change, name="mail_change"),
+    path("mail_change_done/", views.mail_change_done, name="mail_change_done"),
+    path("image_change/", views.image_change, name="image_change"),
+    path("image_change_done/", views.image_change_done, name="image_change_done"),
+    path("password_change/", views.PasswordChange.as_view(), name="password_change"),
+    path("password_change_done/", views.password_change_done, name="password_change_done"),
     path("logout/", views.Logout.as_view(), name="logout"),
 ]

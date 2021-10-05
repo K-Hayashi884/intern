@@ -3,7 +3,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import (
     AuthenticationForm,
     UserCreationForm,
+    PasswordChangeForm,
 )
+from django.db.models import fields
 
 from .models import Talk
 
@@ -28,6 +30,27 @@ class TalkForm(forms.ModelForm):
         fields = ("talk",)
         # 入力予測の表示をさせない（めっちゃ邪魔）
         widgets = {"talk": forms.TextInput(attrs={"autocomplete": "off"})}
+
+
+class UserNameChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("username",)
+        labels = {"username": "新しいユーザ名"}
+
+class MailChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("email",)
+        labels = {"email": "新しいメールアドレス"}
+
+class ImageChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("icon",)
+
+class PasswordChangeForm(PasswordChangeForm):
+    pass
 
 
 

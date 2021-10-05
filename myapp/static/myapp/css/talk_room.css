@@ -36,53 +36,6 @@
     right: 4%;
     z-index: -1;
 }
-/* ここまでが簡易版 */
-
-/* ここからLINEに寄せたトーク画面 */
-/* .chatboard__content {
-    list-style: none;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-justify-content: flex-end;
-    justify-content: flex-end;
-    -webkit-align-items: flex-end;
-    align-items: flex-end;
-}
-.chatboard__content:first-child {
-}
-.chatboard__content--user {
-    -webkit-flex-direction: row-reverse;
-    flex-direction: row-reverse;
-}
-.chatboard__content--user .chatboard__text {
-    margin: 4px 2% 4px 8px;
-    background-color: #98fb98;
-}
-.chatboard__content--friend .chatboard__text {
-    margin: 4px 8px 4px 2%;
-    background-color: #eee;
-}
-.chatboard__name {
-    display: none;
-}
-.chatboard__text {
-    margin: 0;
-    padding: 8px 12px;
-    width: max-content;
-    max-width: 70%;
-    border-radius: 16px;
-    word-break: break-all;
-}
-.chatboard__time {
-    font-size: 0.6rem;
-}
-.chatboard__content--user .chatboard__time {
-    margin: auto 0 8px auto;
-}
-.chatboard__content--friend .chatboard__time {
-    margin: auto auto 8px 0;
-} */
-/* ここまでがLINEに寄せたトーク画面 */
 
 /* トーク送信部分 */
 .talk_room__sendbox {
