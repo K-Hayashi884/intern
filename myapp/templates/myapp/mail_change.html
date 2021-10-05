@@ -1,9 +1,24 @@
 {% extends "myapp/base.html" %}
 
 
-{% block header-title %}メールアドレス{% endblock %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'myapp/css/change.css' %}">
+{% endblock %}
+
+{% block header %}
+    <header class="header">
+        <div class="header-container">
+            <span class="header-container__title">
+                {% block header-title %}メールアドレス変更{% endblock %}
+            </span>
+        </div>
+    </header>
+{% endblock %}
             
 {% block content %}
+<div class="main">
 <form method="post" action="{% url 'mail_change' %}">
     <table>
         {% for field in form %}
@@ -14,7 +29,7 @@
         {% endfor %}
     </table>
     {% csrf_token %}
-    <button type="submit">変更</button>
+    <button type="submit" class="submit-btn">変更</button>
     {# エラーメッセージを表示 #}
     {% if form.errors %}
         {% for field in form %}
@@ -24,4 +39,5 @@
          {% endfor %}
     {% endif %}
 </form>
+</div>
 {% endblock %}

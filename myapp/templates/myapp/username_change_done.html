@@ -1,7 +1,23 @@
 {% extends "myapp/base.html" %}
 
-{% block header-title %}ユーザ名{% endblock %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'myapp/css/change.css' %}">
+{% endblock %}
+
+{% block header %}
+    <header class="header">
+        <div class="header-container">
+            <span class="header-container__title">
+                {% block header-title %}パスワード変更{% endblock %}
+            </span>
+        </div>
+    </header>
+{% endblock %}
 
 {% block content %}
-<p style="text-align:center">ユーザー名変更完了</p>
+<div class="main">
+    <p style="text-align:center">ユーザー名変更完了</p>
+</div>
 {% endblock content %}

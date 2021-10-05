@@ -125,6 +125,7 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'myapp.user'
 
 # 画像（ユーザーアイコン）にアクセスするための指定
+
 import os
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -84,7 +84,8 @@ def talk_room(request, user_id):
     context = {
         "form": form,
         "talk": talk,
-        "name": friend.username,
+        "friend": friend,
+        "user":user,
     }
 
     # POST（メッセージ送信あり）

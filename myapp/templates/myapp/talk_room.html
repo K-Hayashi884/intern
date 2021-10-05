@@ -11,7 +11,7 @@
     <div class="header-container">
         <a href="{% url 'friends' %}" class="header-container__back"><i class="fas fa-chevron-circle-left"></i></a>
         <span class="header-container__title">
-            {% block header-title %}{{ name }}{% endblock %}
+            {% block header-title %}{{ friend.username }}{% endblock %}
         </span>
         <a href="" class="talk_room__reload">更新</a>
     </div>
@@ -22,20 +22,13 @@
 <div class="talk_room">
     <!-- トークの表示部分 -->
     <ul class="chatboard" id="chatboard">
-        <!--
-            トークに応じて表示
-            ＞for文を回して表示
-        -->
-        <!--
-            自分→友人と友人→自分のメッセージで表示を変える
-            ＞違いを見出してclassの違いに反映
-            ＞cssにて表示に違いを出す
-        -->
+        
         {% for talk in talk %}
             <li class="chatboard__content">
+                <img class="friend__usericon" src="{% if talk.talk_from == user %}{{ user.icon.url }}{% else %}{{ friend.icon.url }}{% endif %}">
                 <p class="chatboard__name">＞{{ talk.talk_from }}</p>
                 <p class="chatboard__text">{{ talk.talk }}</p>
-                <p class="chatboard__time">{{ talk.time|date:"m/d" }}　　{{ talk.time|date:"H:i" }}</p>
+                <p class="chatboard__time">{{ talk.time|date:"m/d" }}　{{ talk.time|date:"H:i" }}</p>
             </li>
         {% endfor %}
     </ul>
