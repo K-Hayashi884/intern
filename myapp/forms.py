@@ -5,10 +5,14 @@ from django.contrib.auth.forms import (
     PasswordChangeForm,
     UserCreationForm,
 )
+from django.core.exceptions import ValidationError
+from django.forms.widgets import Select
 
 from .models import Talk
 
 User = get_user_model()
+
+NG_WORDS = ["バカ", "ばか", "アホ", "あほ", ]
 
 
 class SignUpForm(UserCreationForm):
@@ -71,3 +75,20 @@ class TalkForm(forms.ModelForm):
         fields = ("talk",)
         # 入力予測の表示をさせない（めっちゃ邪魔）
         widgets = {"talk": forms.TextInput(attrs={"autocomplete": "off"})}
+
+    def clean(self):
+        cleaned_data = super().clean()
+        talk = cleaned_data.get("talk")
+        contained_ng_words = [w for w in NG_WORDS if w in talk]
+        if contained_ng_words:
+            raise ValidationError(
+                f"禁止ワード {', '.join(contained_ng_words)} が含まれています")
+        return cleaned_data
+
+    # def clean_talk(self):
+    #     talk = self.cleaned_data.get("talk")
+    #     contained_ng_words = [w for w in NG_WORDS if w in talk]
+    #     if contained_ng_words:
+    #         raise ValidationError(
+    #             f"禁止ワード {', '.join(contained_ng_words)} が含まれています")
+    #     return talk

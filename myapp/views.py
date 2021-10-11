@@ -171,6 +171,8 @@ def talk_room(request, user_id):
             # 更新
             return redirect("talk_room", user_id)
 
+        context["form"] = form
+
     # POSTでない（リダイレクトorただの更新）&POSTでも入力がない場合
     return render(request, "myapp/talk_room.html", context)
 
