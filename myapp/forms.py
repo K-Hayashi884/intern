@@ -12,7 +12,12 @@ from .models import Talk
 
 User = get_user_model()
 
-NG_WORDS = ["バカ", "ばか", "アホ", "あほ", ]
+TABOO_WORDS = [
+    "ばか",
+    "バカ",
+    "あほ",
+    "アホ",
+]
 
 
 class SignUpForm(UserCreationForm):
@@ -79,16 +84,8 @@ class TalkForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         talk = cleaned_data.get("talk")
-        contained_ng_words = [w for w in NG_WORDS if w in talk]
-        if contained_ng_words:
+        contained_taboo_words = [w for w in TABOO_WORDS if w in talk]
+        if contained_taboo_words:
             raise ValidationError(
-                f"禁止ワード {', '.join(contained_ng_words)} が含まれています")
+                f"禁止ワード {', '.join(contained_taboo_words)} が含まれています")
         return cleaned_data
-
-    # def clean_talk(self):
-    #     talk = self.cleaned_data.get("talk")
-    #     contained_ng_words = [w for w in NG_WORDS if w in talk]
-    #     if contained_ng_words:
-    #         raise ValidationError(
-    #             f"禁止ワード {', '.join(contained_ng_words)} が含まれています")
-    #     return talk

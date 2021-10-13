@@ -32,8 +32,12 @@ class Talk(models.Model):
     def get_elapsed_time(self) -> str:
         # メッセージが生成されてから経った時間
         delta = timezone.now() - self.time
-        zero_delta, hour_delta, day_delta, week_delta = timedelta(), timedelta(
-            hours=1), timedelta(days=1), timedelta(days=7)
+        zero_delta, hour_delta, day_delta, week_delta = (
+            timedelta(),
+            timedelta(hours=1),
+            timedelta(days=1),
+            timedelta(days=7),
+        )
         if zero_delta < delta < hour_delta:
             return f"{int(delta.seconds//60)}分前"
 
