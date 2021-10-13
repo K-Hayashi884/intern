@@ -39,27 +39,27 @@ class TalkFormTests(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls._good_form = TalkForm({"talk": "こんにちは今日もプログラミングを頑張るぞ"})
-        cls._not_good_form1 = TalkForm({"talk": "君はあほだね"})
-        cls._not_good_form2 = TalkForm({"talk": "彼はバカというよりかはあほだ"})
-        cls._not_good_form3 = TalkForm({"talk": "テストばかりで疲れた"})
+        cls._bad_form1 = TalkForm({"talk": "君はあほだね"})
+        cls._bad_form2 = TalkForm({"talk": "彼はバカというよりかはあほだ"})
+        cls._bad_form3 = TalkForm({"talk": "テストばかりで疲れた"})
 
     def test_good_talk(self):
         self.assertTrue(self._good_form.is_valid())
 
-    def test_not_good_talk(self):
-        self.assertFalse(self._not_good_form1.is_valid())
+    def test_bad_talk(self):
+        self.assertFalse(self._bad_form1.is_valid())
         with self.assertRaisesMessage(ValidationError, "禁止ワード あほ が含まれています"):
-            self._not_good_form1.clean()
+            self._bad_form1.clean()
 
-        self.assertFalse(self._not_good_form2.is_valid())
+        self.assertFalse(self._bad_form2.is_valid())
         with self.assertRaisesMessage(
             ValidationError, "禁止ワード バカ, あほ が含まれています"
         ):
-            self._not_good_form2.clean()
+            self._bad_form2.clean()
 
-        self.assertFalse(self._not_good_form3.is_valid())
+        self.assertFalse(self._bad_form3.is_valid())
         with self.assertRaisesMessage(ValidationError, "禁止ワード ばか が含まれています"):
-            self._not_good_form3.clean()
+            self._bad_form3.clean()
 
 
 class TestsWithAuthMixin:
@@ -70,7 +70,7 @@ class TestsWithAuthMixin:
     @classmethod
     def setUpAuthData(cls):
         cls._username = "test太郎"
-        cls._email = "test@test.com"
+        cls._email = "test@example.com"
         cls._password = "thisistest"
         cls.user = User.objects.create_user(
             username=cls._username, email=cls._email, password=cls._password
@@ -95,7 +95,7 @@ class SignupViewTests(TestCase):
     def test_valid_post(self):
         params = {
             "username": "test太郎",
-            "email": "test@test.com",
+            "email": "test@example.com",
             "password1": "thisistest",
             "password2": "thisistest",
         }
@@ -126,13 +126,13 @@ class TalkRoomViewTests(TestCase, TestsWithAuthMixin):
     def setUpClass(cls):
         super().setUpClass()
         cls._good_form = {"talk": "こんにちは今日もプログラミングを頑張るぞ"}
-        cls._not_good_form = {"talk": "彼はバカというよりかはあほだ"}
+        cls._bad_form = {"talk": "彼はバカというよりかはあほだ"}
 
     @classmethod
     def setUpTestData(cls):
         cls.setUpAuthData()
         cls._friend_username = "friend太郎"
-        cls._friend_email = "friend@friend.com"
+        cls._friend_email = "friend@example.com"
         cls._friend_password = "thisistest"
         cls._friend = User.objects.create_user(
             username=cls._friend_username,
@@ -160,7 +160,7 @@ class TalkRoomViewTests(TestCase, TestsWithAuthMixin):
 
     def test_invalid_post(self):
         self.login()
-        res = self.client.post(self._talk_room_url, self._not_good_form)
+        res = self.client.post(self._talk_room_url, self._bad_form)
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, "myapp/talk_room.html")
         self.assertContains(res, "禁止ワード バカ, あほ が含まれています")
