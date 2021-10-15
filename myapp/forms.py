@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
-from .models import CustomUser, Talk
+from .models import CustomUser
 
 # アカウント作成フォーム
 class SignupForm(UserCreationForm):

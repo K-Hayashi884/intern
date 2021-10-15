@@ -14,8 +14,8 @@ from django.utils.timezone import localtime
 from django.utils import timezone
 
 
-def index(request):
-    return render(request, "myapp/index.html")
+class IndexView(TemplateView):
+    template_name = 'myapp/index.html'
     
 class Signup_View(TemplateView):
     """ 登録用のクラス
@@ -49,7 +49,7 @@ class Login_View(LoginView):
     form_class = LoginForm
     template_name = 'myapp/login.html'
 
-@login_required(login_url='/login')
+@login_required
 def friends(request):
     # ログインユーザーを取得し、検索から自分の友達を取得
     user = request.user
@@ -90,7 +90,7 @@ def friends(request):
 
     return render(request, "myapp/friends.html", carams)
 
-@login_required(login_url='/login')
+@login_required
 def talk_room(request, id):
     """ talkroomの関数
         共通でメッセージを表示
@@ -123,10 +123,9 @@ def talk_room(request, id):
         
     return render(request, "myapp/talk_room.html", params)
 
-@login_required(login_url='/login')
-def setting(request):
+class SettingView(LoginRequiredMixin, TemplateView):
     """ 設定用ページに移動 """
-    return render(request, "myapp/setting.html")
+    template_name = "myapp/setting.html"
 
 
 class PasswordChange(PasswordChangeView):
@@ -144,7 +143,7 @@ class Logout(LoginRequiredMixin, LogoutView):
     """ ログアウトビュー """
     pass
 
-@login_required(login_url='/login')
+@login_required
 def edit_username(request):
     """ username変更ビュー """
     obj = request.user
@@ -167,7 +166,7 @@ def edit_username_done(request):
     }
     return render(request, 'myapp/done.html', params)
 
-@login_required(login_url='/login')
+@login_required
 def edit_email(request):
     """ email変更ビュー """
     obj = request.user
@@ -182,7 +181,7 @@ def edit_email(request):
     }
     return render(request, 'myapp/edit_email.html', params)
 
-@login_required(login_url='/login')
+@login_required
 def edit_email_done(request):
     """ email変更完了 """
     carams = {
@@ -190,7 +189,7 @@ def edit_email_done(request):
     }
     return render(request, 'myapp/done.html', carams)
 
-@login_required(login_url='/login')
+@login_required
 def edit_icon(request):
     """ icon変更ビュー """
     obj = request.user
@@ -205,7 +204,7 @@ def edit_icon(request):
     }
     return render(request, 'myapp/edit_icon.html', params)
 
-@login_required(login_url='/login')
+@login_required
 def edit_icon_done(request):
     """ icon変更完了 """
     carams = {

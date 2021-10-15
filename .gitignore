@@ -236,6 +236,7 @@ Temporary Items
 
 # Environments
 
+
 # Spyder project settings
 
 # Rope project settings
@@ -275,3 +276,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/django,python,windows,macos,linux
+
+.vscode/
+migrations/
