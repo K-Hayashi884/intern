@@ -279,3 +279,5 @@ $RECYCLE.BIN/
 
 .vscode/
 migrations/
+
+local_settings.py

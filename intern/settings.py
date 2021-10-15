@@ -139,3 +139,8 @@ LOGIN_REDIRECT_URL = '/friends'
 LOGOUT_REDIRECT_URL = 'index'
 
 AUTH_USER_MODEL = 'myapp.CustomUser'
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
