@@ -43,8 +43,8 @@ class ImageView(CreateView):
         return super().form_invalid(form)
 
 
-def login_view(request):
-    return render(request, "myapp/login.html")
+# def login_view(request):
+    # return render(request, "myapp/login.html")
 
 def friends(request):
     return render(request, "myapp/friends.html")
