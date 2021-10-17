@@ -8,6 +8,7 @@ from django.views.generic import CreateView
 
 
 def index(request):
+    print(request.user)
     return render(request, "myapp/index.html")
 
 def signup_view(request):
