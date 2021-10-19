@@ -11,6 +11,7 @@ def index(request):
     print(request.user)
     return render(request, "myapp/index.html")
 
+# これは使わない
 def signup_view(request):
     params = {
         'form' : UserForm(),
@@ -27,6 +28,7 @@ def signup_view(request):
             print('no ')
     return render(request, "myapp/signup.html", params)
 
+# これでサインアップする
 class ImageView(CreateView):
     model = User
     template_name = 'myapp/signup.html'
@@ -48,9 +50,13 @@ class ImageView(CreateView):
     # return render(request, "myapp/login.html")
 
 def friends(request):
-    return render(request, "myapp/friends.html")
+    friends = User.objects.all().order_by('id').reverse()
+    params = {
+        'friends' : friends,
+    }
+    return render(request, "myapp/friends.html", params)
 
-def talk_room(request):
+def talk_room(request, id):
     return render(request, "myapp/talk_room.html")
 
 def setting(request):
