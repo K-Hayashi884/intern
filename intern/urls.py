@@ -20,6 +20,8 @@ import myapp.views as myapp
 from django.conf import settings
 from django.conf.urls.static import static 
 
+import debug_toolbar
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,3 +29,7 @@ urlpatterns = [
 ] 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# デバッグ用
+if settings.DEBUG:
+    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]

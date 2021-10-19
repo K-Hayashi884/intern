@@ -59,7 +59,8 @@ def friends(request):
     info = []
     for friend in friends:
         # 最新のメッセージの取得
-        latest_message = Talk.objects.filter(Q(talk_from=user, talk_to=friend)| \
+        latest_message = Talk.objects.select_related('talk_from', 'talk_to').\
+            filter(Q(talk_from=user, talk_to=friend)| \
                     Q(talk_from=friend, talk_to=user)).order_by('pub_date').last()
         # 表示情報の処理
         if latest_message:
@@ -104,7 +105,7 @@ def talk_room(request, id):
             content=request.POST['content'])
         talk.save()
 
-    messages = Talk.objects.filter(Q(talk_from=user, talk_to=friend)| \
+    messages = Talk.objects.select_related('talk_from', 'talk_to').filter(Q(talk_from=user, talk_to=friend)| \
         Q(talk_from=friend, talk_to=user)).order_by('pub_date')
     
     # messageと表示時間が一体となったタプルを持つリストを制作
