@@ -1,8 +1,9 @@
+from django import forms
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.views import generic
-from .models import User
-from .forms import UserForm
+from .models import User, Message
+from .forms import MessageForm, UserForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
@@ -50,14 +51,33 @@ class ImageView(CreateView):
     # return render(request, "myapp/login.html")
 
 def friends(request):
-    friends = User.objects.all().order_by('id').reverse()
+    login_user_id = request.user.id
+    friends = User.objects.exclude(id=login_user_id).order_by('id').reverse()
     params = {
         'friends' : friends,
     }
     return render(request, "myapp/friends.html", params)
 
-def talk_room(request, id):
-    return render(request, "myapp/talk_room.html")
+def talk_room(request, user_id):
+    
+    friend = User.objects.get(id=user_id)
+    path = request.path
+    params = {
+        'friend' : friend,
+        'form' : MessageForm,
+        'path' : path,
+    }
+    
+    if request.method == 'POST':
+        obj = Message()
+        message = MessageForm(request.POST, instance=obj)
+        if message.is_valid():
+            message.instance.friend = friend
+            message.save()
+            print('success')
+        else: 
+            print('why')
+    return render(request, "myapp/talk_room.html", params)
 
 def setting(request):
     return render(request, "myapp/setting.html")
