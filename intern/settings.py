@@ -128,3 +128,4 @@ MEDIA_URL = '/media/'
 
 LOGIN_URL = 'login_view'
 LOGIN_REDIRECT_URL = '/friends'
+LOGOUT_REDIRECT_URL = '/index'

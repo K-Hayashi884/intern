@@ -8,27 +8,28 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
     {% block extra_style %}{% endblock %}
-    <title>DeMiAインターン</title>
+    <title>DeMiAインターン|アイコン編集</title>
 </head>
 <body>
     {% block header %}
     <header class="header">
         <div class="header-container">
             <span class="header-container__title">
-                {% block header-title %}{% endblock %}
+                {% block header-title %}アイコン編集{% endblock %}
             </span>
         </div>
     </header>
     {% endblock %}
-
+        <main>
+            <table>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <p>new image : {{form}} <img src="{{object.image.url}}" alt=""></p> 
+                </table>
+                <input type="submit" value="送信">
+            </form>
+        </main>
     {% block content %}
-    <main>
-        <div><a href="{% url 'username_edit' login_id %}">ユーザーネーム変更</a></div>
-        <div><a href="{% url 'email_edit' login_id %}">メールアドレス変更</a></div>
-        <div><a href="{% url 'image_edit' login_id %}">アイコン変更</a></div>
-        <div><a href="{% url 'password_edit' login_id %}">パスワード変更</a></div>
-        <div><a href="{% url 'logout_view' %}">ログアウト</a></div>
-    </main>
     {% endblock %}
 
     {% block footer %}

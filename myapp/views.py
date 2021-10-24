@@ -3,10 +3,11 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.views import generic
 from .models import User, Message
-from .forms import MessageForm, UserForm
+from .forms import MessageForm, UserForm, UsernameChangeForm, EmailChangeForm, ImageChangeForm, MyPasswordChangeForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.db.models import Q
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 
 
 def index(request):
@@ -14,21 +15,21 @@ def index(request):
     return render(request, "myapp/index.html")
 
 # これは使わない
-def signup_view(request):
-    params = {
-        'form' : UserForm(),
-        'message' : '' ,
-    }
-    if(request.method == 'POST'):
-        obj = User()
-        user = UserForm(request.POST, instance=obj)
-        if(user.is_valid()):
-            user.save()
-            return redirect(to='/index')
-        else:
-            params['message'] = 'no good'
-            print('no ')
-    return render(request, "myapp/signup.html", params)
+# def signup_view(request):
+#     params = {
+#         'form' : UserForm(),
+#         'message' : '' ,
+#     }
+#     if(request.method == 'POST'):
+#         obj = User()
+#         user = UserForm(request.POST, instance=obj)
+#         if(user.is_valid()):
+#             user.save()
+#             return redirect(to='/index')
+#         else:
+#             params['message'] = 'no good'
+#             print('no ')
+#     return render(request, "myapp/signup.html", params)
 
 # これでサインアップする
 class ImageView(CreateView):
@@ -97,4 +98,68 @@ def talk_room(request, user_id):
     return render(request, "myapp/talk_room.html", params)
 
 def setting(request):
-    return render(request, "myapp/setting.html")
+    params = {
+        'login_id' : request.user.id,
+    }
+    print(request.user.id)
+    return render(request, "myapp/setting.html", params)
+
+def username_edit(request, login_id):
+    login_id = request.user.id
+    current_username = User.objects.get(id=login_id)
+    if(request.method == 'POST'):
+        username_edit = UsernameChangeForm(request.POST, instance=current_username)
+        username_edit.save()
+        print(username_edit)
+        return redirect(to='/setting')
+    params = {
+        'current_username' : current_username,
+        'form' : UsernameChangeForm(instance=current_username),
+    }
+    return render(request, "myapp/username_edit.html", params)
+
+def email_edit(request, login_id):
+    login_id = request.user.id
+    current_email = User.objects.get(id=login_id)
+    if(request.method == 'POST'):
+        email_edit = EmailChangeForm(request.POST, instance=current_email)
+        email_edit.save()
+        return redirect(to='/setting')
+    params = {
+        'current_email' : current_email,
+        'form' : EmailChangeForm(instance=current_email),
+    }
+    return render(request, "myapp/email_edit.html", params)
+
+def image_edit(request, login_id):
+    login_id = request.user.id
+    current_image = User.objects.get(id=login_id)
+    if(request.method == 'POST'):
+        image_edit = ImageChangeForm(request.POST, instance=current_image)
+        image_edit.save()
+        return redirect(to='/setting')
+    params = {
+        'current_image' : current_image,
+        'form' : ImageChangeForm(instance=current_image),
+    }
+    return render(request, "myapp/image_edit.html", params)
+
+# def password_edit(request, login_id):
+#     login_id = request.user.id
+#     current_image = User.objects.get(id=login_id)
+#     if(request.method == 'POST'):
+#         image_edit = PasswordChangeForm(request.POST, instance=current_image)
+#         image_edit.save()
+#         return redirect(to='/setting')
+#     params = {
+#         'current_image' : current_image,
+#         'form' : PasswordChangeForm(instance=current_image),
+#     }
+#     return render(request, "myapp/password_edit.html", params)
+
+class PasswordChange(PasswordChangeView):
+    """パスワード変更ビュー"""
+    form_class = MyPasswordChangeForm
+    success_url = reverse_lazy('index')
+    template_name = 'myapp/password_edit.html'
+
