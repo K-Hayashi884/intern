@@ -8,7 +8,8 @@ class User(AbstractUser):
     image = models.ImageField(default='', blank=True, upload_to='images/')
 
 class Message(models.Model):
-    friend = models.ForeignKey(User, on_delete=CASCADE, null=True)
+    sender = models.ForeignKey(User, on_delete=CASCADE, null=True, related_name='sender')
+    reciever = models.ForeignKey(User, on_delete=CASCADE, null=True, related_name='reciever')
     message = models.CharField(max_length=500)
     message_date = models.DateTimeField(auto_now_add=True)
 

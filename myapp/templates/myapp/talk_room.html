@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/base.css' %}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
@@ -15,7 +16,7 @@
     <header class="header">
         <div class="header-container">
             <span class="header-container__title">
-                {% block header-title %}{{friend.username}}{% endblock %}
+                {% block header-title %}{{reciever.username}}{% endblock %}
             </span>
         </div>
     </header>
@@ -23,22 +24,36 @@
 
     {% block content %}
     <main>
-        <table class="table">
-        </table>
+        {% for item in messages %} 
+            {% if reciever == item.reciever %}
+            <div style="background-color:aliceblue;" class="sender">
+                <p><img src="/media/{{sender.image}}" alt="" style="width: 2.5rem; height: 2.5rem; border-radius: 50%;">{{sender.username}}</p>
+                <p class="message">{{item.message}}</p>
+                <p>{{item.message_date}}</p>
+            {% else %} 
+            </div>
+            <div style="background-color: white;">
+                <p><img src="/media/{{reciever.image}}" alt="" style="width: 2.5rem; height: 2.5rem; border-radius: 50%;">{{reciever.username}}</p>
+                <p class="message">{{item.message}}</p>
+                <p>{{item.message_date}}</p>
+            </div>  
+            {% endif %}
+            </div>
+        {% endfor %}
     </main>
+
     {% endblock %}
 
     {% block footer %}
     <footer class="footer">
         <div class="footer-container">
-            <div class="footer-container__item">
+            <!-- <div class="footer-container__item"> -->
                 <form action="", method="post">
-                    {{ request.path_info }}
                     {% csrf_token %}
                     {{ form }}
                     <input type="submit", value="送信">
                 </form>
-            </div>
+            <!-- </div> -->
         </div>
     </footer>
     {% endblock %}

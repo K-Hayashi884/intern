@@ -6,6 +6,7 @@ from .models import User, Message
 from .forms import MessageForm, UserForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from django.db.models import Q
 
 
 def index(request):
@@ -51,7 +52,9 @@ class ImageView(CreateView):
     # return render(request, "myapp/login.html")
 
 def friends(request):
+    # ログインしているユーザーを判定
     login_user_id = request.user.id
+    # ログインしているユーザーを除いて表示
     friends = User.objects.exclude(id=login_user_id).order_by('id').reverse()
     params = {
         'friends' : friends,
@@ -59,24 +62,38 @@ def friends(request):
     return render(request, "myapp/friends.html", params)
 
 def talk_room(request, user_id):
-    
+    # お相手を定義
     friend = User.objects.get(id=user_id)
-    path = request.path
-    params = {
-        'friend' : friend,
-        'form' : MessageForm,
-        'path' : path,
-    }
-    
+    print(friend.image)
+    # 自分を定義
+    login_user_id = request.user.id
+    me = User.objects.get(id=login_user_id)
+    print(me.image)
+    # 処理
     if request.method == 'POST':
         obj = Message()
         message = MessageForm(request.POST, instance=obj)
         if message.is_valid():
-            message.instance.friend = friend
+            # messageモデルのインスタンスとユーザーを紐づけ
+            message.instance.reciever = friend
+            message.instance.sender = me
+            # 保存
             message.save()
-            print('success')
         else: 
             print('why')
+    # メッセージを表示
+    # recieverで
+    messages = Message.objects.filter(Q(reciever=friend, sender=me)|Q(reciever=me, sender=friend)).order_by('message_date')
+    reciever = friend
+    sender = me
+    params = {
+        'form' : MessageForm,
+        'messages' : messages,
+        'reciever' : reciever,
+        'sender' : sender,
+        
+    }
+    
     return render(request, "myapp/talk_room.html", params)
 
 def setting(request):

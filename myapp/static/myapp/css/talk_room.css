@@ -1,0 +1,13 @@
+
+p {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.sender {
+    text-align: right;
+}
+
+.message {
+    font-weight: bold;
+}
