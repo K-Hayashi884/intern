@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <title>設定</title>
+</head>
+<body>
+  <h1 class="display-4 text-primary">ユーザー設定</h1>
+  <table class='table'>
+    <th>
+        <td><a href="{% url 'chatapp:namechange' loggedin_user.id %}">ユーザー名変更</a></td>
+        <td><a href="{% url 'chatapp:adresschange' loggedin_user.id %}">メールアドレス変更</a></td>
+        <td><a href="{% url 'chatapp:iconchange' loggedin_user.id %}">アイコン変更</a></td>
+        <td><a href="{% url 'chatapp:password' loggedin_user.id %}">パスワード変更</a></td>
+        <td><a href="{% url 'chatapp:home' %}">戻る</a></td>
+    </th>
+  </table>
+</body>
+</html>
