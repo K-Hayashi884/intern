@@ -1,0 +1,18 @@
+.index-button-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.index-button {
+    display: inline-block;
+    border: slategrey solid 1px;
+    border-radius: 5px;
+    padding: 10px 30px;
+    margin: 6px;
+    text-decoration: none;
+    color: slategrey;
+}
