@@ -13,7 +13,7 @@ def signup_view(request):
             form.save()
             return redirect(to='/')
         else:
-            print('ERROR!!!')
+            return render(request, "myapp/signup.html", {'form': form})
     return render(request, "myapp/signup.html", {'form': SignupForm()})
 
 def login_view(request):

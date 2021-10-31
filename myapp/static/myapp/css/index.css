@@ -9,10 +9,10 @@
 
 .index-button {
     display: inline-block;
-    border: slategrey solid 1px;
+    border: #9b9b9b solid 1px;
     border-radius: 5px;
     padding: 10px 30px;
     margin: 6px;
     text-decoration: none;
-    color: slategrey;
+    color: #9b9b9b;
 }
