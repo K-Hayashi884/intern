@@ -1,6 +1,8 @@
 from django.shortcuts import redirect, render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from .models import User
-from .forms import SignupForm
+from .forms import SignupForm, LoginForm
 
 
 def index(request):
@@ -16,8 +18,9 @@ def signup_view(request):
             return render(request, "myapp/signup.html", {'form': form})
     return render(request, "myapp/signup.html", {'form': SignupForm()})
 
-def login_view(request):
-    return render(request, "myapp/login.html")
+class login_view(LoginView):
+    form_class = LoginForm
+    template_name = 'myapp/login.html'    
 
 def friends(request):
     return render(request, "myapp/friends.html")

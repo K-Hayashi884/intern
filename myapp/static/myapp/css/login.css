@@ -1,0 +1,27 @@
+form {
+    padding: 30px;
+    max-width: 500px;
+    margin: auto;
+}
+
+table {
+    width: 100%;
+}
+
+
+input {
+    width: 100%;
+}
+
+.signup-button-wrapper {
+    text-align: center;
+}
+
+button {
+    border: #9b9b9b solid 1px;
+    border-radius: 5px;
+    padding: 10px 30px;
+    margin: 6px;
+    text-decoration: none;
+    background-color: white;
+}

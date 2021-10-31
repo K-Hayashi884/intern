@@ -129,3 +129,7 @@ AUTH_USER_MODEL = 'myapp.User'
 
 IMAGE_ROOT = os.path.join(BASE_DIR, 'images')
 IMAGE_URL = '/images/'
+
+LOGIN_URL = '/' 
+LOGIN_REDIRECT_URL = '/friends'
+#LOGOUT_REDIRECT_URL='/login'
