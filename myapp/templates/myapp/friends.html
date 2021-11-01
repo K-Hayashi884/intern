@@ -1,3 +1,4 @@
+{% extends 'myapp/base.html' %}
 {% load static %}
 
 {% block extra_style %}
@@ -8,13 +9,35 @@
 <header class="header">
     <div class="header-container">
         <span class="header-container__title">
-            {% block header-title %}{% endblock %}
+            {% block header-title %}友達{% endblock %}
         </span>
     </div>
 </header>
 {% endblock %}
 
 {% block content %}
+<div class="users">
+    {% for user in data %}
+    <a href="{% url 'talk_room' user.id %}">
+        <div class="user-row">
+            <div class="user-content">
+                {% if user.img %}
+                <img src="{{ IMAGE_URL }}{{ user.img }}" class="user-icon">
+                {% else %}
+                <img src="{% static 'myapp/img/no-img.jpeg' %}" class="user-icon">
+                {% endif %}
+                <div class="user-content-right">
+                    <div class="username">{{ user.username }}</div>
+                    {% if user.latest_msg %}
+                    <div class="latest-msg">{{ user.latest_msg | truncatechars:20}}</div>
+                    <div class="latest-sent-time">{{ user.latest_sent_time}}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
 {% endblock %}
 
 {% block footer %}
