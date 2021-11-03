@@ -1,11 +1,32 @@
 from django.shortcuts import redirect, render
-
+from .forms import SignupForm
+from .models import User
 
 def index(request):
-    return render(request, "myapp/index.html")
+    parameters = {}
+    parameters['signup'] = 'signup_view'
+    return render(request, "myapp/index.html", parameters)
 
 def signup_view(request):
-    return render(request, "myapp/signup.html")
+    parameters = {}
+    if request.method == 'GET':
+        parameters['form'] = SignupForm()
+        return render(request, "myapp/signup.html", parameters)
+    elif request.method == 'POST':
+        form = SignupForm(request.POST, request.FILES)
+        if form.is_valid():
+            cd = form.cleaned_data #どうしてこれ成功するんだ？？？
+            user = User(
+                username = cd['username'], \
+                email = cd['email'], \
+                password = cd['password1'], \
+                image = cd['image'],
+            )
+            user.save()
+            return redirect(to="/")
+        parameters['form'] = SignupForm(request.POST, request.FILES)
+        return render(request, "myapp/signup.html", parameters)
+
 
 def login_view(request):
     return render(request, "myapp/login.html")
