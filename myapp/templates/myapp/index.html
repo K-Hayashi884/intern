@@ -3,16 +3,17 @@
 <html lang="ja">
     <head>
         <meta charset="utf-8">
-        <tiltle>タイトル</tiltle>
-        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+        <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     </head>
     <body>
         <div>
-            <div class="text-center mb-10">
-                <li class="list-none"><a class="text-2xl font-mono rounded-md border-2 py-1 px-3">ログイン</a></li>
-            </div>
-            <div class="text-center">
-                <li class="list-none"><a class="text-2xl font-mono rounded-md border-2 py-1 px-3">会員登録</a></li>
+            <div>
+                <div class="font-mono text-center mb-16 mt-80">
+                    <a href="{% url goto_login %}" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">ログイン</a>
+                </div>
+                <div class="font-mono text-center">
+                    <a href="{% url goto_signup %}" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">会員登録</a>
+                </div>
             </div>
         </div>
     </body>
