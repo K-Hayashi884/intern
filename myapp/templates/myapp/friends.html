@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}" />
+    {% block extra_style %}{% endblock %}
+    <title>DeMiAインターン</title>
+</head>
+<body>
+    {% block header %}
+    <header class="header">
+        <div class="header-container">
+            <span class="header-container__title">
+                {% block header-title %}
+                    {{ header_title }}({{ user }}としてログインしています)
+                {% endblock %}
+            </span>
+        </div>
+    </header>
+    {% endblock %}
+
+    {% block content %}
+    <table>
+    {% for _, friend, talk in list_w_talks %}
+        <tr class="friendsshow">
+            <td><a href="{% url 'talk_room' friend.id %}"><img class="friendimg" src="{{ friend.image.url }}"></a></td>
+            <td class="friendname">{{ friend.username }}</td>
+            <td class="latestmessage">{{ talk.content }}</td>
+            <td class="time">{{ talk.sendtime }}</td>
+        </tr>
+    {% endfor %}
+    {% for _, friend in list_wo_talks %}
+        <tr class="friendsshow">
+            <td><a href="{% url 'talk_room' friend.id %}"><img class="friendimg" src="{{ friend.image.url }}"></a></td>
+            <td class="friendname">{{ friend.username }}</td>
+            <td class="latestmessage"></td>
+            <td class="time">{{ friend.regtime }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    {% endblock %}
+
+    {% block footer %}
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-container__item">
+                <a href="{% url 'friends' %}" class="footer-item__link">
+                    <span class="footer-item__icon"><img src="{% static 'myapp/img/people-24px.svg' %}"></span>
+                    <span class="footer-item__text">友達</span>
+                </a>
+            </div>
+            <div class="footer-container__item">
+                <a href="{% url 'setting' %}" class="footer-item__link">
+                    <span class="footer-item__icon"><img src="{% static 'myapp/img/settings-black-18dp.svg' %}"></span>
+                    <span class="footer-item__text">設定</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+</body>
+</html>
