@@ -11,6 +11,7 @@ from .forms import SignupForm
 from .forms import LoginForm
 from django.contrib.auth import login, authenticate
 # 友だち表示, トークルーム
+from django.contrib.auth.decorators import login_required
 from .models import Message
 # トークルーム
 from django.db.models import Q
@@ -62,6 +63,7 @@ def login_view(request):
             params["errormessage"] = "正しく入力されていません"
     return render(request, 'myapp/login.html', params)
 
+@login_required
 def friends(request):
     data = CustomUser.objects.all()
     # request.userとトーク履歴のあるユーザー
@@ -92,6 +94,7 @@ def friends(request):
 
     return render(request, "myapp/friends.html", params)
 
+@login_required
 def talk_room(request, your_id):
     # 送る側のユーザー
     me = request.user
