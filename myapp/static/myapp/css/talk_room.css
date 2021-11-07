@@ -1,0 +1,46 @@
+.backbtn{
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(0,-50%);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.table{
+  border-bottom: 1px solid lightgray;
+  position: relative;
+}
+
+.senduser{
+  background-color: cornsilk;
+}
+
+.reseaveuser{
+  background-color: darkcyan;
+}
+
+.name{
+  font-size: 1px;
+  font-weight: bolder;
+}
+
+.msg{
+  font-size: 3px;
+  font-weight: bold;
+}
+
+.date{
+  font-size: 1px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+
+.message_input{
+  background-color: lightgray;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}

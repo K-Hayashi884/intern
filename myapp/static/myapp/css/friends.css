@@ -1,0 +1,23 @@
+a{
+  text-decoration: none;
+  display: block;
+  border-bottom:1px solid lightgray;
+}
+
+img{
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border: 2px solid #000;
+}
+
+.username{
+  font-weight: bold;
+}
+
+.last_content{
+  font-size: 1px;
+  position: absolute;
+  right: 0;
+}

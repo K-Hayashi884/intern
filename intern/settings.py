@@ -120,7 +120,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATICFILES_DIR =BASE_DIR/'static'
 STATIC_URL = '/static/'
+
 
 AUTH_USER_MODEL = 'myapp.Friend'
 
