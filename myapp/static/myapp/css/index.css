@@ -1,0 +1,23 @@
+.btn{
+  display: block;
+  text-align: center;
+  width: 120px;
+  border:1px solid #000 ;
+  border-radius: 10px;
+  text-decoration: none;
+  padding: 12px 0;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.loginbtn{
+  position: absolute;
+  transform: translate(-50%,-110%);
+}
+
+.signupbtn{
+  position: absolute;
+  transform: translate(-50%,10%);
+}
