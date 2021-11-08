@@ -1,1 +1,51 @@
-TR
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+
+{% block header %}
+<header class="header">
+    <div class="header-container">
+        <span class="header-container__title">
+            {% block headersa-title %}{{ user2_name }}{% endblock %}
+        </span> 
+        <a href="{% url 'friends' %}" class="return-button">
+            <i class="fas fa-angle-left fa-2x"></i>
+        </a>              
+        <a href="" class="reload-button">更新</a>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="messages">
+    {% for item in data %}
+    <div class="message-row {% if item.from_user.username == user2_name %} not-from-me{% endif %}">
+        <div class="message-content">
+            <div class="username-row">
+                <div class="username">{{ item.from_user.username }}</div>
+                <div class="sent-time">{{ item.sent_time }}</div>
+            </div>
+            <div class="message">{{ item.message }}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer">
+    <div class="footer-container">
+        <div class="input-container">
+            <form method='post'>
+                {% csrf_token %}
+                {{ form.message }}
+                <button type="submit" class="submit-button">送信</button>
+            </form>
+        </div>
+    </div>        
+</footer>
+{% endblock %}

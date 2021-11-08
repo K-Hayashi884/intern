@@ -4,7 +4,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Subquery, OuterRef, Q
 from .models import User, Talk
-from .forms import SignupForm, LoginForm
+from .forms import SignupForm, LoginForm, TalkForm
 
 
 def index(request):
@@ -15,7 +15,7 @@ def signup_view(request):
         form = SignupForm(request.POST, request.FILES, instance=User())
         if form.is_valid():
             form.save()
-            return redirect(to='/')
+            return redirect('/')
         else:
             return render(request, "myapp/signup.html", {'form': form})
     return render(request, "myapp/signup.html", {'form': SignupForm()})
@@ -27,7 +27,6 @@ class login_view(LoginView):
 @login_required
 def friends(request):
     user = request.user
-    print(user, user.id)
     latest_talks = Talk.objects.filter(
         Q(from_user=user, to_user=OuterRef('pk'))
         | Q(from_user=OuterRef('pk'), to_user=user),
@@ -39,8 +38,29 @@ def friends(request):
     ).order_by('-latest_sent_time', '-date_joined')
     return render(request, "myapp/friends.html", {'data': friend_list})
 
+@login_required
 def talk_room(request, pk):
-    return render(request, "myapp/talk_room.html")
+    user1 = request.user
+    user2 = User.objects.get(id=pk)
+    message_list = Talk.objects.filter(
+        Q(from_user=user1, to_user=user2)
+        | Q(from_user=user2, to_user=user1)
+    ).order_by('sent_time')
+
+    if request.method == 'POST':
+        talk = Talk(from_user=user1, to_user=user2)
+        form = TalkForm(request.POST, instance=talk)
+        if form.is_valid():
+            form.save()
+            redirect('talk_room', pk)
+
+    params = {
+        'form': TalkForm(),
+        'data': message_list,
+        'user2_name': user2.username
+    }
+
+    return render(request, "myapp/talk_room.html", params)
 
 def setting(request):
     return render(request, "myapp/setting.html")
