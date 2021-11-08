@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_style %}
-<link rel="stylesheet" href="{% static 'myapp/css/friends.css' %}">
+<link rel="stylesheet" href="{% static '/myapp/css/friends1.css' %}">
 {% endblock %}
 
 {% block header-title %}友達{% endblock %}
@@ -13,7 +13,7 @@
       <table>
         <tr>
           <div class="img">
-            <td><img src='{{MEDIA_URL}}{{item1.img.url}}'alt='写真は登録されていません'></td> 
+            <td><img src='{{MEDIA_URL}}{{item1.img.url}}'alt='写真は登録されていません' class='icon'></td> 
           </div>
           <div class='username'>
             <td> {{item1.username}}</td>
@@ -38,7 +38,7 @@
       <table>
         <tr>
           <div class="img">
-            <td><img src='{{ MEDIA_URL }}{{item2.img.url}}' alt='写真は登録されていません'></td>
+            <td><img src='{{ MEDIA_URL }}{{item2.img.url}}' alt='写真は登録されていません' class='icon'></td>
             <!-- <td><img src='intern/media/image/bo2.jpg'+img alt='写真は登録されていません'></td> -->
           </div>
           <div class='username'>

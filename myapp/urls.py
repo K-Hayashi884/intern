@@ -21,7 +21,7 @@ urlpatterns = [
     path('setting//img',views.change_img,name='change_img'),
     path('change_img_done/',views.change_img_done,name='change_img_done'),
 
-    path('setting//password',views.change_password,name='change_password'),
+    path('setting/password',views.change_password,name='change_password'),
     path('change_password_done',views.change_password_done,name='change_password_done'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

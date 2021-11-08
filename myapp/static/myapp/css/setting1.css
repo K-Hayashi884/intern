@@ -1,0 +1,15 @@
+table{
+  width: 100%;
+}
+.btn{
+  display: block;
+  text-align: center;
+  border: 1px solid #000;
+  border-radius: 5px;
+  text-decoration: none;
+  width: 150px;
+  padding: 5px;
+  /* margin-top: 20px;
+  margin-bottom: 20px; */
+  margin: 20px auto;
+}

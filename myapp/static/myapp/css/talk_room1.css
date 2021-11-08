@@ -7,17 +7,13 @@
   font-weight: bold;
 }
 
-.table{
-  border-bottom: 1px solid lightgray;
-  position: relative;
-}
 
 .senduser{
   background-color: cornsilk;
 }
 
 .reseaveuser{
-  background-color: darkcyan;
+  background-color:aqua;
 }
 
 .name{
