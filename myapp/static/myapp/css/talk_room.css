@@ -7,6 +7,9 @@
   font-weight: bold;
 }
 
+.table{
+  position: relative;
+}
 
 .senduser{
   background-color: cornsilk;
@@ -27,10 +30,10 @@
 }
 
 .date{
-  font-size: 1px;
   position: absolute;
-  top: 0;
-  right: 0;
+  font-size: 1px;
+  right: 0%;
+  top: 50%;
 }
 
 

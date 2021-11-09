@@ -127,7 +127,7 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'myapp.Friend'
 
 
-LOGIN_URL = 'login' 
+LOGIN_URL = 'login_view' 
 
 LOGIN_REDIRECT_URL='/friends'
 LOGOUT_REDIRECT_URL='/login'
