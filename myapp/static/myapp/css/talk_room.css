@@ -45,7 +45,6 @@ a {
 }
 
 .talk-from {
-    width: 100%;
     padding: 7px 10px;
 }
 
@@ -68,7 +67,6 @@ a {
 }
 
 .message {
-    width: 70%;
     border-radius: 5px;
     padding: 7px 10px;
 }

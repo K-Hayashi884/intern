@@ -14,7 +14,6 @@ chatSocket.onmessage = function(e) {
     const div_container = document.getElementById('container')
         
     const data = JSON.parse(e.data);
-    let message = document.createTextNode(data.message);
 
     let div_talkContainer = document.createElement('div');
     let div_time = document.createElement('div');
@@ -22,8 +21,8 @@ chatSocket.onmessage = function(e) {
     div_time.classList.add('group');
     div_message.classList.add('message');
     div_message.classList.add('group');
-    div_time.innerHTML = data.time_talkRoom
-    div_message.appendChild(message);
+    div_time.innerHTML = data.time_talkRoom;
+    div_message.innerHTML = data.message;
 
 
     if (Number.parseInt(data.user_id) === Number.parseInt(user_id)) {

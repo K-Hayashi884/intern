@@ -20,17 +20,17 @@
 
 {% block content %}
 <div class='content' id='content'>
-    {% for message, time in message_list %}
+    {% for message, pro_message, time in message_list %}
     <div class='container'>
     {% if message.talk_from == user %}
         <div class='my-talk-container'>
             <div class='group'>{{ time|safe }}</div>    
-            <div class='message group mine'>{{ message.content }}</div>
+            <div class='message group mine'>{{ pro_message|safe }}</div>
         </div>
     {% else %}
         <div class='talk-from'>{{ message.talk_from }}</div>
         <div class='your-talk-container'>    
-            <div class='message group yours'>{{ message.content }}</div>
+            <div class='message group yours'>{{ pro_message|safe }}</div>
             <div class='group'>{{ time|safe }}</div>
         </div>
     {% endif %}

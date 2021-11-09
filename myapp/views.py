@@ -12,6 +12,7 @@ from .forms import UsernameChangeForm, EmailChangeForm, IconChangeForm, TalkCont
 
 from django.utils.timezone import localtime
 from django.utils import timezone
+from .consumers import process_message
 
 
 class IndexView(TemplateView):
@@ -104,21 +105,16 @@ def talk_room(request, room_path):
     friend_id = int(room_path.replace(str(user.id), '', 1).replace('-', ''))
     friend = CustomUser.objects.get(id=friend_id)
 
-    # postで送られてくるメッセージはデータベースに保存
-    #if request.method == 'POST':
-    #    talk = Talk(talk_from=user, talk_to=friend, \
-    #        content=request.POST['content'])
-    #    talk.save()
-
     messages = Talk.objects.select_related('talk_from', 'talk_to').filter(Q(talk_from=user, talk_to=friend)| \
         Q(talk_from=friend, talk_to=user)).order_by('pub_date')
     
     # messageと表示時間が一体となったタプルを持つリストを制作
     message_list = []
     for message in messages:
+        pro_message = process_message(message.content)
         jst_recorded_time = localtime(message.pub_date)
         display_time = f'{jst_recorded_time:%m/%d<br>%H:%M}'
-        message_list.append((message, display_time))
+        message_list.append((message, pro_message, display_time))
 
     params = {
         'user': user,

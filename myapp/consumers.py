@@ -5,6 +5,21 @@ from .models import Talk, CustomUser
 from django.utils.timezone import localtime
 from django.utils import timezone
 
+def process_message(message):
+        """ 長いメッセージに改行処理 """
+        letter_oneline = 20
+        processed_message = ''
+        message = message.replace('<br>', '').replace('\n', '')
+        while message:
+            if len(message) <= letter_oneline:
+                processed_message += message
+                message = False
+            else:
+                processed_message += message[:letter_oneline] + '<br>'
+                message = message[letter_oneline:]
+        
+        return processed_message
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
@@ -30,11 +45,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        raw_message = text_data_json['message']
         user_id = text_data_json['user_id']
         partner_id = text_data_json['partner_id']
+
+        message = process_message(raw_message)
         
-        talk_id = await self.save_message(user_id, partner_id, message)
+        talk_id = await self.save_message(user_id, partner_id, raw_message)
         username = await self.get_name(user_id)
         time = await self.get_time(talk_id)
 
@@ -49,6 +66,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         display_time_talkRoom = f'{jst_recorded_time:%m/%d<br>%H:%M}'
 
+        if len(raw_message) > 35:
+                display_message = raw_message[:35] + '...'
+
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -56,10 +76,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'chat_message',
                 'message': message,
+                'display_message': display_message,
                 'username': username,
                 'time_talkRoom': display_time_talkRoom,
                 'time_friend': display_time_friend,
-                'user_id': user_id
+                'user_id': user_id,
+                'room_path': self.room_path
 
             }
         )
@@ -67,18 +89,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
+        display_message = event['display_message']
         username = event['username']
         time_talkRoom = event['time_talkRoom']
         time_friend = event['time_friend']
         user_id = event['user_id']
+        room_path = event['room_path']
 
         # Send message to Websocket
         await self.send(text_data=json.dumps({
             'message': message,
+            'display_message': display_message,
             'username': username,
             'time_talkRoom': time_talkRoom,
             'time_friend': time_friend,
-            'user_id': user_id
+            'user_id': user_id,
+            'room_path': room_path
         }))
 
     @database_sync_to_async
@@ -101,4 +127,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         """ 送信時間の取得 """
         return Talk.objects.get(id=int(talk_id)).pub_date
 
-    
+
+            
+
+
+
