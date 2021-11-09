@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'myapp',
 
     'debug_toolbar',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -75,6 +76,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'intern.wsgi.application'
 
+# channels
+ASGI_APPLICATION = 'intern.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)]
+        },
+    },
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -83,8 +95,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'chat_app',
-        'USER':  os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'USER':  'nakatanisouta',
+        'PASSWORD': 'opklnmui',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -131,10 +143,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR.joinpath('staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# 画像DB用
-MEDIA_ROOT = BASE_DIR.joinpath('media')
+STATICFILE_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # ログイン用URL
@@ -149,6 +164,9 @@ INTERNAL_IPS = ['127.0.0.1']
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK" : lambda request: True,
 }
+
+
+
 
 
 try:

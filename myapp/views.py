@@ -78,10 +78,12 @@ def friends(request):
                 display_time = f'{jst_recorded_time:%m/%d/%Y}'
         else:
             display_time = None
+        
+        room_path = create_room_path(user, friend)
 
 
         # 最新のメッセージと対応する相手をタプルとしてリストに格納
-        info.append((friend, latest_message, display_time))
+        info.append((friend, latest_message, display_time, room_path))
 
     
     
@@ -92,18 +94,21 @@ def friends(request):
     return render(request, "myapp/friends.html", carams)
 
 @login_required
-def talk_room(request, id):
+def talk_room(request, room_path):
     """ talkroomの関数
         共通でメッセージを表示
         post時メッセージをデータベースに保存 """
     user = request.user
-    friend = CustomUser.objects.get(id=id)
+
+    # pathからidを抽出
+    friend_id = int(room_path.replace(str(user.id), '', 1).replace('-', ''))
+    friend = CustomUser.objects.get(id=friend_id)
 
     # postで送られてくるメッセージはデータベースに保存
-    if request.method == 'POST':
-        talk = Talk(talk_from=user, talk_to=friend, \
-            content=request.POST['content'])
-        talk.save()
+    #if request.method == 'POST':
+    #    talk = Talk(talk_from=user, talk_to=friend, \
+    #        content=request.POST['content'])
+    #    talk.save()
 
     messages = Talk.objects.select_related('talk_from', 'talk_to').filter(Q(talk_from=user, talk_to=friend)| \
         Q(talk_from=friend, talk_to=user)).order_by('pub_date')
@@ -116,9 +121,10 @@ def talk_room(request, id):
         message_list.append((message, display_time))
 
     params = {
-        'partner': friend.username,
+        'user': user,
+        'partner': friend,
         'message_list': message_list,
-        'id': id,
+        'room_path': room_path,
         'form': TalkContentForm()
     }
         
@@ -159,7 +165,7 @@ def edit_username(request):
     }
     return render(request, 'myapp/edit_username.html', params)
 
-@login_required(login_url='/login')
+@login_required
 def edit_username_done(request):
     """ username変更完了 """
     params = {
@@ -213,6 +219,16 @@ def edit_icon_done(request):
     }
     return render(request, 'myapp/done.html', carams)
 
+
+def create_room_path(user1, user2):
+    """userを渡すと一意のroom_pathを生成する関数"""
+    user1_id = str(user1.id)
+    user2_id = str(user2.id)
+    
+    num_list = sorted([user1_id, user2_id])
+    room_path = '-'.join(num_list)
+
+    return room_path
 
 
 

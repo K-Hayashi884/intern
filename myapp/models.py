@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 # ユーザーアカウントのクラス
 class CustomUser(AbstractUser):
-    account_image = models.ImageField(upload_to='profile_photos/', blank=True)
+    account_image = models.ImageField(upload_to='myapp/profile_photos/', blank=True)
 
 # トークメッセージのクラス
 class Talk(models.Model):

@@ -281,3 +281,5 @@ $RECYCLE.BIN/
 migrations/
 
 local_settings.py
+
+.venv
