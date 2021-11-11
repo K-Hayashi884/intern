@@ -16,27 +16,29 @@
 {% endblock %}
 
 {% block content %}
-<div class="users">
-    {% for user in data %}
-    <a href="{% url 'talk_room' user.id %}">
-        <div class="user-row">
-            <div class="user-content">
-                {% if user.img %}
-                <img src="{{ IMAGE_URL }}{{ user.img }}" class="user-icon">
-                {% else %}
-                <img src="{% static 'myapp/img/no-img.jpeg' %}" class="user-icon">
-                {% endif %}
-                <div class="user-content-right">
-                    <div class="username">{{ user.username }}</div>
-                    {% if user.latest_msg %}
-                    <div class="latest-msg">{{ user.latest_msg | truncatechars:20}}</div>
-                    <div class="latest-sent-time">{{ user.latest_sent_time}}</div>
+<div class="main-container">
+    <div class="users">
+        {% for user in data %}
+        <a href="{% url 'talk_room' user.id %}">
+            <div class="user-row">
+                <div class="user-content">
+                    {% if user.img %}
+                    <img src="{{ IMAGE_URL }}{{ user.img }}" class="user-icon">
+                    {% else %}
+                    <img src="{% static 'myapp/img/no-img.jpeg' %}" class="user-icon">
                     {% endif %}
+                    <div class="user-content-right">
+                        <div class="username">{{ user.username }}</div>
+                        {% if user.latest_msg %}
+                        <div class="latest-msg">{{ user.latest_msg | truncatechars:20}}</div>
+                        <div class="latest-sent-time">{{ user.latest_sent_time}}</div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-    </a>
-    {% endfor %}
+        </a>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
 

@@ -11,6 +11,8 @@ body{
     width: 100vw;
     height: 64px;
     border-bottom: solid 1px #9b9b9b;
+    position: fixed;
+    background-color: white;
 }
 .header-container{
     position: relative;
@@ -46,6 +48,7 @@ body{
     height: 64px;
     text-align: center;
     border-top: solid 1px #9b9b9b;
+    background-color: white;
 }
 .footer-container__item{
     display: flex;
@@ -78,4 +81,9 @@ body{
     line-height: 0.8rem;
     font-size: 0.8rem;
     color: #000;
+}
+
+/* 追加 */
+.main-container {
+    padding-top: 64px;
 }

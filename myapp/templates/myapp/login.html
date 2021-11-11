@@ -16,25 +16,27 @@
 {% endblock %}
 
 {% block content %}
-<form action="{% url 'login_view' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% if form.non_field_errors %}
-        {% for error in form.non_field_errors %}
-            <p>{{ error }}</p>
+<div class="main-container">
+    <form action="{% url 'login_view' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        {% endif %}
+        <table>
+        {% for field in form %}
+            <tr>
+                <td>{{ field.label_tag }}</td>
+                <td>{{ field }}</td>
+            </tr>
         {% endfor %}
-    {% endif %}
-    <table>
-    {% for field in form %}
-        <tr>
-            <td>{{ field.label_tag }}</td>
-            <td>{{ field }}</td>
-        </tr>
-    {% endfor %}
-    </table>
-    <div class="signup-button-wrapper">
-        <button type="submit">送信</button>
-    </div>
-</form>
+        </table>
+        <div class="signup-button-wrapper">
+            <button type="submit">送信</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
 
 {% block footer %}

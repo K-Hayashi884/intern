@@ -21,18 +21,20 @@
 {% endblock %}
 
 {% block content %}
-<div class="messages">
-    {% for item in data %}
-    <div class="message-row {% if item.from_user.username == user2_name %} not-from-me{% endif %}">
-        <div class="message-content">
-            <div class="username-row">
-                <div class="username">{{ item.from_user.username }}</div>
-                <div class="sent-time">{{ item.sent_time }}</div>
+<div class="main-container">
+    <div class="messages">
+        {% for item in data %}
+        <div class="message-row {% if item.from_user.username == user2_name %} not-from-me{% endif %}">
+            <div class="message-content">
+                <div class="username-row">
+                    <div class="username">{{ item.from_user.username }}</div>
+                    <div class="sent-time">{{ item.sent_time }}</div>
+                </div>
+                <div class="message">{{ item.message }}</div>
             </div>
-            <div class="message">{{ item.message }}</div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}
 
