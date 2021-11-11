@@ -88,6 +88,8 @@
     word-break: break-all;
 }
 
+/*---------------------------*/
+
 .footer {
     height: 45px;
 }
@@ -95,6 +97,7 @@
 .footer-container {
     height: 45px;
     text-align: center;
+    background-color: white;
 }
 
 .input-container {
