@@ -23,9 +23,10 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = 'oaab#2kr%trbj2h-w9ycf0&f$7dgi2+p=37!cjw$*y0@26pq77'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost',
+    'www.localhost',]
 
 
 # Application definition
@@ -120,15 +121,14 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = BASE_DIR/'static'
 
 AUTH_USER_MODEL = 'myapp.user'
 
 # 画像（ユーザーアイコン）にアクセスするための指定
 
-import os
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR/'media'
 MEDIA_URL = '/media/'
 
 
