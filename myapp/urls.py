@@ -9,3 +9,4 @@ urlpatterns = [
     path('talk_room', views.talk_room, name='talk_room'),
     path('setting', views.setting, name='setting'),
 ]
+

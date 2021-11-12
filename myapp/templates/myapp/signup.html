@@ -20,7 +20,7 @@
 
         <div class="container mt-24">
             {% block content %}
-            <form action="{% url 'signup_view' %}" method="post">
+            <form action="{% url 'signup_view' %}" method="post" enctype="multipart/form-data">
                 <label class="block">
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
@@ -60,8 +60,15 @@
                     </div>
                 </label>
                 <div class="text-center">
-                    <button type="button" class="btn btn-secondary">Submit</button>
+                    <button type="submit" class="btn btn-secondary">Submit</button>
                 </div>
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %} 
             </form>
             {% endblock %}
         </div>

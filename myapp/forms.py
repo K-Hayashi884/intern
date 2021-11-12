@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm
 
 class SignUpForm(UserCreationForm):
     image=forms.ImageField()
@@ -31,3 +32,15 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model=User
         fields=['username','email','password1','password2',"image"]
+
+class LoginForm(AuthenticationForm):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields["username"].widget.attrs.update({
+            'class':"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+            'placeholder':""
+        })
+        self.fields["password"].widget.attrs.update({
+            'class':"shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline",
+            'placeholder':""
+        })
