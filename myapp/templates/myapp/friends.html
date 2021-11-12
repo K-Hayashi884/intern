@@ -1,0 +1,13 @@
+{% extends 'myapp/base.html' %}
+{% block content %}
+<ul>
+    {% for friend in friends %}
+        <li>
+            {% if friend.image %}
+                <img src="{{ friend.image.url }}">
+            {% endif %}
+            <a href="{% url 'myapp:talk_room' friend.username %}">{{ friend.username }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
