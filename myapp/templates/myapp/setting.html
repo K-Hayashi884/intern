@@ -1,1 +1,20 @@
-S
+{% extends 'myapp/base.html' %}
+{% block content %}
+<ul>
+    <li>
+        <a href="{% url 'myapp:change' item='username' %}">ユーザーネーム変更</a>
+    </li>
+    <li>
+        <a href="{% url 'myapp:password_change' %}">パスワード変更</a>
+    </li>
+    <li>
+        <a href="{% url 'myapp:change' item='image' %}">アイコン変更</a>
+    </li>
+    <li>
+        <a href="{% url 'myapp:change' item='email' %}">メールアドレス変更</a>
+    </li>
+    <li>
+        <a href="{% url 'myapp:logout' %}">ログアウト</a>
+    </li>
+</ul>
+{% endblock %}

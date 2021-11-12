@@ -1,1 +1,23 @@
-TR
+{% load static %}
+
+{% block extra_style %}{% endblock %}
+
+{% block header %}{% block header-title %}{% endblock %}{% endblock %}
+
+{% block content %}
+<ul>
+    {% for message in messages %}
+        <li>
+            {{message.contents}}
+            {{message.date_joined}}
+        </li>
+    {% endfor %}
+</ul>
+<form action="{% url 'myapp:talk_room' partner %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Send">
+</form>
+{% endblock %}
+
+{% block footer %}{% endblock %}

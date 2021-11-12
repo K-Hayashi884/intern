@@ -1,12 +1,19 @@
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <title>Index</title>
-</head>
-<body>
-    <a href="{% url signup %}">会員登録</a>
-</body>
-</html>
+
+{% block extra_style %}{% endblock %}
+
+{% block header %}{% block header-title %}{% endblock %}{% endblock %}
+
+{% block content %}
+    {{request.user}}
+    <ul>
+        <li>
+            <a href="{% url 'myapp:login' %}" id="login_button">Login</a>
+        </li>
+        <li>
+            <a href="{% url 'myapp:signup' %}" id="signup_button">SignUp</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block footer %}{% endblock %}

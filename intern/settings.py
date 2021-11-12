@@ -130,4 +130,10 @@ import os
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# db関係
 AUTH_USER_MODEL = 'myapp.User'
+
+# login関係
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/friends'
+LOGOUT_REDIRECT_URL = '/'
