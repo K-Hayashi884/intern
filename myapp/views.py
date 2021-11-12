@@ -7,6 +7,7 @@ from .models import User, Talk
 from .forms import SignupForm, LoginForm, TalkForm
 
 
+
 def index(request):
     return render(request, "myapp/index.html")
 
