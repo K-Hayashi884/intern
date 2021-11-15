@@ -5,20 +5,7 @@ from .models import Talk, CustomUser
 from django.utils.timezone import localtime
 from django.utils import timezone
 
-def process_message(message):
-        """ 長いメッセージに改行処理 """
-        letter_oneline = 20
-        processed_message = ''
-        message = message.replace('<br>', '').replace('\n', '')
-        while message:
-            if len(message) <= letter_oneline:
-                processed_message += message
-                message = False
-            else:
-                processed_message += message[:letter_oneline] + '<br>'
-                message = message[letter_oneline:]
-        
-        return processed_message
+from .views import create_room_path, process_message
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -48,13 +35,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         raw_message = text_data_json['message']
         user_id = text_data_json['user_id']
         partner_id = text_data_json['partner_id']
-
         message = process_message(raw_message)
         
         talk_id = await self.save_message(user_id, partner_id, raw_message)
         username = await self.get_name(user_id)
         time = await self.get_time(talk_id)
-
         jst_recorded_time = localtime(time)
         now = localtime(timezone.now())
         if jst_recorded_time.date() == now.date():
@@ -67,9 +52,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         display_time_talkRoom = f'{jst_recorded_time:%m/%d<br>%H:%M}'
 
         if len(raw_message) > 35:
-                display_message = raw_message[:35] + '...'
-
-
+            display_message = raw_message[:35] + '...'
+        else:
+            display_message = raw_message
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -80,7 +65,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'username': username,
                 'time_talkRoom': display_time_talkRoom,
                 'time_friend': display_time_friend,
-                'user_id': user_id,
+                'user_id': str(user_id),
                 'room_path': self.room_path
 
             }
@@ -95,7 +80,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         time_friend = event['time_friend']
         user_id = event['user_id']
         room_path = event['room_path']
-
         # Send message to Websocket
         await self.send(text_data=json.dumps({
             'message': message,
@@ -128,7 +112,52 @@ class ChatConsumer(AsyncWebsocketConsumer):
         return Talk.objects.get(id=int(talk_id)).pub_date
 
 
-            
+class SearchConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.user = self.scope['user']
+        await self.accept()
+        print(1)
+
+    async def disconnect(self, close_code):
+        pass
+
+     # Receive search context from WebSocket
+    async def receive(self, text_data):
+        print(2)
+        text_data_json = json.loads(text_data)
+        search = text_data_json['search']
+        print(self.user)
+        info = await self.get_friends_info(search)
+        print(info)   
+         # Send search context to room group
+        await self.send(text_data=json.dumps({
+            'info': info
+        })
+        )
+
+    @database_sync_to_async
+    def get_friends_info(self, search):
+        print(5)
+        friends = CustomUser.objects.exclude(id=self.user.id).filter(username__icontains=str(search))
+        all_friends =  CustomUser.objects.all().exclude(id=self.user.id)
+        print(friends)
+        if search == '':
+            info = create_room_path_list(self.user, all_friends)
+        if friends:
+            info = create_room_path_list(self.user, friends)
+        else:
+            info = []
+        
+        print(7)
+        return info
+    
+def create_room_path_list(user, friends):
+    info = []
+    for friend in friends:
+        room_path = create_room_path(user, friend)
+        info.append(room_path)
+
+    return info
 
 
 

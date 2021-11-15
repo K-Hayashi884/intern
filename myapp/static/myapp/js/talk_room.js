@@ -8,7 +8,7 @@ const chatSocket = new WebSocket(
     + '/ws/chat/'
     + room_path
     + '/'
-    );
+);
 
 chatSocket.onmessage = function(e) {
     const div_container = document.getElementById('container')
@@ -47,7 +47,7 @@ chatSocket.onmessage = function(e) {
         div_container.appendChild(div_talkContainer);
     };
 
-    let content = document.getElementById('content')
+    let content = document.getElementById('content');
     content.scrollTo(0, content.scrollHeight);
 };
 
@@ -72,3 +72,10 @@ document.querySelector('.submit-button').onclick = function(e) {
     }));
     messageInputDom.value = '';
 };
+
+document.addEventListener('DOMContentLoaded', function() {
+    let content = document.getElementById('content');
+    content.scrollTo(0, content.scrollHeight);
+})
+
+

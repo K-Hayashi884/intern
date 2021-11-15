@@ -12,7 +12,7 @@
     display: flex;
     height: 66px;
     border-bottom: 1px solid #858585;
-    margin: 5px;
+    padding: 5px;
 }
 
 .talk_partner {
@@ -53,4 +53,31 @@ a {
     padding-left: 30px;
     color: #858585;
     font-size: 14px;
+}
+
+.blue {
+    background-color: rgb(188, 234, 255);
+}
+
+.form-control {
+    height: 2em;
+    width: 90%;
+    padding: 0 16px;
+    border-radius: 4px;
+    border: none;
+    box-shadow: 0 0 0 1px #ccc inset;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    margin: 3px;
+}
+
+.form-control:focus {
+    outline: 0;
+    box-shadow: 0 0 0 2px rgb(33, 150, 243) inset;
+}
+
+.input-wrap {
+    display: flex;
+    border-bottom: 1px solid #858585;
 }

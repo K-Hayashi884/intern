@@ -38,10 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp',
+    'myapp.apps.MyappConfig',
 
-    'debug_toolbar',
+
     'channels',
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+
+    'rest_framework'
+
 ]
 
 MIDDLEWARE = [
@@ -53,7 +60,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'intern.urls'
@@ -85,21 +91,6 @@ CHANNEL_LAYERS = {
             'hosts': [('127.0.0.1', 6379)]
         },
     },
-}
-
-
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'chat_app',
-        'USER':  'nakatanisouta',
-        'PASSWORD': 'opklnmui',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
 }
 
 
@@ -152,22 +143,57 @@ STATICFILE_DIRS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-# ログイン用URL
-LOGIN_URL = 'login_view'
-LOGIN_REDIRECT_URL = '/friends'
-LOGOUT_REDIRECT_URL = 'index'
 
 AUTH_USER_MODEL = 'myapp.CustomUser'
 
-# デバッグ用
-INTERNAL_IPS = ['127.0.0.1']
-DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK" : lambda request: True,
+
+# django-allauthサイト識別用ID
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = (
+    'allauth.account.auth_backends.AuthenticationBackend', # 一般ユーザー用(メールアドレス認証)
+    'django.contrib.auth.backends.ModelBackend' # 管理サイト用(ユーザー名認証)
+)
+
+# メールアドレス認証にする設定
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+# サインアップにメールアドレス確認を挟む設定
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
+
+
+# ログイン/ログアウト後の遷移先を設定
+LOGIN_REDIRECT_URL = '/friends'
+LOGOUT_REDIRECT_URL = 'index'
+LOGIN_URL = 'account_login'
+
+
+ACCOUNT_LOGOUT_ON_GET = True  # ログアウトリンクのクリック一発でログアウト
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True # メールアドレスでの確認後即時ログイン
+
+# django-allauthが送信するメールの件名に自動付与される接頭辞をブランクに
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
+ACCOUNT_MAX_EMAIL_ADDRESSES = 2
+
+
+# デフォルトのメール送信元を設定
+DEFAULT_FROM_EMAIL = 'sota.appad@gmail.com'
+
+# allauthのフォームカスタマイズ
+ACCOUNT_FORMS = {
+    'login': 'myapp.forms.MyLoginForm',
+    'signup': 'myapp.forms.MySignupForm',
+    'reset_password_from_key': 'myapp.forms.MyResetPasswordKeyForm',
+    'reset_password': 'myapp.forms.MyResetPasswordForm',
+
 }
 
+#signupformからの情報をcustomusermodelに保存するのに必要
+ACCOUNT_ADAPTER = 'myapp.adapter.AccountAdapter'
 
-
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 try:
     from .local_settings import *

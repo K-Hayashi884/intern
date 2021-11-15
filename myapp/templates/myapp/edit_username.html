@@ -25,6 +25,11 @@
             </div>
         {% endfor %}
     {% endif %}
+    {% if error %}
+        <div>
+            {{ error }}
+        </div>
+    {% endif %}
     <div><button type='submit' class='submit-button'>変更</button></div>
 </div>
 </form>

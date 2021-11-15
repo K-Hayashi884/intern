@@ -1,29 +1,8 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm
 from .models import CustomUser
+from allauth.account.forms import LoginForm, SignupForm, ResetPasswordKeyForm, ResetPasswordForm
 
-# アカウント作成フォーム
-class SignupForm(UserCreationForm):
-    """ Userクラス用フォーム """
-    class Meta:
-        model = CustomUser
-        fields = ('username', 'email', 'password1', 'password2', 'account_image')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs['placeholder'] = 'ユーザー名'
-        self.fields['email'].widget.attrs['placeholder'] = 'メールアドレス'
-        self.fields['password1'].widget.attrs['placeholder'] = 'パスワード'
-        self.fields['password2'].widget.attrs['placeholder'] = 'パスワード(確認用)'
-
-# ログイン用フォーム
-class LoginForm(AuthenticationForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs['placeholder'] = 'ユーザー名'
-        self.fields['password'].widget.attrs['placeholder'] = 'パスワード'
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
 
 # パスワード変更用フォーム
 class PasswordChange_Form(PasswordChangeForm):
@@ -60,3 +39,49 @@ class TalkContentForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super(TalkContentForm, self).__init__(*args, **kwargs)
+
+
+# ログイン用フォーム
+class MyLoginForm(LoginForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+# サインアップ用フォーム
+class MySignupForm(SignupForm):
+    """ Userクラス用フォーム """
+    account_image = forms.ImageField()
+    class Meta:
+        model = CustomUser
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['placeholder'] = 'ユーザー名'
+        self.fields['email'].widget.attrs['placeholder'] = 'メールアドレス'
+        self.fields['password1'].widget.attrs['placeholder'] = 'パスワード'
+        self.fields['password2'].widget.attrs['placeholder'] = 'パスワード(確認用)'
+
+        for field in self.fields.values():
+            if field != self.fields['account_image']:
+                field.widget.attrs['class'] = 'form-control'
+    
+    def signup(self, request, user):
+        user.account_image = self.cleaned_data['account_image']
+        user.save()
+        return user
+
+# パスワードリセット(変更用フォーム)
+class MyResetPasswordKeyForm(ResetPasswordKeyForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password2'].widget.attrs['placeholder'] ='パスワード(確認用)'
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+# パスワードリセット(メール送信用フォーム)
+class MyResetPasswordForm(ResetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
