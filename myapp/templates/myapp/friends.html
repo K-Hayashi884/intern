@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/base.css' %}" />
     {% block extra_style %}{% endblock %}
     <title>DeMiAインターン</title>
@@ -20,6 +21,12 @@
     {% endblock %}
 
     {% block content %}
+    {% for item in data %}
+    <div class="p-5 flex border-b border-gray-300 border-solid">
+        <div class="pr-3"><img class="h-8 w-8 object-cover rounded-full bg-gray-600" src="{{item.image.url}}"></div>
+        <p class="leading-8">{{item.username}}</p>
+    </div>
+    {% endfor %}
     {% endblock %}
 
     {% block footer %}

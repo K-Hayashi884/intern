@@ -10,3 +10,5 @@ urlpatterns = [
     path('setting', views.setting, name='setting'),
 ]
 
+
+

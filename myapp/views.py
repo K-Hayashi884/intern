@@ -1,7 +1,10 @@
 from django.shortcuts import redirect, render
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from .models import Profile
 from .forms import SignUpForm
 from .forms import LoginForm
 
@@ -14,38 +17,55 @@ def index(request):
 
 def signup_view(request):
     if request.method=="POST":
-        form=SignUpForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save()
-            username=form.cleaned_data.get("username")
-            password=form.cleaned_data.get("password1")
+        user_form=SignUpForm(request.POST,request.FILES)
+        if user_form.is_valid():
+            user_form.save()
+            username=user_form.cleaned_data.get("username")
+            password=user_form.cleaned_data.get("password1")
             new_user=authenticate(username=username,password=password)
             if new_user is not None:
                 login(request,new_user)
-                return redirect('index')
+                return redirect('friends')
     else:
-        form=SignUpForm()
-    return render(request, "myapp/signup.html",{'form':form})
+        user_form=SignUpForm()
+    params={
+        'user_form':user_form,
+    }
+    return render(request, "myapp/signup.html",params)
 
 def login_view(request):
     if request.method=='POST':
         form=LoginForm(request.POST)
-        if form.is_valid():
-            usename=form.cleaned_data.get("username")
-            password=form.cleaned_data.get("password1")
-            if new_user is not None:
-                login(request,new_user)
-                return HttpResponseRedirect(reverse('inquiry_apps:inquiry_list'))
-            else:
-                pass
+        username=request.POST['username']
+        password=request.POST['password']
+        user=authenticate(username=username,password=password)
+        if user is not None:
+            if user.is_active:
+                login(request,user)
+                return redirect('friends')
+        else:
+            pass
     else:
         form=LoginForm()
     return render(request, "myapp/login.html",{'form':form})
+
+@login_required
 def friends(request):
-    return render(request, "myapp/friends.html")
+    user=request.user
+    data = Profile.objects.exclude(id=user.id)
+    params = {
+        'user':user,
+        'data':data,
+    }
+    return render(request, "myapp/friends.html",params)
 
 def talk_room(request):
     return render(request, "myapp/talk_room.html")
 
 def setting(request):
     return render(request, "myapp/setting.html")
+
+@login_required
+def Logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('Login'))
