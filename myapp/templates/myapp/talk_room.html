@@ -1,44 +1,41 @@
+{% extends 'myapp/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/base.css' %}" />
     {% block extra_style %}
-        
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}" />
     {% endblock %}
-    <title>DeMiAインターン</title>
-</head>
-<body>
     {% block header %}
     <header class="header">
         <div class="header-container">
             <span class="header-container__title">
-                {% block header-title %}{% endblock %}
+                {% block header-title %}
+                <div align="left"><a href="{% url 'friends' %}">戻る</a></div>
+                {{username}}
+                {% endblock %}
             </span>
         </div>
     </header>
     {% endblock %}
 
     {% block content %}
+    <table>
+        {% for item in data %}
+            <tr>
+                <td>>>{{item.receiver}}</td>
+                <td>{{item.content}}</td>
+                <td>{{item.msg_date}}</td>
+            </tr>
+        {% endfor %} 
+    </table>
     {% endblock %}
 
     {% block footer %}
     <footer class="footer">
         <div class="footer-container">
-            <div class="footer-container__item">
-                <a href="{% url 'friends' %}" class="footer-item__link">
-                    <span class="footer-item__icon"><img src="{% static 'myapp/img/people-24px.svg' %}"></span>
-                    <span class="footer-item__text">友達</span>
-                </a>
-            </div>
-            <div class="footer-container__item">
-                <a href="{% url 'setting' %}" class="footer-item__link">
-                    <span class="footer-item__icon"><img src="{% static 'myapp/img/settings-black-18dp.svg' %}"></span>
-                    <span class="footer-item__text">設定</span>
-                </a>
-            </div>
+            <form method = 'POST'>
+                {% csrf_token %}
+                {{ form }}
+                <button type = "submit">送信</button>
+            </form>
         </div>
     </footer>
     {% endblock %}
