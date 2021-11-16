@@ -178,8 +178,7 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
 ACCOUNT_MAX_EMAIL_ADDRESSES = 2
 
 
-# デフォルトのメール送信元を設定
-DEFAULT_FROM_EMAIL = 'sota.appad@gmail.com'
+
 
 # allauthのフォームカスタマイズ
 ACCOUNT_FORMS = {
@@ -193,8 +192,10 @@ ACCOUNT_FORMS = {
 #signupformからの情報をcustomusermodelに保存するのに必要
 ACCOUNT_ADAPTER = 'myapp.adapter.AccountAdapter'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+
+
+# メール設定、ロギング設定や、データベース設定はlocal_settings
 try:
     from .local_settings import *
 except ImportError:
