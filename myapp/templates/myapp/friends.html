@@ -14,7 +14,7 @@
         <input id="chat-message-input" class='form-control' type="text" placeholder='ユーザー名で検索'>
     </div>
     <div class='container' id='container'> 
-    {% for friend, message, time, room_path in info %}
+    {% for friend, message, time, room_path, _ in info %}
     <a href="{% url 'talk_room' room_path %}" class='{{ room_path }} link'>
         <table hidden class='room_path'>{{ room_path|json_script:room_path}}</table>
         <div class='item wrap'>

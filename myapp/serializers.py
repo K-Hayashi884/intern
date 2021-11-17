@@ -9,4 +9,4 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class TalkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Talk
-        fields = ('content',)
+        fields = ('content', 'pub_date')

@@ -13,6 +13,7 @@ from .serializers import CustomUserSerializer, TalkSerializer
 
 from django.utils.timezone import localtime
 from django.utils import timezone
+import operator
 
 
 class IndexView(TemplateView):
@@ -154,6 +155,8 @@ def create_message_dict(user, friends):
     リストに記録し、ルームIDを作成
     """
     info = []
+    info_have_message = []
+    info_heve_no_message = []
     for friend in friends:
         # 最新のメッセージの取得
         latest_message = Talk.objects.select_related('talk_from', 'talk_to').\
@@ -183,8 +186,15 @@ def create_message_dict(user, friends):
         serialize_message = TalkSerializer(latest_message)
 
         # 最新のメッセージと対応する相手をリストとしてinfoリストに格納
-        info.append([serialize_friend.data, serialize_message.data, display_time, room_path])
+        if latest_message:
+            info_have_message.append([serialize_friend.data, serialize_message.data, display_time, room_path, latest_message.pub_date])
+        else:
+            info_heve_no_message.append([serialize_friend.data, serialize_message.data, display_time, room_path, None])
     
+    # 時間順に並べ替え
+    info_have_message = sorted(info_have_message, key=operator.itemgetter(4), reverse=True)
+    info.extend(info_have_message)
+    info.extend(info_heve_no_message)
     return info
 
 def process_message(message):
