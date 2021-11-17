@@ -7,7 +7,7 @@ const searchSocket = new WebSocket(
 
 searchSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
-    const container = document.getElementById('container')
+    const container = document. getElementById('container')
     const anchor = document.getElementsByClassName('link')
     let lst = []
     for (const elem of data.info) {
@@ -22,7 +22,7 @@ searchSocket.onmessage = function(e) {
         };
     }
     
-    let info = data.info;
+    
     
 
 };

@@ -115,8 +115,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 class SearchConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user = self.scope['user']
-        await self.accept()
         print(1)
+        await self.accept()
 
     async def disconnect(self, close_code):
         pass
