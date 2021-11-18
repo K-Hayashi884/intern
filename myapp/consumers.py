@@ -8,7 +8,9 @@ from django.utils import timezone
 from .views import create_room_path, process_message
 
 
+
 class ChatConsumer(AsyncWebsocketConsumer):
+    """ チャット関係のコンシューマー、トークルームとフレンド欄で使用"""
 
     async def connect(self):
         self.room_path = self.scope['url_route']['kwargs']['room_path']
@@ -35,11 +37,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         raw_message = text_data_json['message']
         user_id = text_data_json['user_id']
         partner_id = text_data_json['partner_id']
+        # メッセージに改行処理
         message = process_message(raw_message)
         
+        # データベースに保存、各種値の取得
         talk_id = await self.save_message(user_id, partner_id, raw_message)
         username = await self.get_name(user_id)
         time = await self.get_time(talk_id)
+
+        # 表示系処理(時間をトークルーム、フレンド欄に分けて)
         jst_recorded_time = localtime(time)
         now = localtime(timezone.now())
         if jst_recorded_time.date() == now.date():
@@ -51,6 +57,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         display_time_talkRoom = f'{jst_recorded_time:%m/%d<br>%H:%M}'
 
+        # フレンドに表示するトークメッセージ
         if len(raw_message) > 35:
             display_message = raw_message[:35] + '...'
         else:
@@ -113,6 +120,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
 class SearchConsumer(AsyncWebsocketConsumer):
+    """ 検索文のコンシューマー
+    検索文を受け取りリアルタイムでデータベースを参照"""
     async def connect(self):
         self.user = self.scope['user']
         print(1)
@@ -137,6 +146,7 @@ class SearchConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def get_friends_info(self, search):
+        """検索文からデータベースを参照、ルームパスのリストを返す"""
         print(5)
         friends = CustomUser.objects.exclude(id=self.user.id).filter(username__icontains=str(search))
         all_friends =  CustomUser.objects.all().exclude(id=self.user.id)
@@ -150,7 +160,8 @@ class SearchConsumer(AsyncWebsocketConsumer):
         
         print(7)
         return info
-    
+
+# ルームパスからリストを作成
 def create_room_path_list(user, friends):
     info = []
     for friend in friends:

@@ -1,4 +1,6 @@
 'use strict';
+
+// ソケットを部屋ごとに作り受信したらトーク内容を表示し上に上げる
 const container = document.getElementById('container')
 var room_path_elements = document.getElementsByClassName('room_path')
 var chatSocket = []

@@ -20,7 +20,7 @@ class IndexView(TemplateView):
     template_name = 'myapp/index.html'
     
 
-
+# 小回りが効くようクラスベースは導入していない
 @login_required
 def friends(request):
     # ログインユーザーを取得し、検索から自分の友達を取得
@@ -36,6 +36,7 @@ def friends(request):
 
     return render(request, "myapp/friends.html", carams)
 
+# 小回りが効くようクラスベースは導入していない
 @login_required
 def talk_room(request, room_path):
     """ talkroomの関数

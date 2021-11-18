@@ -10,6 +10,7 @@ const chatSocket = new WebSocket(
     + '/'
 );
 
+// ソケット受信時トークルームにチャットコンテナを追加
 chatSocket.onmessage = function(e) {
     const div_container = document.getElementById('container')
         
@@ -47,14 +48,17 @@ chatSocket.onmessage = function(e) {
         div_container.appendChild(div_talkContainer);
     };
 
+    // 画面をトーク一番下までスクロール
     let content = document.getElementById('content');
     content.scrollTo(0, content.scrollHeight);
 };
 
+// エラー時コンソールにメッセージ
 chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
 
+// エンターキーでも送信できるように
 document.querySelector('#chat-message-input').focus();
 document.querySelector('#chat-message-input').onkeyup = function(e) {
     if (e.keyCode === 13) {  // enter, return
@@ -62,6 +66,7 @@ document.querySelector('#chat-message-input').onkeyup = function(e) {
     }
 };
 
+// チャットソケットにメッセージを送信
 document.querySelector('.submit-button').onclick = function(e) {
     const messageInputDom = document.querySelector('#chat-message-input');
     const message = messageInputDom.value;
@@ -73,6 +78,7 @@ document.querySelector('.submit-button').onclick = function(e) {
     messageInputDom.value = '';
 };
 
+// アクセスした時一番下を表示
 document.addEventListener('DOMContentLoaded', function() {
     let content = document.getElementById('content');
     content.scrollTo(0, content.scrollHeight);

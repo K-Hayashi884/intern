@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 
 from allauth.account.models import EmailAddress
 
+# メールアドレス変更の際はデータベースから古いメールアドレスを削除する
 @receiver(email_confirmed)
 def email_confirmed_(request, email_address, **kwargs):
     customuser = request.user
