@@ -18,6 +18,7 @@ from .forms import (
 )
 
 
+
 def index(request):
     return render(request, "myapp/index.html")
 
