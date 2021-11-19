@@ -200,3 +200,32 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+# 以下local_settingsの内容
+
+# メールサーバーへの接続設定
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = '自分のメールアドレス'
+# EMAIL_HOST_PASSWORD = 'メールアドレスアカウントのパス'
+# EMAIL_USE_TLS = True
+
+# デフォルトのメール送信元を設定
+# DEFAULT_FROM_EMAIL = '自分のメールアドレス'
+
+# smtpはconsoleでも可
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Database
+# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'データベースネーム',
+#        'USER':  'データベースユーザー',
+#        'PASSWORD': 'データベースパス',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    }
+#}
