@@ -1,19 +1,15 @@
+{% extends 'myapp/base.html' %}
 {% load static %}
-
-{% block extra_style %}{% endblock %}
+{% block extra_style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/index.css' %}" />
+{% endblock %}
 
 {% block header %}{% block header-title %}{% endblock %}{% endblock %}
 
 {% block content %}
-    {{request.user}}
-    <ul>
-        <li>
-            <a href="{% url 'myapp:login' %}" id="login_button">Login</a>
-        </li>
-        <li>
-            <a href="{% url 'myapp:signup' %}" id="signup_button">SignUp</a>
-        </li>
-    </ul>
+    <div id="btn-area">
+        <a href="{% url 'myapp:login' %}" id="login_button">Login</a>
+        <a href="{% url 'myapp:signup' %}" id="signup_button">SignUp</a>
+    </div>
 {% endblock %}
-
 {% block footer %}{% endblock %}

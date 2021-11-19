@@ -1,23 +1,35 @@
+{% extends 'myapp/base.html' %}
 {% load static %}
 
-{% block extra_style %}{% endblock %}
+{% block extra_style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}" />
+{% endblock %}
 
-{% block header %}{% block header-title %}{% endblock %}{% endblock %}
+{% block header-title %}
+    {{ partner }}
+{% endblock %}
 
 {% block content %}
-<ul>
+<ul id="message-area">
     {% for message in messages %}
         <li>
-            {{message.contents}}
-            {{message.date_joined}}
-        </li>
+            {% if message.sender == request.user.unique_id %}
+                <div class="message from-user">
+                    <div class="message-content from-user-content">{{message.contents}}</div>
+                    <div class="message-datetime">{{message.date_joined}}</div>
+                </div>
+            {% elif message.sender == partner_id %}
+                <div class="message">
+                    <div class="message-content">{{message.contents}}</div>
+                    <div class="message-datetime">{{message.date_joined}}</div>
+                </div>
+            {% endif %}
+        </li><br>
     {% endfor %}
 </ul>
 <form action="{% url 'myapp:talk_room' partner %}" method="post">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Send">
+    {{ form.contents }}
+    <input type="submit" value="send" id="btn">
 </form>
 {% endblock %}
-
-{% block footer %}{% endblock %}

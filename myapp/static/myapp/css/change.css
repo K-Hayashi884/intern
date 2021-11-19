@@ -6,17 +6,19 @@ body {
 }
 
 form {
-    width: 400px;
-    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 455px;
+    position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
 
 th {
-    font-size: 12px;
+    font-size: 14px;
     text-align: start;
-    width: 128px;
+    width: 170px;
     height: 50px;
 }
 

@@ -9,8 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 def index(request):
-    parameters = {}
-    return render(request, "myapp/index.html", parameters)
+    return render(request, "myapp/index.html")
 
 def signup(request):
     parameters = {}
@@ -18,7 +17,7 @@ def signup(request):
         parameters['form'] = SignupForm()
     elif request.method == 'POST':
         form = SignupForm(request.POST, request.FILES)
-        if form.is_valid(): # <-これいる？
+        if form.is_valid():
             form.save()
             return redirect(to="/")
         parameters['form'] = form
@@ -41,65 +40,75 @@ def friends(request):
 @login_required
 def talk_room(request, partner):
     parameters = {}
-    user = request.user.username
+    user_id = request.user.unique_id
+    objects = User.objects.filter(username=partner)
+
+    if objects:
+        partner_id = objects[0].unique_id
+    else:
+        return HttpResponse("404")
+
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():
             message = Message(
-                sender=user, \
-                receiver=partner, \
+                sender=user_id, \
+                receiver=partner_id, \
                 contents=form.cleaned_data['contents']
             )
             message.save()
-    parameters['messages'] = Message.objects.filter((Q(sender=partner) & Q(receiver=user)) | (Q(sender=user) & Q(receiver=partner)))
-    parameters['form'] = MessageForm()
+    parameters['messages'] = Message.objects.filter((Q(sender=partner_id) & Q(receiver=user_id)) | (Q(sender=user_id) & Q(receiver=partner_id)))
+    parameters['form'] = MessageForm() # 文字さえ入力していればvalidateは通る気がするのでrequest.POSTは入れない
     parameters['partner'] = partner
+    parameters['partner_id'] = partner_id
     return render(request, "myapp/talk_room.html", parameters)
 
 @login_required
 def setting(request):
     return render(request, "myapp/setting.html")
 
-def Form(item):
+def PostForm(item, request):
+    user = request.user
     if item == 'username':
-        return UsernameChangeForm
-    elif item == 'image':
-        return ImageChangeForm
+        return UsernameChangeForm(request.POST, instance=user)
     elif item == 'email':
-        return EmailChangeForm
+        return EmailChangeForm(request.POST, instance=user)
     else:
-        return "invalid"
+        return ImageChangeForm(request.POST, request.FILE, instance=user)
+
+def GetForm(item, request):
+    user = request.user
+    if item == 'username':
+        return UsernameChangeForm(instance=user)
+    elif item == 'email':
+        return EmailChangeForm(instance=user)
+    else:
+        return ImageChangeForm(instance=user)
 
 @login_required
 def change(request, item):
+    print("this is change")
+    if item not in { 'username', 'email', 'image' }:
+        return HttpResponse("404")
     parameters = {}
-    user = request.user
-
-    if Form(item) == "invalid":
-        return HttpResponse("This URL has not been registered.")
-
-    if request.method == 'GET':
-        parameters['form'] = Form(item)(instance=user)
-    elif request.method == 'POST':
-        if item == 'image':
-            form = Form(item)(request.POST, request.FILE, instance=user)
-        else:
-            form = Form(item)(request.POST, instance=user)
-        
+    if request.method == 'POST':
+        form = PostForm(item, request)
         if form.is_valid():
             form.save()
-            return redirect("done/"+item)
-    
+            return redirect(item+"/done")
     parameters['item'] = item
+    parameters['form'] = GetForm(item, request)
     return render(request, "myapp/change.html", parameters)
 
 class password_change(PasswordChangeView, LoginRequiredMixin):
     form_class = PasswordChangeForm
     success_url = reverse_lazy("myapp:change_done", kwargs={'item':'password'})
-    template_name = "myapp/password_change.html"
+    template_name = "myapp/change.html"
 
 @login_required
 def change_done(request, item):
-    parameters = {}
-    parameters['item'] = item
-    return render(request, "myapp/change_done.html", parameters)
+    # parameters = {}
+    # parameters['item'] = item
+    # return render(request, "myapp/change_done.html", parameters)
+    print("OK")
+    return render(request, "myapp/change_done.html")
