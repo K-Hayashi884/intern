@@ -14,19 +14,14 @@
     <header class="header bg-gray-200">
         <div class="header-container">
             <span class="header-container__title">
-                {% block header-title %}友達{% endblock %}
+                {% block header-title %}ユーザー名{% endblock %}
             </span>
         </div>
     </header>
     {% endblock %}
 
     {% block content %}
-    {% for item in data %}
-    <a href="{% url 'talk_room' item.username %}" class="p-5 flex border-b border-gray-300 border-solid">
-        <div class="pr-3"><img class="h-8 w-8 object-cover rounded-full bg-gray-600" src="{{item.image.url}}"></div>
-        <p class="leading-8">{{item.username}}</p>
-    </a>
-    {% endfor %}
+    ユーザー名変更完了
     {% endblock %}
 
     {% block footer %}
