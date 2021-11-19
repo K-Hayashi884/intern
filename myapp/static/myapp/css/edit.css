@@ -8,6 +8,28 @@ main {
     width: 100%;
 }
 
+.header-container {
+    display: flex;
+    align-items: center;
+}
+
+.back {
+    flex: 0 0 25%;
+    display: flex;
+}
+
+.back-button {
+    text-decoration: none;
+    color: black;
+    margin-left: 5%;
+}
+
+.title {
+    flex: 0 0 50%;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
 div {
     text-align: center;
     font-size: 14px;

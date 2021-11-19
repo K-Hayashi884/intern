@@ -5,8 +5,15 @@
 <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/edit.css' %}" />
 {% endblock %}
 
-{% block header-title %}
-    ログイン
+{% block header %}
+    <header class="header">
+        <div class="header-container">
+            <div class='back'><a href='{% url "settings" %}' class='back-button'>＜</a></div>
+            <div class='title'>
+                ログイン
+            </div>
+        </div>
+    </header>
 {% endblock %}
 
 {% block content %}

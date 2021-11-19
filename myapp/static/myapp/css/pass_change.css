@@ -2,6 +2,28 @@ div {
     text-align: center;
 }
 
+.header-container {
+    display: flex;
+    align-items: center;
+}
+
+.back {
+    flex: 0 0 25%;
+    display: flex;
+}
+
+.back-button {
+    text-decoration: none;
+    color: black;
+    margin-left: 5%;
+}
+
+.title {
+    flex: 0 0 50%;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
 .form {
     margin: 10px;
 }

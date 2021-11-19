@@ -1,0 +1,14 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/error.css' %}" />
+{% endblock %}
+
+{% block header-title %}
+    404エラー
+{% endblock %}
+
+{% block content %}
+    <p>ページが見つかりません。</p>
+{% endblock %}

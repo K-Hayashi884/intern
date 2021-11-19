@@ -1,0 +1,14 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/error.css' %}" />
+{% endblock %}
+
+{% block header-title %}
+    500エラー
+{% endblock %}
+
+{% block content %}
+    <p>想定外のエラーが発生しました。</p>
+{% endblock %}
