@@ -4,7 +4,7 @@ from django.utils import timezone
 
 
 class CustomUser(AbstractUser):
-    image = models.ImageField(upload_to='userimg/', default='userimg/defaultuser.png')
+    image = models.ImageField(upload_to='userimg/', default='myapp/static/myapp/img/defaultuser.png')
     regtime = models.DateTimeField(default=timezone.now)
     class Meta:
         verbose_name_plural = 'CustomUser'
