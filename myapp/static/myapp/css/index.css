@@ -1,0 +1,14 @@
+.box {
+    padding: 0.5em 1em;
+    margin: 2em 24em;
+    font-weight: bold;
+    color: #000;/*文字色*/
+    background: #FFF;
+    border: solid 3px #000;/*線*/
+    border-radius: 10px;/*角の丸み*/
+}
+.box p {
+    margin: 0em; 
+    padding: 0em 0em;
+    text-align: center;
+}
