@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+            integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        {% block extra_style %}{% endblock %}
+        <title>DeMiAインターン</title>
+    </head>
+    <body>
+        {% block header %}
+        <header class="header" id="header">
+            <div class="header-container">
+                <span class="header-container__title">
+                    {% block header_title %}{% endblock %}
+                </span>
+
+            </div>
+        </header>
+        {% endblock %}
+
+        {% block content %}{% endblock %}
+
+        {% block footer %}
+        <footer class="footer" id="footer">
+            <div class="footer-container">
+                <div class="footer-container__item">
+                        <span class="footer-item__icon"><img src="{% static 'img/people-24px.svg' %}"></span>
+                        <span class="footer-item__text">友達</span>
+                    </a>
+                </div>
+                <div class="footer-container__item">
+
+                        <img src="{% static 'img/settings-black-18dp.svg' %}" class="footer-item__icon">
+                        <span class="footer-item__text">設定</span>
+
+                </div>
+            </div>
+        </footer>
+        {% endblock %}
+    </body>
+</html>

@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="utf-8">
-    <title>トップページ</title>
-  </head>
-  <body>
-    <h1>Hello World</h1>
-  </body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<div class="index-buttons">
+    <a  href="{% url 'account_login' %}" class="index-button">ログイン</a>
+    <a  href="{% url 'account_signup' %}" class="index-button">会員登録</a>
+    <a  href="{% url 'account_logout' %}" class="index-button">ログアウト</a>
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

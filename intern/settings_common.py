@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myapp',
     'accounts',
+    
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -129,7 +130,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR,'static'),
+)
 
+MEDIA_URL = '/media/'
 
 SITE_ID = 1
 
@@ -147,7 +152,8 @@ ACCOUNT_EMAIL_VERIFICATION ='mandatory'
 ACCOUNT_EMAIL_REQUIRED = True
 
 #ログイン/ログアウト後の遷移先を設定
-ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
+LOGIN_REDIRECT_URL= 'myapp:friends'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'myapp:index'
 
 #ログアウトリンクのクリック一発でログアウトする設定
 ACCOUNT_LOGOUT_ON_GET = True
