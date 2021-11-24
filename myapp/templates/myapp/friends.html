@@ -5,15 +5,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}" />
 {% endblock %}
 
-{% block header %}
-<header class="header">
-    <div class="header-container">
-        <span class="header-container__title">
-            {% block header-title %}友達{% endblock %}
-        </span>
-    </div>
-</header>
-{% endblock %}
+{% block header-title %}友達{% endblock %}
 
 {% block content %}
 <div class="main-container">
@@ -40,23 +32,4 @@
         {% endfor %}
     </div>
 </div>
-{% endblock %}
-
-{% block footer %}
-<footer class="footer">
-    <div class="footer-container">
-        <div class="footer-container__item">
-            <a href="{% url 'friends' %}" class="footer-item__link">
-                <span class="footer-item__icon"><img src="{% static 'myapp/img/people-24px.svg' %}"></span>
-                <span class="footer-item__text">友達</span>
-            </a>
-        </div>
-        <div class="footer-container__item">
-            <a href="{% url 'setting' %}" class="footer-item__link">
-                <span class="footer-item__icon"><img src="{% static 'myapp/img/settings-black-18dp.svg' %}"></span>
-                <span class="footer-item__text">設定</span>
-            </a>
-        </div>
-    </div>
-</footer>
 {% endblock %}

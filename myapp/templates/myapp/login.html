@@ -5,15 +5,8 @@
 <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/login.css' %}" />
 {% endblock %}
 
-{% block header %}
-<header class="header">
-    <div class="header-container">
-        <span class="header-container__title">
-            {% block header-title %}ログイン{% endblock %}
-        </span>
-    </div>
-</header>
-{% endblock %}
+{% block header-title %}ログイン{% endblock %}
+
 
 {% block content %}
 <div class="main-container">
