@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_style %}
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/talk_room.css' %}">
+{% endblock %}
+
+{% block header %}
+<header class="header">
+    <div class="header-container">
+        <a href="{% url 'myapp:friends' %}" class="header-container__back"><i class="fas fa-chevron-circle-left"></i></a>
+        <span class="header-container__title">
+            {% block header-title %}{{ friend.username }}{% endblock %}
+        </span>
+        <a href="" class="talk_room__reload">更新</a>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="talk_room">
+    <!-- トークの表示部分 -->
+    <ul class="chatboard" id="chatboard">
+        
+        {% for talk in talks %}
+            <li class="chatboard__content">
+                {% if talk.talk_from == user %}
+                    {% if user.icon %}
+                        <img class="friend__usericon" src="{{ user.icon.url }}">
+                    {% else %}
+                        <img class="friend__usericon" src="{% static 'img/people-24px.svg' %}">
+                    {% endif %}
+                {% elif talk.talk_from == friend %}
+                    {% if friend.icon %}
+                        <img class="friend__usericon" src="{{ friend.icon.url }}">
+                    {% else %}
+                        <img class="friend__usericon" src="{% static 'img/people-24px.svg' %}">
+                    {% endif %}
+                {% endif %}
+                <p class="chatboard__name">＞{{ talk.talk_from }}</p>
+                <p class="chatboard__text">{{ talk.talk }}</p>
+                <p class="chatboard__time">{{ talk.time|date:"m/d" }}　{{ talk.time|date:"H:i" }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- トークの送信部分 -->
+    <form class="talk_room__sendbox" method="POST">
+        {% csrf_token %}
+        {{ form.talk }}
+        <button class="talk_room__sendbox-btn" type="submit">送信</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra_js %}
+<!-- 機能を載せるために不可避だったので、ここだけコピペで実装してください -->
+<script>
+    // トークの表示を新しいものを下にしているため、最下にスクロールさせる
+    document.addEventListener("DOMContentLoaded", function () {
+        const chatboard = document.getElementById("chatboard");
+        window.scroll(0, chatboard.scrollHeight);
+    });
+</script>
+{% endblock %}

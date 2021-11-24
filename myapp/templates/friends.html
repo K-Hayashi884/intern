@@ -13,10 +13,16 @@
 <div class="friends">
     <ul class="friend-list">
         {% for friend in object_list %}
-        <li class="friend-list__item">
-            <!-- それぞれが別のトーク画面に飛ぶようにリンクをはる -->
-            <div class="friend-list__username">{{ friend.username }}</div>
-        </li>
+        <a class="friend-list__link" href="{% url 'myapp:talk_room' friend.id %}">
+            <li class="friend-list__item">
+                {% if friend.icon %}
+                    <img class="friend-list__usericon" src="{{ friend.icon.url }}">
+                {% else %}
+                    <img class="friend-list__usericon" src="{% static 'img/people-24px.svg' %}">
+                {% endif %}
+                <div class="friend-list__username">{{ friend.username }}</div>
+            </li>
+        </a>
         {% empty %}
         {% endfor %}
     </ul>

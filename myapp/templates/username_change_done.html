@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'css/change.css' %}">
+{% endblock %}
+
+
+{% block header_title %}ユーザー名変更完了{% endblock %}
+
+{% block content %}
+<div class="container">
+    <p style="text-align:center">ユーザー名変更完了</p>
+</div>
+{% endblock %}
