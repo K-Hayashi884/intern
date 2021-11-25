@@ -5,6 +5,8 @@
 <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/index.css' %}">
 {% endblock %}
 
+{% block header %}{% endblock %}
+
 {% block content %}
 <a href="{% url 'login_view' %}">
     <div class='box' >
@@ -22,3 +24,5 @@
     </div>
 </a>
 {% endblock %}
+
+{% block footer %}{% endblock %}

@@ -1,1 +1,29 @@
-SU
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+
+{% block header-title %}
+    会員登録
+{% endblock %}
+
+{% block content %}
+<p>{{ msg }}</p>
+
+<form action="{% url 'signup_view' %}" method="POST" enctype="multipart/form-data">
+    <table>
+    {{ form.non_field_errors }}
+    {% for field in form %}
+        {{ field.label_tag }}
+        {{ field }}
+        <hr>
+        
+    {% endfor %}
+        <tr><th><td>
+            <input type="submit" value="登録">
+        </td></th></tr>
+    </table>
+    {%csrf_token %}
+</form>
+{% endblock %}
+
+{% block footer %}{% endblock %}
