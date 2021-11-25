@@ -20,6 +20,7 @@ class IndexView(generic.TemplateView):
 class FriendsView(LoginRequiredMixin, generic.ListView):
     model = User
     template_name = "friends.html"
+    paginate_by = 7
 
     def get_queryset(self):
         user = self.request.user

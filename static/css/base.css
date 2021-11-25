@@ -16,6 +16,7 @@ a {
     border-bottom: solid 1px #9b9b9b;
     position: fixed;
     background-color: #eee;
+    z-index: 1;
 }
 .header-container {
     position: relative;
