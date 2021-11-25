@@ -6,6 +6,8 @@ from .models import Talk
 User = get_user_model()
 
 
+
+
 class TalkForm(forms.ModelForm):
     """トークの送信のためのform
     メッセージを送信するだけで、誰から誰か、時間は全て自動で対応できるのでこれだけで十分

@@ -4,8 +4,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserNameChangeForm,ImageChangeForm,TalkForm
-from django.contrib import messages
-from django.db.models import Q
+from django.db.models import OuterRef, Q, Subquery
 
 from .models import Talk
 
@@ -24,7 +23,30 @@ class FriendsView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         user = self.request.user
-        friends = User.objects.exclude(id=user.id)
+
+        # 最新のトークも表示する
+        # ユーザーひとりずつの最新のトークを特定する
+        latest_msg = Talk.objects.filter(
+            Q(talk_from=OuterRef("pk"), talk_to=user)
+            | Q(talk_from=user, talk_to=OuterRef("pk"))
+        ).order_by("-time")
+
+
+        friends = (
+            User.objects.exclude(id=user.id)
+            .annotate(
+                latest_msg_pk=Subquery(latest_msg.values("pk")[:1]),
+                latest_msg_talk=Subquery(latest_msg.values("talk")[:1]),
+                latest_msg_time=Subquery(latest_msg.values("time")[:1]),
+            )
+            .order_by("latest_msg_pk")
+        )
+
+        q_word = self.request.GET.get('query')
+
+        if q_word:
+            friends = friends.filter(Q(username__icontains=q_word))
+        
 
         return friends
 

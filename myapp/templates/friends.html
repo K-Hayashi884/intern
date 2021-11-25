@@ -11,6 +11,15 @@
 
 {% block content %}
 <div class="friends">
+
+
+    <form class="search-form" method="GET">
+        <i class="fas fa-search"></i>
+            <input name="query" value="{{ request.GET.query }}" type="text">
+        <button class="friends__search-btn" name="friends_search" type="submit">検索</button>
+    </form>
+
+
     <ul class="friend-list">
         {% for friend in object_list %}
         <a class="friend-list__link" href="{% url 'myapp:talk_room' friend.id %}">
@@ -21,6 +30,11 @@
                     <img class="friend-list__usericon" src="{% static 'img/people-24px.svg' %}">
                 {% endif %}
                 <div class="friend-list__username">{{ friend.username }}</div>
+                <!-- ここから最新のトークを表示する部分 -->
+                <div class="friend-list__talk">
+                    <p class="friend-list__content">{{ friend.latest_msg_talk }}</p>
+                    <p class="friend-list__time">{{ friend.latest_msg_time|date:"n/j H:i" }}</p>
+                </div>
             </li>
         </a>
         {% empty %}
