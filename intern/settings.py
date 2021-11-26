@@ -137,3 +137,11 @@ AUTH_USER_MODEL = 'myapp.User'
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/friends'
 LOGOUT_REDIRECT_URL = '/'
+
+STATIC_ROOT = BASE_DIR/"staticfiles"
+
+try:
+    from .local_settings import *
+except ImportError:
+    # local_settings.py が存在しなくてもエラーにならないようにする
+    pass

@@ -4,9 +4,10 @@ from .forms import EmailChangeForm, ImageChangeForm, MessageForm, SignupForm, Lo
 from .models import Message, User
 from django.db.models import Q
 from django.urls import reverse_lazy
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 
 def index(request):
     return render(request, "myapp/index.html")
@@ -41,13 +42,10 @@ def friends(request):
 def talk_room(request, partner):
     parameters = {}
     user_id = request.user.unique_id
-    objects = User.objects.filter(username=partner)
-
-    if objects:
-        partner_id = objects[0].unique_id
-    else:
-        return HttpResponse("404")
-
+    try:
+        partner_id = User.objects.get(username=partner).unique_id
+    except ObjectDoesNotExist:
+        raise Http404
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():
@@ -57,8 +55,8 @@ def talk_room(request, partner):
                 contents=form.cleaned_data['contents']
             )
             message.save()
-    parameters['messages'] = Message.objects.filter((Q(sender=partner_id) & Q(receiver=user_id)) | (Q(sender=user_id) & Q(receiver=partner_id)))
-    parameters['form'] = MessageForm() # 文字さえ入力していればvalidateは通る気がするのでrequest.POSTは入れない
+    parameters['messages'] = Message.objects.filter(Q(sender=partner_id, receiver=user_id) | Q(sender=user_id, receiver=partner_id)) 
+    parameters['form'] = MessageForm() # 文字さえ入力していれば基本validateは通る気がするのでrequest.POSTは入れない
     parameters['partner'] = partner
     parameters['partner_id'] = partner_id
     return render(request, "myapp/talk_room.html", parameters)
@@ -87,15 +85,14 @@ def GetForm(item, request):
 
 @login_required
 def change(request, item):
-    print("this is change")
-    if item not in { 'username', 'email', 'image' }:
-        return HttpResponse("404")
     parameters = {}
+    if item not in { 'username', 'email', 'image' }:
+        raise Http404
     if request.method == 'POST':
         form = PostForm(item, request)
         if form.is_valid():
             form.save()
-            return redirect(item+"/done")
+            return redirect(to=item+"/done")
     parameters['item'] = item
     parameters['form'] = GetForm(item, request)
     return render(request, "myapp/change.html", parameters)
@@ -107,8 +104,4 @@ class password_change(PasswordChangeView, LoginRequiredMixin):
 
 @login_required
 def change_done(request, item):
-    # parameters = {}
-    # parameters['item'] = item
-    # return render(request, "myapp/change_done.html", parameters)
-    print("OK")
     return render(request, "myapp/change_done.html")

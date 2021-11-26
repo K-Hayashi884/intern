@@ -1,11 +1,9 @@
+{% extends 'myapp/base.html' %}
 {% load static %}
-
 {% block extra_style %}
-    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/signup.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/change.css' %}" />
 {% endblock %}
-
-{% block header %}{% block header-title %}{% endblock %}{% endblock %}
-
+{% block header-title %}ログイン{% endblock %}
 {% block content %}
     <form action="" method="post">
         {% csrf_token %}
@@ -15,5 +13,4 @@
         <input id="submit-btn" type="submit" value="Login">
     </form>
 {% endblock %}
-
 {% block footer %}{% endblock %}
