@@ -1,11 +1,16 @@
 .box {
     padding: 0.5em 1em;
-    margin: 2em 12em;
+    margin-top: 2em;
+    margin-bottom: 2em;
     font-weight: bold;
-    color: #000;/*文字色*/
+    color: #000;
     background: #FFF;
-    border: solid 3px #000;/*線*/
-    border-radius: 10px;/*角の丸み*/
+    border: solid 3px #000;
+    border-radius: 10px;
+    width: 20em;
+    margin-left: auto;
+    margin-right: auto;
+    
 }
 .box p {
     margin: 0em; 

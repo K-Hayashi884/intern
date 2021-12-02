@@ -1,0 +1,46 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}">{% endblock %}
+
+{% block header-title %}
+友達
+{% endblock %}
+
+{% block content %}
+
+    {% for friend in data %}
+    
+    {% if friend != user %}
+    <a href="{% url 'talk_room' friend.id %}">
+        <div class="wrapper">
+            <div class="img-box">
+                <!--モデルの画像フィールドを表示する際は存在するかチェックしないとエラー-->
+                {% if friend.icon %} 
+                <img src="{{ friend.icon.url }}" alt="'{{ friend.username }}'のアイコン">
+            {% endif %}
+            </div>
+            <div class="name-box">
+                <p>{{ friend.username }}</p>
+            </div>
+            <div class="msg-box">
+                <p>ここにメッセージ</p>
+            </div>
+            <div class="time-box">
+                <p>時間</p>
+            </div>
+        </div>
+    </a>
+    
+    <hr>   
+    {% endif %}
+{% empty %}
+<p>友達がいません</p>
+
+{% endfor %}
+
+{% endblock %}
+
+
+
+

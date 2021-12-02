@@ -1,0 +1,19 @@
+{% extends 'myapp/base.html' %} 
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/signup.css' %}">
+{% endblock %}
+
+{% block header-title %}ユーザ名変更{% endblock %}
+
+{% block content %}
+<form action="{% url 'name' %}" method="POST">
+    {{ form.non_field_errors }}
+    {{ form.username.label_tag }}
+    {{ form.username }}
+    <input type="submit" value="変更">
+    {% csrf_token %}
+</form>
+{% endblock %}
+

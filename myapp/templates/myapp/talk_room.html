@@ -1,1 +1,48 @@
-TR
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block extra_style %}<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/talk_room.css' %}">{% endblock %}
+
+{% block header-title %}
+<div class="header-wrapper">
+<a href="{% url 'friends' %}">
+<div class="header-box1">
+    ＜
+</div>
+</a>
+<div class="header-box2">
+    {{ friend.username }}
+</div>
+<a href="{% url 'talk_room' friend.id %}">
+<div class="header-box3">
+    更新    
+</div>
+</a>
+</div>
+{% endblock %}
+
+{% block content %}
+{% for talk in data %}
+{% if talk.sender == user %}
+<div class="box2">
+    {{ talk.content }}
+</div>
+{% else %}
+<div class="box1">
+    {{ talk.content }}
+</div>
+{% endif %}
+{% empty %}
+まだメッセージはありません
+{% endfor %}
+{% endblock %}
+
+{% block footer %}
+<footer class="footer">
+  <form action="{% url 'talk_room' friend.id %}" method="POST">
+        {{ form.non_field_errors }}
+        {{ form.content }}<input type="submit" value="送信">
+        {%csrf_token %}
+    </form>
+</footer>
+{% endblock %}

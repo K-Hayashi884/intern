@@ -1,0 +1,18 @@
+{% extends 'myapp/base.html' %} 
+{% load static %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static 'myapp/css/signup.css' %}">
+{% endblock %}
+
+{% block header-title %}アイコン変更{% endblock %}
+
+{% block content %}
+<form action="{% url 'icon' %}" method="POST" enctype="multipart/form-data">
+    {{ form.non_field_errors }}
+    {{ form.icon.label_tag }}
+    {{ form.icon }}
+    <input type="submit" value="変更">
+    {% csrf_token %}
+</form>
+{% endblock %}
