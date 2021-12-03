@@ -58,8 +58,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         display_time_talkRoom = f'{jst_recorded_time:%m/%d<br>%H:%M}'
 
         # フレンドに表示するトークメッセージ
-        if len(raw_message) > 35:
-            display_message = raw_message[:35] + '...'
+        cut_length = 25
+        if len(raw_message) > cut_length:
+            display_message = raw_message[:cut_length] + '...'
         else:
             display_message = raw_message
         # Send message to room group

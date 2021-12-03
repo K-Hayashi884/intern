@@ -166,8 +166,9 @@ def create_message_dict(user, friends):
         # 表示情報の処理
         if latest_message:
             # 長すぎる文章のカット
-            if len(latest_message.content) > 35:
-                latest_message.content = latest_message.content[:35] + '...'
+            cut_length = 25
+            if len(latest_message.content) > cut_length:
+                latest_message.content = latest_message.content[:cut_length] + '...'
             # 表示したい時刻情報の決定    
             jst_recorded_time = localtime(latest_message.pub_date)
             now = localtime(timezone.now())
