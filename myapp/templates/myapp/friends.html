@@ -20,14 +20,14 @@
     <table class="table">
     {% for _, friend, talk in list_w_talks %}
         <tr>
-            <td><img src="{{friend.img}}"></td>
+            <td><img src="{{friend.img.url}}"></td>
             <td><a href ="{% url 'talk_room' friend.id %}">{{friend.username}}</a></td>
             <td>{{talk.content}}</td>
         </tr>
     {% endfor %}
     {% for _, friend in list_wo_talks %}
         <tr>
-            <td><img src="{{friend.img}}"></td>
+            <td><img src="{{friend.img.url}}"></td>
             <td><a href ="{% url 'talk_room' friend.id %}">{{friend.username}}</a></td>
         </tr>
     {% endfor %}
