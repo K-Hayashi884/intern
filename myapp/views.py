@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.db.models import Q
 from .models import Profile
 from .models import Message
 from .forms import UserChangeForm,UserPasswordChangeForm
@@ -55,10 +56,21 @@ def login_view(request):
 @login_required
 def friends(request):
     user=request.user
+    friends=[]
+    never_talked_friends=[]
     data = Profile.objects.exclude(id=user.id)
+    for friend in data:
+        latests = Message.objects.all().filter(Q(sender=request.user) | Q(receiver=request.user)).filter(Q(sender=friend) | Q(receiver=friend)).order_by('created_at').last()
+        if latests != None:
+            friends.append([friend,latests])
+        else:
+            never_talked_friends.append(friend)
+   
     params = {
         'user':user,
         'data':data,
+        'never_talked_friends':never_talked_friends,
+        'friends':friends,
     }
     return render(request, "myapp/friends.html",params)
 
@@ -69,16 +81,17 @@ def talk_room(request,username):
         obj=Message()
         message=MessageForm(request.POST,instance=obj)
         if message.is_valid():
-            obj.reciever=Profile.objects.get(username=username)
+            obj.receiver=Profile.objects.get(username=username)
+            obj.sender=Profile.objects.get(username=user)
             content=message.cleaned_data.get("content")
             message.save()
     else:
         message=MessageForm()
     data=Message.objects.all().reverse()
-    reciever=Profile.objects.get(username=username)
+    receiver=Profile.objects.get(username=username)
     params={
-        'reciever':reciever,
-        'sender':user,
+        'receiver':receiver,
+        'user':user,
         'data':data,
         'message':message,
     }

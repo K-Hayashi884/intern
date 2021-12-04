@@ -33,7 +33,6 @@ class SignUpForm(UserCreationForm):
         model=Profile
         fields = ['username','email','password1','password2','image']
 
-
 class LoginForm(AuthenticationForm):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
