@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    env_file:
+      - .env
+    expose:
+      - 5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    user: ${POSTGRES_USER}
+    healthcheck:
+      test: /usr/bin/pg_isready
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  web:
+    build: .
+    command: gunicorn intern.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./staticfiles:/staticfiles
+      - ./media:/media
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    ports:
+      - 80:80
+    depends_on:
+      - web
