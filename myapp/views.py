@@ -82,8 +82,11 @@ def talk_room(request,reseave_user_id):
     user= request.user
 
     senduser_name= User.objects.get(id=user.id).username
+    senduser_img=User.objects.get(id=user.id).img
 
     friend_name= User.objects.get(id=reseave_user_id).username
+    friend_img= User.objects.get(id=reseave_user_id).img
+
 
 
     data=Message.objects.filter(
@@ -94,6 +97,8 @@ def talk_room(request,reseave_user_id):
     params={
     'title':'talk_room',
     'header_title':friend_name,
+    'senduser_img':senduser_img,
+    'friend_img':friend_img,
     'form':MessageForm(),
     'send_user_id':user.id,
     'reseave_user_id':reseave_user_id,
@@ -116,9 +121,7 @@ def talk_room(request,reseave_user_id):
                 Q(senduser_id=reseave_user_id,reseaveuser_id=user.id)
             ).order_by('pub_date') 
             params['data']=data
-
-    #   else:
-    #     print('There are something wrong!')
+        
         
     return render(request,'myapp/talk_room.html',params)
 

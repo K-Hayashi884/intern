@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_style %}
-<link rel="stylesheet" href="{% static '/myapp/css/friends1.css' %}">
+<link rel="stylesheet" href="{% static '/myapp/css/friends.css' %}">
 {% endblock %}
 
 {% block header-title %}友達{% endblock %}
@@ -10,20 +10,20 @@
 {% block content %}
   {% for item1 in message_friend_data %}
     <a href="{% url 'talk_room' item1.id %}">
-      <table>
+      <table class='table'>
         <tr>
           <div class="img">
             <td><img src='{{MEDIA_URL}}{{item1.img.url}}'alt='写真は登録されていません' class='icon'></td> 
           </div>
-          <div class='username'>
-            <td> {{item1.username}}</td>
+          <div>
+            <td class='friend_name'> {{item1.username}}</td>
           </div>
           
           <!-- 辞書で渡せれた｛ログインしていないほうのメッセージ送信者のid:最後のメッセージ}
           をfor文でとりだして照合し表示する -->
           {% for key,content in last_contents.items %}
              {% if key == item1.id %}
-             <div class='last_content'><td> {{content}}</td></div>
+             <div><td class='last_content'> {{content}}</td></div>
              {% endif %}
           {% endfor %}
           
@@ -41,8 +41,8 @@
             <td><img src='{{ MEDIA_URL }}{{item2.img.url}}' alt='写真は登録されていません' class='icon'></td>
             <!-- <td><img src='intern/media/image/bo2.jpg'+img alt='写真は登録されていません'></td> -->
           </div>
-          <div class='username'>
-            <td> {{item2.username}}</td>
+          <div>
+            <td class='friend_name'> {{item2.username}}</td>
           </div>
         </tr>
       </table>

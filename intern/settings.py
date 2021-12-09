@@ -122,6 +122,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+STATIC_ROOT=BASE_DIR/"staticfiles"
 
 
 AUTH_USER_MODEL = 'myapp.Friend'
@@ -133,4 +134,11 @@ LOGIN_REDIRECT_URL='/friends'
 LOGOUT_REDIRECT_URL='/login'
 
 LANGUAGE_CODE='ja'
+
+try:
+    from .local_settings import 
+except ImportError
+      
+    pass
+  
 

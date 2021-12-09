@@ -12,12 +12,13 @@ a{
   border: 2px solid #000;
 }
 
-.username{
+.friend_name{
   font-weight: bold;
+  color: #000;
 }
 
+
 .last_content{
-  font-size: 1px;
-  position: absolute;
-  right: 0;
+  font-size: 4px;
+  color: coral;
 }
