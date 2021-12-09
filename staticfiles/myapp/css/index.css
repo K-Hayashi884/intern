@@ -1,0 +1,19 @@
+.box {
+    padding: 0.5em 1em;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    font-weight: bold;
+    color: #000;
+    background: #FFF;
+    border: solid 3px #000;
+    border-radius: 10px;
+    width: 20em;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+.box p {
+    margin: 0em; 
+    padding: 0em 0em;
+    text-align: center;
+}
