@@ -136,8 +136,8 @@ LOGOUT_REDIRECT_URL='/login'
 LANGUAGE_CODE='ja'
 
 try:
-    from .local_settings import 
-except ImportError
+    from .local_settings import *
+except ImportError:
       
     pass
   
