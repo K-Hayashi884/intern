@@ -5,9 +5,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/friends.css' %}" />
 {% endblock %}
 
-{% block header-title %}
-    友達
-{% endblock %}
+{% block header-title %}友達{% endblock %}
 
 {% block content %}
     <div class='input-wrap'>
@@ -27,8 +25,6 @@
                 <div class='talk_partner'>
                 {{ friend.username }}
                 </div>
-
-                
                 <div class='talk-container'>
                     <div class="{{ room_path }} message">{% if message.content %}{{ message.content }}{% endif %}</div>
                     <div class="{{ room_path }} time">{% if time %}{{ time }}{% endif %}</div>

@@ -5,7 +5,7 @@ from allauth.account.forms import LoginForm, SignupForm, ResetPasswordKeyForm, R
 
 
 # パスワード変更用フォーム
-class PasswordChange_Form(PasswordChangeForm):
+class PasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['old_password'].widget.attrs['placeholder'] = '元のパスワード'
