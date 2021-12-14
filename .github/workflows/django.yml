@@ -17,18 +17,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
+    - name: Docker Container Create
+        run: |
+          docker-compose up -d
     - name: Install Dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        docker-compose exec web python -m pip install --upgrade pip
+        docker-compose exec web pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python manage.py test
+        docker-compose exec web python manage.py test
     - name: Lint with black
       run: |
-        pip install black
-        black .
+        docker-compose exec web pip install black
+        docker-compose exec web black .
