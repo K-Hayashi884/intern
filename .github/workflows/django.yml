@@ -26,13 +26,14 @@ jobs:
         cat .env
     - name: Docker Container Create
       run: |
-        docker-compose down
-        docker-compose up --build db web
-        docker-compose ps
-    - name: Install Dependencies
-      run: |
-        docker-compose exec web python -m pip install --upgrade pip
-        docker-compose exec web pip install -r requirements.txt
+        docker-compose build web
+        docker-compose up -d
+        sleep 15s
+        docker ps -a
+    # - name: Install Dependencies
+    #   run: |
+    #     docker-compose exec web python -m pip install --upgrade pip
+    #     docker-compose exec web pip install -r requirements.txt
     - name: Run Tests
       run: |
         docker-compose exec web python manage.py test
