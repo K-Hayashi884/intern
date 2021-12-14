@@ -26,7 +26,7 @@ jobs:
     - name: Docker Container Create
       run: |
         docker-compose down
-        docker-compose up --build
+        docker-compose up --build db web
     - name: Install Dependencies
       run: |
         docker-compose exec web python -m pip install --upgrade pip
