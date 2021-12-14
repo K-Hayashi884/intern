@@ -35,6 +35,10 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
+      env:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: postgres
     - name: Lint with black
       run: |
         pip install black
