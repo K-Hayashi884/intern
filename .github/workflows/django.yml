@@ -25,6 +25,7 @@ jobs:
         echo POSTGRES_INITDB_ARGS="--auth-host=md5" > .env
     - name: Docker Container Create
       run: |
+        docker-compose down
         docker-compose up --build
     - name: Install Dependencies
       run: |
