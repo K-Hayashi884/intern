@@ -1,0 +1,30 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ cicd-intro ]
+  pull_request:
+    branches: [ cicd-intro ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create .env File
+      run: |
+        POSTGRES_DB=postgres >> .env
+        POSTGRES_USER=postgres >> .env
+        POSTGRES_PASSWORD=postgres >> .env
+        POSTGRES_INITDB_ARGS="--auth-host=md5" >> .env
+    - name: Build the Docker image
+      run: docker-compose up -d
+    - name: Run Test
+      run: docker-compose exec web python manage.py test
+    - name: Lint with Black
+      run: |
+        docker-compose exec web pip install black
+        docker-compose exec web black .
