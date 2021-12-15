@@ -52,9 +52,7 @@ class TalkFormTests(TestCase):
             self._bad_form1.clean()
 
         self.assertFalse(self._bad_form2.is_valid())
-        with self.assertRaisesMessage(
-            ValidationError, "禁止ワード バカ, あほ が含まれています"
-        ):
+        with self.assertRaisesMessage(ValidationError, "禁止ワード バカ, あほ が含まれています"):
             self._bad_form2.clean()
 
         self.assertFalse(self._bad_form3.is_valid())
@@ -77,9 +75,7 @@ class TestsWithAuthMixin:
         )
 
     def login(self):
-        return self.client.login(
-            username=self._username, password=self._password
-        )
+        return self.client.login(username=self._username, password=self._password)
 
 
 class SignupViewTests(TestCase):

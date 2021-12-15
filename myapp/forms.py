@@ -86,6 +86,5 @@ class TalkForm(forms.ModelForm):
         talk = cleaned_data.get("talk")
         contained_taboo_words = [w for w in TABOO_WORDS if w in talk]
         if contained_taboo_words:
-            raise ValidationError(
-                f"禁止ワード {', '.join(contained_taboo_words)} が含まれています")
+            raise ValidationError(f"禁止ワード {', '.join(contained_taboo_words)} が含まれています")
         return cleaned_data
