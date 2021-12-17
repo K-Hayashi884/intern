@@ -9,9 +9,8 @@ services:
       - 5432
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
-    user: ${POSTGRES_USER}
     healthcheck:
-      test: /usr/bin/pg_isready
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 30s
       timeout: 5s
       retries: 10
@@ -30,7 +29,7 @@ services:
     volumes:
       - ./staticfiles:/staticfiles
       - ./media:/media
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./nginx:/etc/nginx/conf.d
     ports:
       - 80:80
     depends_on:
