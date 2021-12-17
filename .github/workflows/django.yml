@@ -50,3 +50,7 @@ jobs:
         ssh -oStrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} -i secret_key "cd ~/intern \
         && git pull origin cicd-intro \
         && docker-compose restart"
+      env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        EC2_USER: ${{ secrets.EC2_USER }}
+        EC2_HOST: ${{ secrets.EC2_HOST }}
