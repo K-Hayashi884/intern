@@ -7,4 +7,3 @@ hooks:
   AfterInstall:
     - location: scripts/after.sh
       timeout: 300
-      runas: ubuntu
