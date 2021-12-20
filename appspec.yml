@@ -2,8 +2,11 @@ version: 0.0
 os: linux
 files:
   - source: ./
-    destination: /home/ubuntu/intern-aws
+    destination: /home/ubuntu/intern
 hooks:
+  BeforeInstall:
+    - location: scripts/before.sh
+      timeout: 300
   AfterInstall:
     - location: scripts/after.sh
       timeout: 300
