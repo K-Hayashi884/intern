@@ -12,4 +12,4 @@ artifacts:
     - "**/*"
   base-directory: $CODEBUILD_SRC_DIR
   name: apply-artifacts
-  descard-paths: no
+  discard-paths: no
