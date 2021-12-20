@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: ./
+    destination: ~/intern
+hooks:
+  AfterInstall:
+    - location: scripts/after.sh
+      timeout: 300
+      runas: ubuntu
