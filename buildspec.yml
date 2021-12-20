@@ -7,3 +7,9 @@ phases:
   build:
     commands:
       - python manage.py  test --settings=intern.settings.settings
+artifacts:
+  files:
+    - "**/*"
+  base-directory: $CODEBUILD_SRC_DIR
+  name: eks-apply-artifacts
+  descard-paths: no
