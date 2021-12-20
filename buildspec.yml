@@ -9,7 +9,7 @@ phases:
       - python manage.py  test --settings=intern.settings.settings
 artifacts:
   files:
-    - "intern-aws/**/*"
+    - "**/*"
   base-directory: $CODEBUILD_SRC_DIR
   name: apply-artifacts
   descard-paths: no
