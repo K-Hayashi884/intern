@@ -6,4 +6,4 @@ phases:
       - pip install -r requirements.txt
   build:
     commands:
-      - python manage.py  test --settings=intern.settings.unittest
+      - python manage.py  test --settings=intern.settings.settings
