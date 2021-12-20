@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: ./
-    destination: ~/intern
+    destination: ~/intern-aws
 hooks:
   AfterInstall:
     - location: scripts/after.sh
