@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /home/ubuntu/intern
+cd /home/ubuntu/intern-aws
 docker-compose down
